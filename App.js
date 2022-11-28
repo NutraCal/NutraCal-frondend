@@ -1,65 +1,46 @@
-import * as React from 'react';
-import { Text, View, StyleSheet,Button } from 'react-native';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import SearchRecipe from './screens/SearchRecipe'
-import ApplyFilters from './screens/ApplyFilters'
-import ViewRecipe from './screens/ViewRecipe'
-import AddRecipe from './screens/AddRecipe'
-
-
+import React, {useState} from 'react';
+import Welcome from './screens/Welcome';
+import Intro from './screens/Intro';
+import userFitnessGoal from './screens/userFitnessGoal';
+import userGwh from './screens/userGwh';
+import userAllergies from './screens/userAllergies';
+import userDiet from './screens/userDiet';
+import userIng from './screens/userIng';
+import {LogBox} from 'react-native';
+LogBox.ignoreAllLogs();
+import {
+  SafeAreaView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
-
-export default function App() {
+const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-      >
-      <Stack.Screen 
-      name="Search Recipe" 
-      component={SearchRecipe}
-      options={{
-        headerBackTitleVisible:false,
-        headerTitleAlign:"center",
-        title: 'Recipe Book',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-      
-        },
-        headerRight: () => (
-          <Button
-            onPress={() => alert('This is a button!')}
-            title="Info"
-            color="#fff"
-            />
-          ),
-       
-        }}
-      />
-      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
-      <Stack.Screen name="View Recipe" component={ViewRecipe} />
-      <Stack.Screen name="Add Recipe" component={AddRecipe} />
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Intro" component={Intro} />
+        <Stack.Screen name="userFitnessGoal" component={userFitnessGoal} />
+        <Stack.Screen name="userGwh" component={userGwh} />
+        <Stack.Screen name="userAllergies" component={userAllergies} />
+        <Stack.Screen name="userDiet" component={userDiet} />
+        <Stack.Screen name="userIng" component={userIng} />
       </Stack.Navigator>
     </NavigationContainer>
-
   );
-}
+};
 
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
+export default App;
