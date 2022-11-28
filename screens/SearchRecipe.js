@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image} from 'react-native';
-import { Searchbar,Button } from 'react-native-paper';
+import { Text, View, StyleSheet, Image, ScrollView,TouchableOpacity} from 'react-native';
+import { Searchbar,Button,Avatar } from 'react-native-paper';
 import Sortic from '../assets/sorticon.svg'
 import Arrowdown from '../assets/arrowdownicon.svg'
 import Filter from '../assets/filtericon.svg'
-
-
 
 export default function SearchRecipe() {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -32,12 +30,36 @@ export default function SearchRecipe() {
     <Text style={styles.label}>Filter</Text>
     <Arrowdown width={20} height={20}/>
     </View>
-
-
     </View>
+    <Text style={styles.heading}>Category</Text>
+
+    <ScrollView horizontal={true} style={styles.scroll}>
+    
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
+      <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+      <Text style={styles.name}>Salad</Text>
+    </TouchableOpacity>
 
 
-    <Text style={{fontFamily:"Inter-ExtraBold", color:"black", fontSize:20 }}>This is a bunch of gibberish to see how good the custom font looks. I would love to see this crap. So sleepy rn. My neck hurts but all is well</Text>
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
+    <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+      <Text style={styles.name}>Cake</Text>
+    </TouchableOpacity>
+
+
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
+    <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+      <Text style={styles.name}>Pie</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
+    <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+      <Text style={styles.name}>Smoothie</Text>
+    </TouchableOpacity>
+
+    </ScrollView>
+    
+    
     </View>
   );
 }
@@ -81,5 +103,37 @@ const styles = StyleSheet.create({
     paddingHorizontal:13,
     alignItems:'center',
   },
+
+  heading:{
+  fontFamily:"Inter-ExtraBold", 
+  color:"black", 
+  fontSize:20,
+  marginTop:20,
+  marginLeft:12,
+},
+
+box:{
+  height:130,
+  width:110,
+  borderRadius:12,
+  backgroundColor:"#D83360",
+  margin:10,
+  flexDirection:"column",
+  alignItems:"center",
+  justifyContent:"space-around",
+
+
+},
+
+scroll:{
+   flexDirection:"row",
+
+},
+
+name:{
+  fontSize: 20,
+  color: 'black',
+  fontFamily:"Inter-Regular"
+},
 
 });
