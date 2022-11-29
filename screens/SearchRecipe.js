@@ -4,6 +4,16 @@ import { Searchbar,Button,Avatar } from 'react-native-paper';
 import Sortic from '../assets/sorticon.svg'
 import Arrowdown from '../assets/arrowdownicon.svg'
 import Filter from '../assets/filtericon.svg'
+import Pic1 from '../assets/images/pic1.svg'
+import Pic2 from '../assets/images/pic2.svg'
+import Pic3 from '../assets/images/pic3.svg'
+import Pic4 from '../assets/images/pic4.svg'
+import Diet1 from '../assets/images/dietpic1.svg'
+import Diet2 from '../assets/images/dietpic2.svg'
+import Pop1 from '../assets/images/pop1.svg'
+import Forw from '../assets/forwardbtn.svg'
+
+
 
 export default function SearchRecipe() {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -11,6 +21,7 @@ export default function SearchRecipe() {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       <Searchbar
       placeholder="Recipes"
       onChangeText={onChangeSearch}
@@ -36,27 +47,82 @@ export default function SearchRecipe() {
     <ScrollView horizontal={true} style={styles.scroll}>
     
     <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
-      <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+      <Pic1 width={60} height={61}/>
       <Text style={styles.name}>Salad</Text>
     </TouchableOpacity>
 
 
     <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
-    <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+    <Pic2 width={60} height={61}/>
       <Text style={styles.name}>Cake</Text>
     </TouchableOpacity>
 
 
     <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
-    <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+    <Pic3 width={60} height={61}/>
       <Text style={styles.name}>Pie</Text>
     </TouchableOpacity>
 
     <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
-    <Avatar.Image size={50} source={require('../assets/images/pic1.jpg')}/>
+    <Pic4 width={60} height={61}/>
       <Text style={styles.name}>Smoothie</Text>
     </TouchableOpacity>
 
+    </ScrollView>
+    <Text style={styles.heading}>Diet Recommendations</Text>
+    
+    <ScrollView horizontal={true} style={styles.scroll}>
+    <View style={[styles.box2, {backgroundColor:"#EBF1FF"}]}>
+    <Diet1 width={116} height={80} style={{marginBottom: 10}}/>
+      <Text style={styles.name}>Honey Pancake</Text>
+      <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
+      <TouchableOpacity>
+      <View style={[styles.btn1,{backgroundColor:"#91C788",borderColor:"#91C788", borderWidth: 1, }]}>
+      <Text style={[styles.label1,{color:"white"}]}>View</Text>
+      </View>
+      </TouchableOpacity>
+    </View>
+
+
+    <View style={[styles.box2, {backgroundColor:"#F9EBF8"}]}>
+    <Diet2 width={130.75} height={77} style={{marginBottom: 10}}/>
+    <Text style={styles.name}>Canai Bread</Text>
+    <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
+    <TouchableOpacity>
+      <View style={styles.btn1}>
+      <Text style={[styles.label1,{color:"#91C788",fontFamily:"Inter-Bold"}]}>View</Text>
+      </View>
+      </TouchableOpacity>
+    </View>
+
+    </ScrollView>
+    <Text style={styles.heading}>Popular</Text>
+
+    <ScrollView>
+
+    <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+    <Pop1 width={48} height={47} style={{marginRight: 20}}/>
+    <View>  
+      <Text style={styles.name}>Blueberry Pancake</Text>
+      <Text style={[styles.desc,{marginTop:0}]}>Medium | 30mins | 230kCal</Text>
+    </View>
+    <TouchableOpacity>
+    <Forw width={24} height={24} style={{marginLeft: 20}}/>
+    </TouchableOpacity>
+    </View>
+
+    <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+    <Pop1 width={48} height={47} style={{marginRight: 20}}/>
+    <View>  
+      <Text style={styles.name}>Blueberry Pancake</Text>
+      <Text style={[styles.desc,{marginTop:0}]}>Medium | 30mins | 230kCal</Text>
+    </View>
+    <TouchableOpacity>
+    <Forw width={24} height={24} style={{marginLeft: 20}}/>
+    </TouchableOpacity>
+    </View>
+
+    </ScrollView>
     </ScrollView>
     
     
@@ -73,6 +139,7 @@ const styles = StyleSheet.create({
     borderRadius:20,
     margin: 15,
     elevation:0,
+    backgroundColor:'#F8F9FE',
   },
   label:{
     fontSize:20,
@@ -80,6 +147,14 @@ const styles = StyleSheet.create({
     fontFamily:"Inter-Regular"
     
   },
+
+  label1:{
+    fontSize:16,
+    color:"white",
+    fontFamily:"Inter-Regular"
+    
+  },
+
   icon:{
     width:15,
     height:15,
@@ -95,6 +170,15 @@ const styles = StyleSheet.create({
    borderColor:"#C5C6CC",
    borderRadius:9,
    marginVertical:8
+  },
+
+  btn1:{
+   
+    paddingHorizontal:30,
+    paddingVertical:4,
+    marginTop:15,
+    borderRadius:20,
+
   },
 
   cont:{
@@ -116,13 +200,31 @@ box:{
   height:130,
   width:110,
   borderRadius:12,
-  backgroundColor:"#D83360",
   margin:10,
   flexDirection:"column",
   alignItems:"center",
   justifyContent:"space-around",
+},
 
 
+box2:{
+  height:240, 
+  width: 200,
+  borderRadius:12,
+  margin:10,
+  flexDirection:"column",
+  alignItems:"center",
+  justifyContent:"center",
+},
+
+box3:{
+  height:80, 
+  width: 350,
+  borderRadius:12,
+  margin:10,
+  flexDirection:"row",
+  alignItems:"center",
+  justifyContent:'center',
 },
 
 scroll:{
@@ -131,9 +233,18 @@ scroll:{
 },
 
 name:{
-  fontSize: 20,
+  fontSize: 18,
   color: 'black',
-  fontFamily:"Inter-Regular"
+  fontFamily:"Inter-Medium",
+  marginTop:5,
+},
+
+
+desc:{
+  fontSize: 14,
+  color: '#7B6F72',
+  fontFamily:"Inter-Light",
+  marginTop:5,
 },
 
 });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StyleSheet,Button } from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SearchRecipe from './screens/SearchRecipe'
@@ -14,8 +14,19 @@ import AddRecipe from './screens/AddRecipe'
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+    const MyTheme = {
+      ...DefaultTheme,
+      colors: {
+        ...DefaultTheme.colors,
+        background: '#FFF',
+      },
+    };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+    theme={MyTheme}
+    >
       <Stack.Navigator
       >
       <Stack.Screen 
