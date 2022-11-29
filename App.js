@@ -1,6 +1,5 @@
-import {useState,useEffect}  from 'react';
+import * as React from 'react';
 import { Text, View, StyleSheet,Button } from 'react-native';
-import AnimatedSplash from "react-native-animated-splash-screen";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -15,27 +14,36 @@ import AddRecipe from './screens/AddRecipe'
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [isLoaded,setIsLoaded] = useState(false);
-
-  useEffect(()=>{
-    setTimeout(() => {
-      setIsLoaded(true)
-    }, 3000);
-  })
-
-
   return (
-    <AnimatedSplash
-        translucent={true}
-        isLoaded={isLoaded}
-        logoImage={require("./assets/images/Logo.png")}
-        backgroundColor={"#999999"}
-        logoHeight={150}
-        logoWidth={150}
+    <NavigationContainer>
+      <Stack.Navigator
       >
+      <Stack.Screen 
+      name="Search Recipe" 
+      component={SearchRecipe}
+      options={{
+        headerBackTitleVisible:false,
+        headerTitleAlign:"center",
+        title: 'Recipe Book',
+        headerTitleStyle: {
+          fontWeight: 'bold',
       
-      </AnimatedSplash>
-    
+        },
+        headerRight: () => (
+          <Button
+            onPress={() => alert('This is a button!')}
+            title="Info"
+            color="#fff"
+            />
+          ),
+       
+        }}
+      />
+      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
+      <Stack.Screen name="View Recipe" component={ViewRecipe} />
+      <Stack.Screen name="Add Recipe" component={AddRecipe} />
+      </Stack.Navigator>
+    </NavigationContainer>
 
   );
 }
@@ -55,4 +63,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
