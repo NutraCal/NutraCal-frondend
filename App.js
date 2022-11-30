@@ -27,8 +27,8 @@ export default function App() {
     <NavigationContainer
     theme={MyTheme}
     >
-      <Stack.Navigator
-      >
+      <Stack.Navigator>
+      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
       <Stack.Screen 
       name="Search Recipe" 
       component={SearchRecipe}
@@ -50,7 +50,7 @@ export default function App() {
        
         }}
       />
-      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
+     
       <Stack.Screen name="View Recipe" component={ViewRecipe} />
       <Stack.Screen name="Add Recipe" component={AddRecipe} />
       </Stack.Navigator>
