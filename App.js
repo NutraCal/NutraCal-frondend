@@ -6,6 +6,8 @@ import userGwh from './screens/userGwh';
 import userAllergies from './screens/userAllergies';
 import userDiet from './screens/userDiet';
 import userIng from './screens/userIng';
+import register from './screens/register';
+import Login from './screens/Login';
 import {LogBox} from 'react-native';
 LogBox.ignoreAllLogs();
 import {
@@ -38,6 +40,8 @@ const App = () => {
         <Stack.Screen name="userAllergies" component={userAllergies} />
         <Stack.Screen name="userDiet" component={userDiet} />
         <Stack.Screen name="userIng" component={userIng} />
+        <Stack.Screen name="register" component={register} />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
   );

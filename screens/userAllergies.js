@@ -20,61 +20,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 const userFitnessGoal = ({navigation, route}) => {
-  const [pressed, setPressed] = useState(1);
-  const [pressed1, setPressed1] = useState(1);
-  const [pressed2, setPressed2] = useState(1);
-  const [pressed3, setPressed3] = useState(1);
-  const setColor = () => {
-    if (pressed == 0) {
-      setPressed(1);
-      setPressed1(1);
-      setPressed2(1);
-      setPressed3(1);
-    } else {
-      setPressed(0);
-      setPressed1(1);
-      setPressed2(1);
-      setPressed3(1);
-    }
-  };
-  const setColor1 = () => {
-    if (pressed1 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-      setPressed3(1);
-    } else {
-      setPressed1(0);
-      setPressed(1);
-      setPressed2(1);
-      setPressed3(1);
-    }
-  };
-  const setColor2 = () => {
-    if (pressed2 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-      setPressed3(1);
-    } else {
-      setPressed2(0);
-      setPressed1(1);
-      setPressed(1);
-      setPressed3(1);
-    }
-  };
-  const setColor3 = () => {
-    if (pressed3 == 0) {
-      setPressed3(1);
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-    } else {
-      setPressed3(0);
-      setPressed2(1);
-      setPressed1(1);
-      setPressed(1);
-    }
+  const [pressed, setPressed] = useState(4);
+  const setColor = number => {
+    setPressed(number);
   };
   return (
     <View style={styles.container}>
@@ -84,7 +32,7 @@ const userFitnessGoal = ({navigation, route}) => {
       </Text>
 
       <TouchableOpacity
-        onPress={() => setColor()}
+        onPress={() => setColor(0)}
         style={{
           ...styles.listItem,
           ...{
@@ -95,34 +43,34 @@ const userFitnessGoal = ({navigation, route}) => {
         <Text style={styles.listText}>Lactose Intolerant</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor1()}
+        onPress={() => setColor(1)}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed1 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              pressed == 1 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Nut Allergy</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor2()}
+        onPress={() => setColor(2)}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed2 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              pressed == 2 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Egg</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor3()}
+        onPress={() => setColor(3)}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed3 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              pressed == 3 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>None</Text>

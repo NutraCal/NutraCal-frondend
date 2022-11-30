@@ -21,41 +21,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 const userFitnessGoal = ({navigation, route}) => {
-  const [pressed, setPressed] = useState(1);
-  const [pressed1, setPressed1] = useState(1);
-  const [pressed2, setPressed2] = useState(1);
-  const setColor = () => {
-    if (pressed == 0) {
-      setPressed(1);
-      setPressed1(1);
-      setPressed2(1);
-    } else {
-      setPressed(0);
-      setPressed1(1);
-      setPressed2(1);
-    }
-  };
-  const setColor1 = () => {
-    if (pressed1 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-    } else {
-      setPressed1(0);
-      setPressed(1);
-      setPressed2(1);
-    }
-  };
-  const setColor2 = () => {
-    if (pressed2 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-    } else {
-      setPressed2(0);
-      setPressed1(1);
-      setPressed(1);
-    }
+  const [pressed, setPressed] = useState(3);
+  const setColor = number => {
+    setPressed(number);
   };
   return (
     <View style={styles.container}>
@@ -65,7 +33,7 @@ const userFitnessGoal = ({navigation, route}) => {
         It will help us choose the best program{'\n'}for you
       </Text>
       <TouchableOpacity
-        onPress={() => setColor()}
+        onPress={() => setColor(0)}
         style={{
           ...styles.listItem,
           ...{
@@ -76,23 +44,23 @@ const userFitnessGoal = ({navigation, route}) => {
         <Text style={styles.listText}>Lose Weight</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor1()}
+        onPress={() => setColor(1)}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed1 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              pressed == 1 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Gain Weight</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor2()}
+        onPress={() => setColor(2)}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed2 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              pressed == 2 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Be Healthier</Text>
@@ -116,13 +84,15 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: 20,
     fontFamily: 'Inter-SemiBold',
+    marginBottom: 10,
   },
   Text: {
     color: 'rgba(0, 0, 0, 0.45)',
     fontSize: 17,
     fontFamily: 'Inter-Light',
     lineHeight: 30,
-    marginVertical: 20,
+    marginBottom: 20,
+    marginTop: 5,
   },
   listItem: {
     height: 72,
