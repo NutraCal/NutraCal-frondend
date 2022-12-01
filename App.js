@@ -8,6 +8,7 @@ import SearchRecipe from './screens/SearchRecipe'
 import ApplyFilters from './screens/ApplyFilters'
 import ViewRecipe from './screens/ViewRecipe'
 import AddRecipe from './screens/AddRecipe'
+import MyRecipes from './screens/MyRecipes'
 
 
 
@@ -28,7 +29,8 @@ export default function App() {
     theme={MyTheme}
     >
       <Stack.Navigator>
-      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
+      <Stack.Screen name="View Recipe" component={ViewRecipe} />
+     
       <Stack.Screen 
       name="Search Recipe" 
       component={SearchRecipe}
@@ -50,8 +52,11 @@ export default function App() {
        
         }}
       />
+
+      <Stack.Screen name="My Recipes" component={MyRecipes}/>
+      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
      
-      <Stack.Screen name="View Recipe" component={ViewRecipe} />
+
       <Stack.Screen name="Add Recipe" component={AddRecipe} />
       </Stack.Navigator>
     </NavigationContainer>

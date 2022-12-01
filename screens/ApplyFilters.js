@@ -138,11 +138,9 @@ export default function ApplyFilters() {
 
     
 
-    <TouchableOpacity style={{width:330, height:50, backgroundColor:"#91C788",alignSelf:"center", borderRadius:10, alignItems:"center", justifyContent:"center",marginTop:40, marginBottom:20}}>
-      <Text style={{color:"white", fontSize:16, fontFamily:"Inter-SemiBold"}}>Apply Filters</Text>
+    <TouchableOpacity style={{width:330, height:48, backgroundColor:"#91C788",alignSelf:"center", borderRadius:12, alignItems:"center", justifyContent:"center",marginTop:40, marginBottom:20}}>
+    <Text style={{color:"white", fontSize:16, fontFamily:"Inter-SemiBold"}}>Apply Filters</Text>
     </TouchableOpacity>
-    
-
 
       </View>
      
