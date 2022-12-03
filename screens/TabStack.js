@@ -27,7 +27,7 @@ const TabStack=()=>{
     
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
-
+      
       if (route.name === 'Home') {
         iconName = focused? 'home': 'home-outline';
       } 
@@ -50,14 +50,18 @@ const TabStack=()=>{
       return <Icon name={iconName} size={size} color={color} style={{margin: 2}}/>;
     },
       tabBarActiveTintColor: "black",
-      tabBarInactiveTintColor: "gray",
+      tabBarInactiveTintColor: "grey",
      
       tabBarStyle: {
-        height: 50,
+        height: 70,
+
         paddingVertical:8,
       },
+      tabBarLabelStyle:{
+        paddingBottom:10,
+      },
     })}>
-    <Tab.Screen name="Home" component={Home}/>
+    <Tab.Screen name="Home" component={Home} options={{ headerShown:false}}/>
     <Tab.Screen name="RecipeBook" component={RecipeBook} 
     options={
       ({ navigation }) => 

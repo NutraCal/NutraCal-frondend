@@ -1,8 +1,8 @@
 import React,{useState} from 'react';
 import {BackHandler,View, Text, StyleSheet, Image, TouchableOpacity, Alert} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { DefaultTheme, Button, Menu, Divider, Provider } from 'react-native-paper';
+import Icon from "react-native-vector-icons/Ionicons" 
 
 const HomeHeader = ({navigation}) => {
   const [visible, setVisible] = useState(false);
@@ -11,18 +11,16 @@ const HomeHeader = ({navigation}) => {
 
 
   return (
-    <Provider theme={DefaultTheme} style={styles.prov}>
+    <Provider style={styles.hehe}>
     <View style={styles.flex}>
-      <View style={[styles.flex]}>
-        <Text style={{color:'black'}}>
-          Recipe Book
-        </Text>
-      </View>
+      <Text style={{color:'black', fontFamily:"Inter-Bold", fontSize:20, alignSelf:"center", marginLeft:50}}>Recipe Book</Text>
       <TouchableOpacity>
       <Menu
           visible={visible}
           onDismiss={closeMenu}
-          anchor={<Button onPress={openMenu}>Show menu</Button>}>
+          anchor={
+            <Icon name="menu" size={30} color="black" onPress={openMenu}/>
+          }>
           <Menu.Item onPress={() => {
             
             navigation.navigate("AddRecipe");
@@ -46,11 +44,18 @@ const HomeHeader = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+ 
+
   flex: {
+    width:'100%',
+    flex:1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor:"red",
+    
+
   },
 });
 
-export default HomeHeader;
+export default HomeHeader;

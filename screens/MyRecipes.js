@@ -60,6 +60,26 @@ export default function MyRecipes() {
       <Hearticon width={20} height={20} style={styles.hicon}/>
       </TouchableOpacity>
 
+      <TouchableOpacity style={styles.box3}>
+      <Myrec1 width={70} height={50} style={{marginRight: 20}}/>
+      <View style={{width:220}}>  
+      <Text style={styles.caltxt}>250 Kcal</Text>
+      <Text style={styles.name}>Chopped Spring Ramen</Text>
+      <Text style={[styles.desc,{marginTop:0}]}>Scallions & tomatoes</Text>
+      </View>
+      <Hearticon width={20} height={20} style={styles.hicon}/>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.box3}>
+      <Myrec1 width={70} height={50} style={{marginRight: 20}}/>
+      <View style={{width:220}}>  
+      <Text style={styles.caltxt}>250 Kcal</Text>
+      <Text style={styles.name}>Chopped Spring Ramen</Text>
+      <Text style={[styles.desc,{marginTop:0}]}>Scallions & tomatoes</Text>
+      </View>
+      <Hearticon width={20} height={20} style={styles.hicon}/>
+      </TouchableOpacity>
+
     </ScrollView>
     </View>
   );

@@ -50,25 +50,25 @@ export default function SearchRecipe({navigation}) {
     <ScrollView horizontal={true} style={styles.scroll}>
     
     <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
-      <Pic1 width={60} height={61}/>
-      <Text style={styles.name}>Salad</Text>
+      <Pic1 width={60} height={61} style={{marginBottom:8}}/>
+      <Text style={styles.name1}>Salad</Text>
     </TouchableOpacity>
 
 
     <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
-    <Pic2 width={60} height={61}/>
-      <Text style={styles.name}>Cake</Text>
+    <Pic2 width={60} height={61} style={{marginBottom: 10}}/>
+      <Text style={styles.name1}>Cake</Text>
     </TouchableOpacity>
 
 
     <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
-    <Pic3 width={60} height={61}/>
-      <Text style={styles.name}>Pie</Text>
+    <Pic3 width={60} height={61} style={{marginBottom: 10}}/>
+      <Text style={styles.name1}>Pie</Text>
     </TouchableOpacity>
 
     <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
-    <Pic4 width={60} height={61}/>
-      <Text style={styles.name}>Smoothie</Text>
+    <Pic4 width={60} height={61} style={{marginBottom: 10}}/>
+      <Text style={styles.name1}>Smoothie</Text>
     </TouchableOpacity>
 
     </ScrollView>
@@ -76,7 +76,7 @@ export default function SearchRecipe({navigation}) {
     
     <ScrollView horizontal={true} style={styles.scroll}>
     <View style={[styles.box2, {backgroundColor:"#EBF1FF"}]}>
-    <Diet1 width={116} height={80} style={{marginBottom: 10}}/>
+    <Diet1 width={96} height={60} style={{marginBottom: 10}}/>
       <Text style={styles.name}>Honey Pancake</Text>
       <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
       <TouchableOpacity onPress={() => navigation.navigate('ViewRecipe')}>
@@ -88,7 +88,7 @@ export default function SearchRecipe({navigation}) {
 
 
     <View style={[styles.box2, {backgroundColor:"#F9EBF8"}]}>
-    <Diet2 width={130.75} height={77} style={{marginBottom: 10}}/>
+    <Diet2 width={110} height={57} style={{marginBottom: 10}}/>
     <Text style={styles.name}>Canai Bread</Text>
     <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
     <TouchableOpacity>
@@ -147,10 +147,9 @@ const styles = StyleSheet.create({
     backgroundColor:'#F8F9FE',
   },
   label:{
-    fontSize:20,
+    fontSize:16,
     color:"black",
-    fontFamily:"Inter-Regular"
-    
+    fontFamily:"Inter-Regular",
   },
 
   label1:{
@@ -171,10 +170,11 @@ const styles = StyleSheet.create({
    alignItems:'center',
    borderWidth: 1,
    paddingHorizontal:2,
-   paddingVertical:6,
+   paddingVertical:8,
    borderColor:"#C5C6CC",
-   borderRadius:9,
+   borderRadius:12,
    marginVertical:8
+
   },
 
   btn1:{
@@ -194,27 +194,27 @@ const styles = StyleSheet.create({
   },
 
   heading:{
-  fontFamily:"Inter-ExtraBold", 
+  fontFamily:"Inter-Bold", 
   color:"black", 
   fontSize:20,
-  marginTop:20,
+  marginTop:10,
   marginLeft:12,
 },
 
 box:{
-  height:130,
-  width:110,
+  height:120,
+  width:100,
   borderRadius:12,
-  margin:10,
+  margin:8,
   flexDirection:"column",
   alignItems:"center",
-  justifyContent:"space-around",
+  justifyContent:"center",
 },
 
 
 box2:{
-  height:240, 
-  width: 200,
+  height:220, 
+  width: 180,
   borderRadius:12,
   margin:10,
   flexDirection:"column",
@@ -233,14 +233,22 @@ box3:{
 },
 
 scroll:{
+  marginTop:10,
    flexDirection:"row",
 
 },
 
-name:{
-  fontSize: 18,
+name1:{
+  fontSize: 16,
   color: 'black',
   fontFamily:"Inter-Medium",
+  marginTop:5,
+},
+
+name:{
+  fontSize: 16,
+  color: 'black',
+  fontFamily:"Inter-SemiBold",
   marginTop:5,
 },
 
