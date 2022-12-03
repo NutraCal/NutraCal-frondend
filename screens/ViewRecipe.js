@@ -16,7 +16,7 @@ import Dp3 from '../assets/images/dp3.svg'
 import Reply from '../assets/images/reply.svg'
 import Like from '../assets/images/like.svg'
 
-export default function ViewRecipe() {
+export default function ViewRecipe({navigation}) {
   return (
     <View style={styles.container}>
       <ScrollView>

@@ -12,6 +12,8 @@ import MyRecipes from './screens/MyRecipes'
 import TabStack from './screens/TabStack';
 
 
+
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -29,9 +31,11 @@ export default function App() {
     theme={MyTheme}
     >
       <Stack.Navigator>
+      
       <Stack.Screen name="TabStack" component={TabStack} options={{headerShown: false}}/>
       <Stack.Screen name="View Recipe" component={ViewRecipe} />
-     
+      <Stack.Screen name="My Recipes" component={MyRecipes}/>
+      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
       <Stack.Screen 
       name="Search Recipe" 
       component={SearchRecipe}
@@ -54,11 +58,7 @@ export default function App() {
         }}
       />
 
-      <Stack.Screen name="My Recipes" component={MyRecipes}/>
-      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
-     
-
-      <Stack.Screen name="Add Recipe" component={AddRecipe} />
+      <Stack.Screen name="AddRecipe" component={AddRecipe} />
       </Stack.Navigator>
     </NavigationContainer>
 

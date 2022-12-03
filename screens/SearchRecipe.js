@@ -12,14 +12,17 @@ import Diet1 from '../assets/images/dietpic1.svg'
 import Diet2 from '../assets/images/dietpic2.svg'
 import Pop1 from '../assets/images/pop1.svg'
 import Forw from '../assets/forwardbtn.svg'
+import HomeHeader from './HomeHeader';
 
 
 
-export default function SearchRecipe() {
+export default function SearchRecipe({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
   return (
+    
+    
     <View style={styles.container}>
       <ScrollView>
       <Searchbar
@@ -127,7 +130,9 @@ export default function SearchRecipe() {
     
     
     </View>
+    
   );
+
 }
 
 const styles = StyleSheet.create({

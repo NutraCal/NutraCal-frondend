@@ -10,7 +10,7 @@ import RecipeBook from './SearchRecipe'
 import DietPlans from './DietPlans'
 import Shopping from './Shopping'
 import Blogs from './SearchBlog'
-
+import HomeHeader from './HomeHeader';
 
 
 import Icon from "react-native-vector-icons/Ionicons" 
@@ -24,7 +24,7 @@ const TabStack=()=>{
 
   return(
   <Tab.Navigator screenOptions={({ route }) => ({
-    headerShown: false,
+    
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
 
@@ -51,7 +51,6 @@ const TabStack=()=>{
     },
       tabBarActiveTintColor: "black",
       tabBarInactiveTintColor: "gray",
-      
      
       tabBarStyle: {
         height: 50,
@@ -59,13 +58,20 @@ const TabStack=()=>{
       },
     })}>
     <Tab.Screen name="Home" component={Home}/>
-    <Tab.Screen name="RecipeBook" component={RecipeBook}/>
+    <Tab.Screen name="RecipeBook" component={RecipeBook} 
+    options={
+      ({ navigation }) => 
+      {
+        return {
+          headerTitle: () =>  <HomeHeader navigation={navigation} />
+
+        }
+      }}/>
+
     <Tab.Screen name="DietPlans" component={DietPlans}  />
     <Tab.Screen name="Shopping" component={Shopping}/>
     <Tab.Screen name="Blogs" component={Blogs}/>
   
- 
-    
   </Tab.Navigator>
   )
 }
