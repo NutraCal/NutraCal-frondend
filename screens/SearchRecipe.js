@@ -41,7 +41,7 @@ export default function SearchRecipe({navigation}) {
 
     <View style={styles.btn}>
     <Filter width={20} height={20}/>
-    <Text style={styles.label}>Filter</Text>
+    <Text style={styles.label} onPress={() => navigation.navigate('ApplyFilters')}>Filter</Text>
     <Arrowdown width={20} height={20}/>
     </View>
     </View>
@@ -79,7 +79,7 @@ export default function SearchRecipe({navigation}) {
     <Diet1 width={116} height={80} style={{marginBottom: 10}}/>
       <Text style={styles.name}>Honey Pancake</Text>
       <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ViewRecipe')}>
       <View style={[styles.btn1,{backgroundColor:"#91C788",borderColor:"#91C788", borderWidth: 1, }]}>
       <Text style={[styles.label1,{color:"white"}]}>View</Text>
       </View>

@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 
 
 
-export default function AddRecipe() {
+export default function AddRecipe({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.paragraph}>
@@ -25,5 +25,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+    color:'black',
   },
 });

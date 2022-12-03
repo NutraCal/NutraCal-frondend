@@ -33,11 +33,12 @@ export default function App() {
       <Stack.Navigator>
       
       <Stack.Screen name="TabStack" component={TabStack} options={{headerShown: false}}/>
-      <Stack.Screen name="View Recipe" component={ViewRecipe} />
-      <Stack.Screen name="My Recipes" component={MyRecipes}/>
-      <Stack.Screen name="Apply Filters" component={ApplyFilters}/>
+      <Stack.Screen name="ViewRecipe" component={ViewRecipe} />
+     
+      <Stack.Screen name="MyRecipes" component={MyRecipes}/>
+      <Stack.Screen name="ApplyFilters" component={ApplyFilters}/>
       <Stack.Screen 
-      name="Search Recipe" 
+      name="SearchRecipe" 
       component={SearchRecipe}
       options={{
         headerBackTitleVisible:false,
@@ -57,7 +58,7 @@ export default function App() {
        
         }}
       />
-
+    
       <Stack.Screen name="AddRecipe" component={AddRecipe} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -29,9 +29,14 @@ const HomeHeader = ({navigation}) => {
             closeMenu();
             
           }} title="Add Recipe" />
-          <Menu.Item onPress={() => {}} title="My Recipe" />
           <Divider />
-          <Menu.Item onPress={() => {}} title="Item 3" />
+          <Menu.Item onPress={() => {
+            
+            navigation.navigate("MyRecipes");
+            closeMenu();
+            
+          }} title="My Recipes" />
+
         </Menu>
    
       </TouchableOpacity>
