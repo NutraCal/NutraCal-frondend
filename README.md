@@ -1,1 +1,1 @@
-This is NutraCal Mi Amor.
+This is NutraCal.
