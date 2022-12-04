@@ -88,7 +88,21 @@ const TabStack=()=>{
           fontWeight: 'bold',
         },
         }}/>
-    <Tab.Screen name="Blogs" component={Blogs}/>
+    <Tab.Screen name="Blogs" component={Blogs}
+    options={{
+      headerBackTitleVisible:false,
+      headerTitleAlign:"center",
+      title: 'Community',
+      headerStyle: {
+        borderWidth:1,
+       
+        elevation:5,
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      }}
+    />
   
   </Tab.Navigator>
   )
