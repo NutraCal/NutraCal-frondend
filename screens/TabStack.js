@@ -54,7 +54,6 @@ const TabStack=()=>{
      
       tabBarStyle: {
         height: 70,
-
         paddingVertical:8,
       },
       tabBarLabelStyle:{

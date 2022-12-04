@@ -35,29 +35,30 @@ export default function Home() {
 
       <View style={{marginTop:10}}>
         <View style={styles.hbox}>
-        <View  style={styles.box2}>
+        <TouchableOpacity style={styles.box2}>
         <Calories width={70} height={70}/>
         <Text style={styles.name}>Calories</Text>
         <Text style={styles.desc}>3 min ago</Text>
-        </View>
-        <View  style={styles.box2}>
+        </TouchableOpacity>
+        
+        <TouchableOpacity  style={styles.box2}>
         <Weight width={70} height={70}/>
         <Text style={styles.name}>Weight</Text>
         <Text style={styles.desc}>4 days ago</Text>
-        </View>
+        </TouchableOpacity>
         </View>
 
         <View style={styles.hbox}>
-        <View  style={styles.box2}>
+        <TouchableOpacity  style={styles.box2}>
         <Water width={70} height={70}/>
         <Text style={styles.name}>Water</Text>
         <Text style={styles.desc}>1 hour ago</Text>
-        </View>
-        <View  style={styles.box2}>
+        </TouchableOpacity>
+        <TouchableOpacity  style={styles.box2}>
         <Steps width={70} height={70}/>
         <Text style={styles.name}>Steps</Text>
         <Text style={styles.desc}>1 min ago</Text>
-        </View>
+        </TouchableOpacity>
         </View>
 
        
