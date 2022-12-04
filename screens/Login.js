@@ -9,11 +9,34 @@ import {
 } from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import register from './register';
+import userGwh from './userGwh';
 import Facebook from '../assets/Facebook.svg';
 import Google from '../assets/Google.svg';
+import ErrorMessage from '../components/ErrorMessage';
 export default function Login({route, navigation}) {
-  const [email, setEmail] = useState(' ');
-  const [password, setPassword] = useState(' ');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState('false');
+  const [isPasswordValid, setIsPasswordValid] = useState('false');
+  const credentialsValidation = () => {
+    if (
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
+      /^(?=.*\d).{8,12}$/.test(password)
+    ) {
+      setIsEmailValid('true');
+      setIsPasswordValid('true');
+      setEmail('');
+      setPassword('');
+      navigation.navigate('register');
+    } else {
+      setIsEmailValid('false');
+      setIsPasswordValid('false');
+      Alert.alert('Invalid Input', 'Please check your email and password', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -26,25 +49,44 @@ export default function Login({route, navigation}) {
           <Text style={styles.label}>Email</Text>
           <TextInput
             placeholder="Enter your email"
-            value={email.value}
+            value={email}
             mode="outlined"
             onChangeText={text => setEmail(text)}
             style={styles.input}></TextInput>
+          <Text
+            style={{
+              color: email != '' ? '#f3f3f3' : '#FF0000',
+              fontSize: 12,
+              marginBottom: 10,
+              fontFamily: 'Inter-Light',
+            }}>
+            Please fill out the field
+          </Text>
+          <Text style={styles.label}>Enter password</Text>
         </View>
         <View>
-          <Text style={styles.label}>Password</Text>
           <TextInput
             placeholder="Enter your password"
-            value={password.value}
+            value={password}
             mode="outlined"
             onChangeText={text => setPassword(text)}
             style={styles.input}
             secureTextEntry></TextInput>
+          <Text
+            style={{
+              color: password != '' ? '#f3f3f3' : '#FF0000',
+              fontSize: 12,
+              marginBottom: 10,
+              fontFamily: 'Inter-Light',
+            }}>
+            Please fill out the field
+          </Text>
         </View>
 
         <Button
           style={styles.btn}
           color="#90C888"
+          onPress={credentialsValidation}
           labelStyle={{color: 'white'}}
           mode="contained">
           Login
@@ -86,7 +128,7 @@ export default function Login({route, navigation}) {
               color: '#90C888',
               fontFamily: 'Inter-SemiBold',
             }}
-            onPress={() => navigation.navigate('register')}>
+            onPress={() => navigation.navigate('userGwh')}>
             Sign Up
           </Text>
         </View>
@@ -124,14 +166,13 @@ const styles = StyleSheet.create({
 
   label: {
     fontSize: 16,
-    marginBottom: 10,
+    marginHorizontal: 10,
     color: 'black',
     fontFamily: 'Inter-Regular',
   },
 
   input: {
     height: 50,
-    marginBottom: 10,
     width: 300,
   },
 

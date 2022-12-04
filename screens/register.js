@@ -10,8 +10,105 @@ import {
 import {Button, TextInput} from 'react-native-paper';
 import Login from './Login';
 const register = ({route, navigation}) => {
-  const [email, setEmail] = useState(' ');
-  const [password, setPassword] = useState(' ');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [goal, setGoal] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [heightUnit, setHeightUnit] = useState('');
+  const [weight, setWeight] = useState(0);
+  const [weightUnit, setWeightUnit] = useState('');
+  const [allergies, setAllergies] = useState('');
+  const [diet, setDiet] = useState('');
+  const [ings, setIngs] = useState('');
+  React.useEffect(() => {
+    if (
+      route.params?.fitnessGoal &&
+      route.params?.gender &&
+      route.params?.age &&
+      route.params?.height &&
+      route.params?.heightUnit &&
+      route.params?.weight &&
+      route.params?.weightUnit &&
+      route.params?.allergies &&
+      route.params?.diet &&
+      route.params?.ingredients
+    ) {
+      const fitnessGoal = route.params?.fitnessGoal;
+      const gender = route.params?.gender;
+      const age = route.params?.age;
+      const height = route.params?.height;
+      const heightUnit = route.params?.heightUnit;
+      const weight = route.params?.weight;
+      const weightUnit = route.params?.weightUnit;
+      const allergies = route.params?.allergies;
+      const diet = route.params?.diet;
+      const ingredients = route.params?.ingredients;
+      setGoal(fitnessGoal);
+      setGender(gender);
+      setAge(age);
+      setHeight(height);
+      setHeightUnit(heightUnit);
+      setWeight(weight);
+      setWeightUnit(weightUnit);
+      setAllergies(allergies);
+      setDiet(diet);
+      setIngs(ings);
+    }
+  }, [
+    route.params?.fitnessGoal,
+    route.params?.gender,
+    route.params?.age,
+    route.params?.height,
+    route.params?.heightUnit,
+    route.params?.weight,
+    route.params?.weightUnit,
+    route.params?.allergies,
+    route.params?.diet,
+    route.params?.ingredients,
+  ]);
+  const credentialsValidation = () => {
+    if (
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
+      /^(?=.*\d).{8,12}$/.test(password)
+    ) {
+      setEmail('');
+      setPassword('');
+      setIsEmailValid('true');
+      setIsPasswordValid('true');
+      navigation.navigate('register');
+    } else {
+      setIsEmailValid('false');
+      setIsPasswordValid('false');
+      Alert.alert('Invalid Input', 'Please check your email and password', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    }
+  };
+  const registerUser = () => {
+    fetch('http://10.0.2.2:3000/users/createUser', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        fitnessGoal: goal,
+        gender: gender,
+        age: age,
+        height: height,
+        heightUnit: heightUnit,
+        weight: weight,
+        weightUnit: weightUnit,
+        allergies: allergies,
+        diet: diet,
+        ingredients: ings,
+      }),
+    });
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.h1}>Create Account</Text>
@@ -22,10 +119,19 @@ const register = ({route, navigation}) => {
           <Text style={styles.label}>Email</Text>
           <TextInput
             placeholder="Enter your email"
-            value={email.value}
+            value={email}
             mode="outlined"
             onChangeText={text => setEmail(text)}
             style={styles.input}></TextInput>
+          <Text
+            style={{
+              color: email != '' ? '#f3f3f3' : '#FF0000',
+              fontSize: 12,
+              marginBottom: 10,
+              fontFamily: 'Inter-Light',
+            }}>
+            Please fill out the field
+          </Text>
         </View>
         <View>
           <Text style={styles.label}>Password</Text>
@@ -36,10 +142,20 @@ const register = ({route, navigation}) => {
             onChangeText={text => setPassword(text)}
             style={styles.input}
             secureTextEntry></TextInput>
+          <Text
+            style={{
+              color: email != '' ? '#f3f3f3' : '#FF0000',
+              fontSize: 12,
+              marginBottom: 10,
+              fontFamily: 'Inter-Light',
+            }}>
+            Please fill out the field
+          </Text>
         </View>
         <Text style={styles.Text}>I agree to the terms and conditions,</Text>
         <Button
           style={styles.btn}
+          onPress={credentialsValidation}
           color="#90C888"
           labelStyle={{color: 'white'}}
           mode="contained">
@@ -105,7 +221,7 @@ const styles = StyleSheet.create({
 
   label: {
     fontSize: 16,
-    marginBottom: 10,
+    marginHorizontal: 10,
     color: 'black',
     fontFamily: 'Inter-Regular',
   },

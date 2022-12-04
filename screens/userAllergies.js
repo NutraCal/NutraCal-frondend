@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import userGwh from './userGwh';
 import userDiet from './userDiet';
 import userIng from './userIng';
@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  Alert,
   Image,
   StyleSheet,
   TouchableOpacity,
@@ -19,10 +20,70 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
-const userFitnessGoal = ({navigation, route}) => {
-  const [pressed, setPressed] = useState(4);
-  const setColor = number => {
-    setPressed(number);
+const userAllergies = ({navigation, route}) => {
+  const [goal, setGoal] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [heightUnit, setHeightUnit] = useState('');
+  const [weight, setWeight] = useState(0);
+  const [weightUnit, setWeightUnit] = useState('');
+  const [allergies, setAllergies] = useState('');
+  React.useEffect(() => {
+    if (
+      route.params?.fitnessGoal &&
+      route.params?.gender &&
+      route.params?.age &&
+      route.params?.height &&
+      route.params?.heightUnit &&
+      route.params?.weight &&
+      route.params?.weightUnit
+    ) {
+      const fitnessGoal = route.params?.fitnessGoal;
+      const gender = route.params?.gender;
+      const age = route.params?.age;
+      const height = route.params?.height;
+      const heightUnit = route.params?.heightUnit;
+      const weight = route.params?.weight;
+      const weightUnit = route.params?.weightUnit;
+      setGoal(fitnessGoal);
+      setGender(gender);
+      setAge(age);
+      setHeight(height);
+      setHeightUnit(heightUnit);
+      setWeight(weight);
+      setWeightUnit(weightUnit);
+    }
+  }, [
+    route.params?.fitnessGoal,
+    route.params?.gender,
+    route.params?.age,
+    route.params?.height,
+    route.params?.heightUnit,
+    route.params?.weight,
+    route.params?.weightUnit,
+  ]);
+
+  const setAllergens = allg => {
+    setAllergies(allg);
+  };
+  const inputValidation = () => {
+    if (allergies != '') {
+      navigation.navigate('userDiet', {
+        fitnessGoal: goal,
+        gender: gender,
+        age: age,
+        height: height,
+        heightUnit: heightUnit,
+        weight: weight,
+        weightUnit: weightUnit,
+        allergies: allergies,
+      });
+    } else {
+      Alert.alert('Invalid Input', 'Please select allergies', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    }
   };
   return (
     <View style={styles.container}>
@@ -32,52 +93,54 @@ const userFitnessGoal = ({navigation, route}) => {
       </Text>
 
       <TouchableOpacity
-        onPress={() => setColor(0)}
+        onPress={() => setAllergens('Lactose Intolerant')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              allergies == 'Lactose Intolerant'
+                ? 'rgba(145, 199, 136, 0.2)'
+                : '#f3f3f3',
           },
         }}>
-        <Text style={styles.listText}>Lactose Intolerant</Text>
+        <Text style={styles.listText}>Lactose Intolerant{gender}</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor(1)}
+        onPress={() => setAllergens('Nut Allergy')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 1 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              allergies == 'Nut Allergy'
+                ? 'rgba(145, 199, 136, 0.2)'
+                : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Nut Allergy</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor(2)}
+        onPress={() => setAllergens('Egg')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 2 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              allergies == 'Egg' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Egg</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor(3)}
+        onPress={() => setAllergens('None')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 3 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              allergies == 'None' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>None</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate('userDiet')}>
+      <TouchableOpacity style={styles.btn} onPress={inputValidation}>
         <Text style={styles.btnText}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -127,4 +190,4 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
   },
 });
-export default userFitnessGoal;
+export default userAllergies;

@@ -25,79 +25,107 @@ import Shrimp from '../assets/shrimp.svg';
 const Stack = createNativeStackNavigator();
 
 const userIng = ({navigation, route}) => {
-  const [pressed, setPressed] = useState(6);
-  const [pressed1, setPressed1] = useState(6);
-  const [pressed2, setPressed2] = useState(6);
-  const [pressed3, setPressed3] = useState(6);
-  const [pressed4, setPressed4] = useState(6);
-  const [pressed5, setPressed5] = useState(6);
-  const setColor = number => {
-    if (pressed == 0) {
-      setPressed(1);
+  const [goal, setGoal] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [heightUnit, setHeightUnit] = useState('');
+  const [weight, setWeight] = useState(0);
+  const [weightUnit, setWeightUnit] = useState('');
+  const [allergies, setAllergies] = useState('');
+  const [diet, setDiet] = useState('');
+  const [ings, setIngs] = useState('');
+  React.useEffect(() => {
+    if (
+      route.params?.fitnessGoal &&
+      route.params?.gender &&
+      route.params?.age &&
+      route.params?.height &&
+      route.params?.heightUnit &&
+      route.params?.weight &&
+      route.params?.weightUnit &&
+      route.params?.allergies &&
+      route.params?.diet
+    ) {
+      const fitnessGoal = route.params?.fitnessGoal;
+      const gender = route.params?.gender;
+      const age = route.params?.age;
+      const height = route.params?.height;
+      const heightUnit = route.params?.heightUnit;
+      const weight = route.params?.weight;
+      const weightUnit = route.params?.weightUnit;
+      const allergies = route.params?.allergies;
+      const diet = route.params?.diet;
+      setGoal(fitnessGoal);
+      setGender(gender);
+      setAge(age);
+      setHeight(height);
+      setHeightUnit(heightUnit);
+      setWeight(weight);
+      setWeightUnit(weightUnit);
+      setAllergies(allergies);
+      setDiet(diet);
+    }
+  }, [
+    route.params?.fitnessGoal,
+    route.params?.gender,
+    route.params?.age,
+    route.params?.height,
+    route.params?.heightUnit,
+    route.params?.weight,
+    route.params?.weightUnit,
+    route.params?.allergies,
+    route.params?.diet,
+  ]);
+
+  const setIngredient = value => {
+    setIngs(value);
+  };
+  const inputValidation = () => {
+    if (ings != '') {
+      navigation.navigate('register', {
+        fitnessGoal: goal,
+        gender: gender,
+        age: age,
+        height: height,
+        heightUnit: heightUnit,
+        weight: weight,
+        weightUnit: weightUnit,
+        allergies: allergies,
+        diet: diet,
+        ingredients: ings,
+      });
     } else {
-      setPressed(number);
+      Alert.alert('Invalid Input', 'Please select ingredients you dislike', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
     }
   };
-  const setColor1 = number => {
-    if (pressed1 == 1) {
-      setPressed1(0);
-    } else {
-      setPressed1(number);
-    }
-  };
-  const setColor2 = number => {
-    if (pressed2 == 2) {
-      setPressed2(0);
-    } else {
-      setPressed2(number);
-    }
-  };
-  const setColor3 = number => {
-    if (pressed3 == 3) {
-      setPressed3(0);
-    } else {
-      setPressed3(number);
-    }
-  };
-  const setColor4 = number => {
-    if (pressed4 == 4) {
-      setPressed4(0);
-    } else {
-      setPressed4(number);
-    }
-  };
-  const setColor5 = number => {
-    if (pressed5 == 5) {
-      setPressed5(0);
-    } else {
-      setPressed5(number);
-    }
-  };
+
   return (
     <View style={styles.container}>
       <ProgressBar />
       <Text style={styles.Heading}>Which ingredients do you dislike?</Text>
-      <Text style={styles.Text}>Select all that apply.</Text>
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
-          onPress={() => setColor(0)}
+          onPress={() => setIngredient('Mushroom')}
           style={{
             ...styles.listItem,
             ...{
               backgroundColor:
-                pressed == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+                ings == 'Mushroom' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
             },
           }}>
           <Mushroom style={styles.vector} />
           <Text style={styles.listText}>Mushroom</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setColor1(1)}
+          onPress={() => setIngredient('Olives')}
           style={{
             ...styles.listItem,
             ...{
               backgroundColor:
-                pressed1 == 1 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+                ings == 'Olives' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
             },
           }}>
           <Olives style={styles.vector} />
@@ -106,24 +134,24 @@ const userIng = ({navigation, route}) => {
       </View>
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
-          onPress={() => setColor2(2)}
+          onPress={() => setIngredient('Tofu')}
           style={{
             ...styles.listItem,
             ...{
               backgroundColor:
-                pressed2 == 2 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+                ings == 'Tofu' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
             },
           }}>
           <Tofu style={styles.vector} />
           <Text style={styles.listText}>Tofu</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setColor3(3)}
+          onPress={() => setIngredient('Brocolli')}
           style={{
             ...styles.listItem,
             ...{
               backgroundColor:
-                pressed3 == 3 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+                ings == 'Brocolli' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
             },
           }}>
           <Brocolli style={styles.vector} />
@@ -132,24 +160,24 @@ const userIng = ({navigation, route}) => {
       </View>
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
-          onPress={() => setColor4(4)}
+          onPress={() => setIngredient('Onion')}
           style={{
             ...styles.listItem,
             ...{
               backgroundColor:
-                pressed4 == 4 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+                ings == 'Onion' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
             },
           }}>
           <Onion style={styles.vector} />
           <Text style={styles.listText}>Onion</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setColor5(5)}
+          onPress={() => setIngredient('Shrimp')}
           style={{
             ...styles.listItem,
             ...{
               backgroundColor:
-                pressed5 == 5 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+                ings == 'Shrimp' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
             },
           }}>
           <Shrimp style={styles.vector} />
@@ -157,9 +185,7 @@ const userIng = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate('register')}>
+      <TouchableOpacity style={styles.btn} onPress={inputValidation}>
         <Text style={styles.btnText}>Next</Text>
       </TouchableOpacity>
     </View>

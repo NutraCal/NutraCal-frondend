@@ -10,6 +10,7 @@ import {
   ScrollView,
   StatusBar,
   Image,
+  Alert,
   StyleSheet,
   TouchableOpacity,
   TouchableHighlight,
@@ -21,9 +22,18 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 const userFitnessGoal = ({navigation, route}) => {
-  const [pressed, setPressed] = useState(3);
-  const setColor = number => {
-    setPressed(number);
+  const [goal, setFitnessGoal] = useState('');
+  const setGoal = goal => {
+    setFitnessGoal(goal);
+  };
+  const inputValidation = () => {
+    if (goal != '') {
+      navigation.navigate('userGwh', {fitnessGoal: goal});
+    } else {
+      Alert.alert('Invalid Input', 'Please select your Goal', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+    }
   };
   return (
     <View style={styles.container}>
@@ -33,41 +43,39 @@ const userFitnessGoal = ({navigation, route}) => {
         It will help us choose the best program{'\n'}for you
       </Text>
       <TouchableOpacity
-        onPress={() => setColor(0)}
+        onPress={() => setGoal('Lose Weight')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              goal == 'Lose Weight' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Lose Weight</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor(1)}
+        onPress={() => setGoal('Gain Weight')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 1 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              goal == 'Gain Weight' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Gain Weight</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor(2)}
+        onPress={() => setGoal('Be Healthier')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 2 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              goal == 'Be Healthier' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Be Healthier</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate('userGwh')}>
+      <TouchableOpacity style={styles.btn} onPress={inputValidation}>
         <Text style={styles.btnText}>Next</Text>
       </TouchableOpacity>
     </View>
