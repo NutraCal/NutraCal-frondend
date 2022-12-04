@@ -15,9 +15,10 @@ export default function ApplyFilters() {
   const [textInputValue, setTextInputValue] = useState('');
   return (
     <View style={styles.container}>
+      <View style={{alignItems:'center',padding:20, justifyContent:'center'}}>
       <Text style={styles.heading}>Category</Text>
+
       <View style={styles.flex1}>
-        
       <TouchableOpacity style={[styles.btn1,{backgroundColor:"#91C788",borderColor:"#91C788", borderWidth: 1, } ]}>
       <Text style={[styles.txt,{color:"white"}]}>Breakfast</Text>
       </TouchableOpacity>
@@ -65,6 +66,7 @@ export default function ApplyFilters() {
       <Text style={styles.txt}>Vegetarian</Text>
       </TouchableOpacity>
       </View>
+      
 
       <Text style={styles.heading}>Calories</Text>
       <GestureHandlerRootView style={{marginTop:20}}>
@@ -91,57 +93,42 @@ export default function ApplyFilters() {
       <Text style={styles.heading}>Ingredients</Text>
 
       <View style={styles.textinputc}>
-      <TextInput
-      style={{ 
-    	
-    	borderColor: '#C5C6CC', 
-    	borderWidth: 1,
-      height:40,
-      width:300,
-      paddingHorizontal:15,
-      borderRadius:10,
-      alignSelf:"center",
-      fontFamily:"Inter-Regular",
-      color:"black",
-    
-    }}
-	    placeholder="Type and add your ingredients"
-      placeholderTextColor="#C5C6CC"
-    />
+      <TextInput style={[styles.txtinput,{width:320}]} placeholder="Type and add your ingredients" placeholderTextColor="#C5C6CC"/>
+      <TouchableOpacity style={styles.cbtn}>
+      <Text style={{fontSize:20, color:"white"}}>+</Text>
+      </TouchableOpacity>
+      </View>
 
-    <TouchableOpacity style={styles.cbtn}>
-    <Text style={{fontSize:20, color:"white"}}>+</Text>
-    </TouchableOpacity>
-    
-    </View>
+      
+      <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+      <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
+      <Ing1 width={40} height={39} style={{marginRight: 20}}/>
+      <Text style={styles.name}>Sugar</Text>
+      </View>
+      <TouchableOpacity style={[styles.cbtn,{marginLeft:50, elevation:2,backgroundColor:"white"}]}>
+      <Text style={{fontSize:20, color:"#91C788",alignSelf:"center"}}>-</Text>
+      </TouchableOpacity>
+      </View>
 
 
-    <View style={[styles.box3, {backgroundColor:"#F8F9FE"}]}>
-    <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-    <Ing1 width={48} height={47} style={{marginRight: 20}}/>
-    <Text style={styles.name}>Sugar</Text>
-    </View>
-    <TouchableOpacity style={[styles.cbtn,{marginLeft:50, elevation:2,backgroundColor:"white"}]}>
-    <Text style={{fontSize:20, color:"#91C788",alignSelf:"center"}}>-</Text>
-    </TouchableOpacity>
-    </View>
+      <View style={[styles.box3, {backgroundColor:"#F9EBF8"}]}>
+      <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
+      <Ing2 width={40} height={39} style={{marginRight: 20}}/>
+      <Text style={styles.name}>Baking Soda</Text>
+      </View>
+      <TouchableOpacity style={[styles.cbtn,{marginLeft:50, elevation:2,backgroundColor:"white"}]}>
+      <Text style={{fontSize:20, color:"#91C788",alignSelf:"center"}}>-</Text>
+      </TouchableOpacity>
+      </View>
 
-    <View style={[styles.box3, {backgroundColor:"#F8F9FE"}]}>
-    <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-    <Ing2 width={48} height={47} style={{marginRight: 20}}/>
-    <Text style={styles.name}>Baking Soda</Text>
-    </View>
-    <TouchableOpacity style={[styles.cbtn,{marginLeft:50, elevation:2,backgroundColor:"white"}]}>
-    <Text style={{fontSize:20, color:"#91C788",alignSelf:"center"}}>-</Text>
-    </TouchableOpacity>
-    </View>
+      <TouchableOpacity style={{width:330, height:48, backgroundColor:"#91C788",alignSelf:"center", borderRadius:12, alignItems:"center", justifyContent:"center",marginTop:40, marginBottom:20}}>
+      <Text style={{color:"white", fontSize:16, fontFamily:"Inter-SemiBold"}}>Save Recipe</Text>
+      </TouchableOpacity>
+   
 
-    
-
-    <TouchableOpacity style={{width:330, height:48, backgroundColor:"#91C788",alignSelf:"center", borderRadius:12, alignItems:"center", justifyContent:"center",marginTop:40, marginBottom:20}}>
-    <Text style={{color:"white", fontSize:16, fontFamily:"Inter-SemiBold"}}>Apply Filters</Text>
-    </TouchableOpacity>
-
+  
+ 
+      </View>
       </View>
      
 
@@ -151,7 +138,7 @@ export default function ApplyFilters() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    alignItems:'center',
     paddingVertical:5,
     flex:1,
   },
@@ -162,6 +149,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     color:"black",
+    alignSelf:'flex-start'
   },
 
   btn1:{
@@ -184,6 +172,7 @@ const styles = StyleSheet.create({
   },
   flex1:{
     flexDirection:"row",
+    alignSelf:'flex-start',
   },
 
   contentContainer: {
@@ -207,6 +196,7 @@ const styles = StyleSheet.create({
   tableContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
+  
   },
   table: {
     borderColor: '#EBECF2',
@@ -215,50 +205,65 @@ const styles = StyleSheet.create({
     marginTop: 5,
     borderRadius: 5,
   },
-  colorBlack: {color: 'black'},
-  box:{flexDirection:"column"},
+  
+  box:{flexDirection:"column",
+},
 
   label:{
   color:"#999999",
   fontFamily:"Inter-Medium",
   fontSize:12,
 },
-box3:{
-  height:50, 
-  width: 350,
-  borderRadius:12,
-  margin:10,
-  flexDirection:"row",
-  alignItems:"center",
-  justifyContent:'space-between',
-  paddingHorizontal:10,
-  paddingVertical:5,
-},
 
-name:{
-  fontSize: 16,
-  color: 'black',
-  fontFamily:"Inter-Medium",
-  marginTop:5,
-},
 
 labelc:
 {
  flexDirection:"row", 
- width:345, 
+ width:350, 
  justifyContent:"space-between",
  alignItems:"center",
- alignSelf:"center",
+
  marginTop: 10},
+
+
+
+txtinput:{ 
+  borderColor: '#E1E3E8', 
+  borderWidth: 1,
+  height: 48,
+  width:350,
+  paddingHorizontal:15,
+  borderRadius:10,
+  fontFamily:"Inter-Regular",
+  color:"black",
+  fontSize:16,
+  marginBottom:5,
+  
+
+},
 
 textinputc:
 {
   flexDirection:"row",
-  alignContent:"center", 
+  alignItems:"center", 
   justifyContent:"center", 
-  marginTop:15,
-  marginBottom:15,
+  marginTop:10,
+  marginBottom:10,
+  width:350,
 },
+
+box3:{
+  height:55, 
+  width: 360,
+  borderRadius:12,
+  flexDirection:"row",
+  alignItems:"center",
+  justifyContent:"center",   
+  marginVertical:10,
+
+
+},
+
 cbtn:{
   width:30,
   height:30, 
@@ -267,6 +272,14 @@ cbtn:{
   alignItems:"center", 
   justifyContent:"center",
   marginLeft:10,
+},
+
+name:{
+  fontSize: 16,
+  color: 'black',
+  fontFamily:"Inter-Medium",
+  marginTop:5,
+  width:180,
 },
 
 

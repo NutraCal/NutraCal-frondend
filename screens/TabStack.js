@@ -15,6 +15,7 @@ import HomeHeader from './HomeHeader';
 
 import Icon from "react-native-vector-icons/Ionicons" 
 import Icon2 from "react-native-vector-icons/Entypo" 
+import { HeaderTitle } from '@react-navigation/elements';
 
 
 const Tab = createBottomTabNavigator();
@@ -72,7 +73,21 @@ const TabStack=()=>{
       }}/>
 
     <Tab.Screen name="DietPlans" component={DietPlans}  />
-    <Tab.Screen name="Shopping" component={Shopping}/>
+    <Tab.Screen name="Shopping" component={Shopping} 
+    options={{
+        headerBackTitleVisible:false,
+        headerTitleAlign:"center",
+        title: 'Shopping Help',
+        headerStyle: {
+          borderWidth:1,
+          backgroundColor: '#f4511e',
+         
+          elevation:5,
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        }}/>
     <Tab.Screen name="Blogs" component={Blogs}/>
   
   </Tab.Navigator>

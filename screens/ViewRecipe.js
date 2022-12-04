@@ -20,11 +20,11 @@ export default function ViewRecipe({navigation}) {
   return (
     <View style={styles.container}>
       <ScrollView>
-      <Recipe1 width={200} height={200} style={{borderRadius:20}}/>
-      <View >
+      <View style={styles.container2}>
+      <Recipe1 width={200} height={200} style={{borderRadius:40}}/>
+      
       <Text style={styles.heading}>Blueberry Pancake</Text>
       <Text style={styles.name}>by James Ruth</Text>
-      </View>
 
       <Text style={styles.heading}>Nutrition</Text>
 
@@ -87,7 +87,7 @@ export default function ViewRecipe({navigation}) {
 
       <ScrollView horizontal={true}>
     
-        <View>
+        <View style={{alignItems:"center"}}>
         <View style={styles.box1}>
         <Icon1 width={50} height={50}/>
         </View>
@@ -97,7 +97,7 @@ export default function ViewRecipe({navigation}) {
         </View>
         </View>
 
-        <View>
+        <View style={{alignItems:"center"}}>
         <View style={styles.box1}>
         <Icon2 width={50} height={50}/>
         </View>
@@ -107,17 +107,17 @@ export default function ViewRecipe({navigation}) {
         </View>
         </View>
 
-        <View>
+        <View style={{alignItems:"center"}}>
         <View style={styles.box1}>
         <Icon3 width={50} height={50}/>
         </View>
-        <View style={{}}>
+        <View >
         <Text style={styles.name}>Baking Soda</Text>
         <Text style={styles.tag}>2 tsp</Text>
         </View>
         </View>
 
-        <View>
+        <View style={{alignItems:"center"}}>
         <View style={styles.box1}>
         <Icon4 width={50} height={50}/>
         </View>
@@ -126,6 +126,8 @@ export default function ViewRecipe({navigation}) {
         <Text style={styles.tag}>2 items</Text>
         </View>
         </View>
+
+
       </ScrollView>
 
     <TouchableOpacity style={{width:330, height:48, backgroundColor:"#91C788",alignSelf:"center", borderRadius:12, alignItems:"center", justifyContent:"center",marginTop:30, marginBottom:10}}>
@@ -140,9 +142,9 @@ export default function ViewRecipe({navigation}) {
     <Text style={styles.tag}>Put the egg and milk mixture into the dry ingredients, Stir untul smooth and smooth.</Text>
     <Text style={styles.tag}>Prepare all of the ingredients that needed.</Text>
 
+    <View style={{flexDirection:"row",width:370, justifyContent:'space-between',marginTop:10}}>
+    <Text style={[styles.heading]}>Rate & Review</Text>
 
-    <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-    <Text style={styles.heading}>Rate & Review</Text>
     <View style={{flexDirection:"row",marginTop:10}}>
     <Star width={20} height={20} style={{marginLeft:5}}/>
     <Star width={20} height={20} style={{marginLeft:5}}/>
@@ -153,20 +155,7 @@ export default function ViewRecipe({navigation}) {
     </View>
 
     <TextInput
-      style={{ 
-      marginTop:10,
-    	borderColor: '#F8F9FE', 
-      backgroundColor:"#F8F9FE",
-    	borderWidth: 1,
-      height:50,
-      width:370,
-      paddingHorizontal:15,
-      borderRadius:20,
-      fontFamily:"Inter-Regular",
-      color:"black",
-      fontSize:16,
-    
-    }}
+      style={styles.txtInput}
 	    placeholder="Leave a comment"
       placeholderTextColor="#8F9098"
     />
@@ -210,7 +199,7 @@ export default function ViewRecipe({navigation}) {
       </View>
       </View>
 
-      
+       </View>
 
       </ScrollView>
     </View>
@@ -220,15 +209,22 @@ export default function ViewRecipe({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    padding:8,
+    alignItems:'center',
     justifyContent: 'center',
-    marginBottom:10,
+    padding: 8,
+    paddingTop:20,
+  },
+  container2:{
+    alignItems:"center",
+    justifyContent:'center',
+
   },
   heading:{
     fontFamily:"Inter-Bold", 
     color:"black", 
     fontSize:20,
     marginTop:10,
+    alignSelf:'flex-start',
     
   },
   box:{
@@ -255,17 +251,37 @@ const styles = StyleSheet.create({
     justifyContent:"space-around",
   },
 
+  txtInput:{
+      marginVertical:10,
+    	borderColor: '#F8F9FE', 
+      backgroundColor:"#F8F9FE",
+    	borderWidth: 1,
+      height:50,
+      width:370,
+      paddingHorizontal:15,
+      borderRadius:20,
+      fontFamily:"Inter-Regular",
+      color:"black",
+      fontSize:16,
+    
+  },
+
 
   name:{
     fontSize: 16,
     color: 'black',
     fontFamily:"Inter-Medium",
+    alignSelf:'flex-start',
+    
   },
 
   tag:{
     fontSize: 14,
     color: 'black',
     fontFamily:"Inter-Regular",
+    alignSelf:'flex-start',
+    marginBottom:5,
+
   },
   
   desc:{
@@ -274,6 +290,7 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     color: 'black',
     fontFamily:"Inter-Light",
+    alignSelf:"flex-start",
   },
   
   
