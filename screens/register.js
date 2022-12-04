@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
+import type {Node} from 'react';
 import {Button, TextInput} from 'react-native-paper';
 import Login from './Login';
 const register = ({route, navigation}) => {
@@ -22,6 +23,8 @@ const register = ({route, navigation}) => {
   const [allergies, setAllergies] = useState('');
   const [diet, setDiet] = useState('');
   const [ings, setIngs] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState('false');
+  const [isPasswordValid, setIsPasswordValid] = useState('false');
   React.useEffect(() => {
     if (
       route.params?.fitnessGoal &&
@@ -73,11 +76,31 @@ const register = ({route, navigation}) => {
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
     ) {
+      fetch('http://192.168.100.101:3000/users/createUser', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+          fitnessGoal: goal,
+          gender: gender,
+          age: age,
+          height: height,
+          heightUnit: heightUnit,
+          weight: weight,
+          weightUnit: weightUnit,
+          allergies: allergies,
+          diet: diet,
+          ingredients: 'abc',
+        }),
+      });
       setEmail('');
       setPassword('');
       setIsEmailValid('true');
       setIsPasswordValid('true');
-      navigation.navigate('register');
     } else {
       setIsEmailValid('false');
       setIsPasswordValid('false');
@@ -87,7 +110,7 @@ const register = ({route, navigation}) => {
     }
   };
   const registerUser = () => {
-    fetch('http://10.0.2.2:3000/users/createUser', {
+    fetch('http://localhost:3000/users/createUser', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -111,7 +134,7 @@ const register = ({route, navigation}) => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.h1}>Create Account</Text>
+      <Text style={styles.h1}>Create Account{ings}</Text>
       <Text style={styles.h3}>Connect with your Friends Today!</Text>
 
       <View style={styles.midcontainer}>
