@@ -9,8 +9,8 @@ import ApplyFilters from './screens/ApplyFilters'
 import ViewRecipe from './screens/ViewRecipe'
 import AddRecipe from './screens/AddRecipe'
 import MyRecipes from './screens/MyRecipes'
+import SuggestRecipe from './screens/SuggestRecipe'
 import TabStack from './screens/TabStack';
-
 
 
 
@@ -51,6 +51,7 @@ export default function App() {
       />
     
       <Stack.Screen name="AddRecipe" component={AddRecipe} />
+      <Stack.Screen name="SuggestRecipe" component={SuggestRecipe} />
       </Stack.Navigator>
     </NavigationContainer>
 

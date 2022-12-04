@@ -34,6 +34,13 @@ const HomeHeader = ({navigation}) => {
             closeMenu();
             
           }} title="My Recipes" />
+           <Divider />
+          <Menu.Item onPress={() => {
+            
+            navigation.navigate("SuggestRecipe");
+            closeMenu();
+            
+          }} title="Suggest Recipe" />
 
         </Menu>
    

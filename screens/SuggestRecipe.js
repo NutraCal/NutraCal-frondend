@@ -8,8 +8,11 @@ import Ing2 from '../assets/images/ing2.svg'
 export default function AddRecipe() {
   return (
     <View style={styles.container}>
-      
-      <ScrollView>
+      <View style={{alignItems:'flex-start',width:350, marginTop:20, marginBottom:10}}>
+      <Text style={styles.boldheading}>What's in your kitchen?</Text>
+      <Text style={styles.subheading}>Enter up to 5 ingredients</Text>
+      </View>
+
       <View style={styles.textinputc}>
       <TextInput style={[styles.txtinput,{width:300}]} placeholder="Type and add your ingredients" placeholderTextColor="#C5C6CC"/>
       <TouchableOpacity style={styles.cbtn}>
@@ -18,7 +21,7 @@ export default function AddRecipe() {
       </View>
 
       
-      <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+      <View style={[styles.box3, {backgroundColor:"#EFF7EE"}]}>
       <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
       <Ing1 width={40} height={39} style={{marginRight: 20}}/>
       <Text style={styles.name}>Sugar</Text>
@@ -29,7 +32,7 @@ export default function AddRecipe() {
       </View>
 
 
-      <View style={[styles.box3, {backgroundColor:"#F9EBF8"}]}>
+      <View style={[styles.box3, {backgroundColor:"#EFF7EE"}]}>
       <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
       <Ing2 width={40} height={39} style={{marginRight: 20}}/>
       <Text style={styles.name}>Baking Soda</Text>
@@ -39,7 +42,7 @@ export default function AddRecipe() {
       </TouchableOpacity>
       </View>
 
-      <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+      <View style={[styles.box3, {backgroundColor:"#EFF7EE"}]}>
       <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
       <Ing1 width={40} height={39} style={{marginRight: 20}}/>
       <Text style={styles.name}>Sugar</Text>
@@ -50,7 +53,7 @@ export default function AddRecipe() {
       </View>
 
 
-      <View style={[styles.box3, {backgroundColor:"#F9EBF8"}]}>
+      <View style={[styles.box3, {backgroundColor:"#EFF7EE"}]}>
       <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
       <Ing2 width={40} height={39} style={{marginRight: 20}}/>
       <Text style={styles.name}>Baking Soda</Text>
@@ -60,7 +63,7 @@ export default function AddRecipe() {
       </TouchableOpacity>
       </View>
 
-      <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+      <View style={[styles.box3, {backgroundColor:"#EFF7EE"}]}>
       <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
       <Ing1 width={40} height={39} style={{marginRight: 20}}/>
       <Text style={styles.name}>Sugar</Text>
@@ -70,21 +73,9 @@ export default function AddRecipe() {
       </TouchableOpacity>
       </View>
 
-
-      <View style={[styles.box3, {backgroundColor:"#F9EBF8"}]}>
-      <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-      <Ing2 width={40} height={39} style={{marginRight: 20}}/>
-      <Text style={styles.name}>Baking Soda</Text>
-      </View>
-      <TouchableOpacity style={[styles.cbtn,{marginLeft:50, elevation:2,backgroundColor:"white"}]}>
-      <Text style={{fontSize:20, color:"#91C788",alignSelf:"center"}}>-</Text>
+      <TouchableOpacity style={{width:330, height:48, backgroundColor:"#91C788",alignSelf:"center", borderRadius:12, alignItems:"center", justifyContent:"center",marginTop:40, marginBottom:20}}>
+      <Text style={{color:"white", fontSize:16, fontFamily:"Inter-SemiBold"}}>Find Recipes</Text>
       </TouchableOpacity>
-      </View>
-
-
-      </ScrollView>
- 
-
 
 
     </View>
@@ -96,6 +87,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 8,
     alignItems:'center',
+  },
+  boldheading:{
+    fontSize:22,
+    fontFamily:"Inter-Black",
+    color:"black",
+
+  },
+  subheading:{
+    fontSize: 16,
+    color: '#71727A',
+    fontFamily:"Inter-Regular",
+    
   },
 
   txtinput:{ 
@@ -151,8 +154,6 @@ const styles = StyleSheet.create({
     marginTop:5,
     width:180,
   },
-
-
 
   
 });
