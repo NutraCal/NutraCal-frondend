@@ -78,6 +78,7 @@ const register = ({route, navigation}) => {
     ) {
       fetch('http://192.168.100.101:3000/users/createUser', {
         method: 'POST',
+
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -96,6 +97,15 @@ const register = ({route, navigation}) => {
           diet: diet,
           ingredients: 'abc',
         }),
+      }).then(response => {
+        if (response.status == 200) {
+          navigation.navigate('Login');
+        } else {
+          Alert.alert('User already exists', 'Create Account with new Email', [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+        console.log(response.status); // returns 200
       });
       setEmail('');
       setPassword('');
@@ -108,29 +118,6 @@ const register = ({route, navigation}) => {
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]);
     }
-  };
-  const registerUser = () => {
-    fetch('http://localhost:3000/users/createUser', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        fitnessGoal: goal,
-        gender: gender,
-        age: age,
-        height: height,
-        heightUnit: heightUnit,
-        weight: weight,
-        weightUnit: weightUnit,
-        allergies: allergies,
-        diet: diet,
-        ingredients: ings,
-      }),
-    });
   };
   return (
     <View style={styles.container}>

@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import register from './register';
+import Home from './homeDummy';
 import userGwh from './userGwh';
+import userFitnessGoal from './userFitnessGoal';
 import Facebook from '../assets/Facebook.svg';
 import Google from '../assets/Google.svg';
 import ErrorMessage from '../components/ErrorMessage';
@@ -23,11 +25,31 @@ export default function Login({route, navigation}) {
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
     ) {
+      fetch('http://192.168.100.101:3000/users/login', {
+        method: 'POST',
+
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      }).then(response => {
+        if (response.status == 200) {
+          navigation.navigate('Home');
+        } else {
+          Alert.alert('Invalid Credentials', 'Invalid email and password', [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+        }
+        console.log(response.status); // returns 200
+      });
       setIsEmailValid('true');
       setIsPasswordValid('true');
       setEmail('');
       setPassword('');
-      navigation.navigate('register');
     } else {
       setIsEmailValid('false');
       setIsPasswordValid('false');
@@ -128,7 +150,7 @@ export default function Login({route, navigation}) {
               color: '#90C888',
               fontFamily: 'Inter-SemiBold',
             }}
-            onPress={() => navigation.navigate('userGwh')}>
+            onPress={() => navigation.navigate('userFitnessGoal')}>
             Sign Up
           </Text>
         </View>
