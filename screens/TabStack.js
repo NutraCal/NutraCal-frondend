@@ -61,32 +61,66 @@ const TabStack=()=>{
         paddingBottom:10,
       },
     })}>
-    <Tab.Screen name="Home" component={Home} options={{ headerShown:false}}/>
+    <Tab.Screen name="Home" component={Home}
+    options={{
+      headerBackTitleVisible:false,
+      headerTitleAlign:"center",
+      title: 'NutraCal',
+      headerStyle: {
+        borderBottomWidth:1,
+        elevation:5,
+        backgroundColor:"#91C788"
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        color:"white",
+        fontFamily:"Inter-Medium",
+        fontSize:20
+       
+      },
+      }}/>
     <Tab.Screen name="RecipeBook" component={RecipeBook} 
     options={
+      
       ({ navigation }) => 
       {
         return {
-          headerTitle: () =>  <HomeHeader navigation={navigation} />
+
+          headerTitle: () =>  <HomeHeader navigation={navigation}/>
 
         }
       }}/>
 
-    <Tab.Screen name="DietPlans" component={DietPlans}  />
+    <Tab.Screen name="DietPlans" component={DietPlans}  
+    options={{
+      headerBackTitleVisible:false,
+      headerTitleAlign:"center",
+      title: 'Diet Plans',
+      headerStyle: {
+        borderBottomWidth:1,
+        elevation:5,
+      },
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      
+      },
+      }}
+    />
     <Tab.Screen name="Shopping" component={Shopping} 
     options={{
         headerBackTitleVisible:false,
         headerTitleAlign:"center",
         title: 'Shopping Help',
         headerStyle: {
-          borderWidth:1,
-          backgroundColor: '#f4511e',
+          borderBottomWidth:1,
           elevation:5,
         },
         headerTitleStyle: {
           fontWeight: 'bold',
+        
         },
-        }}/>
+        }}
+        />
     <Tab.Screen name="Blogs" component={Blogs}
     options={{
       headerBackTitleVisible:false,

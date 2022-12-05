@@ -75,7 +75,7 @@ export default function SearchRecipe({navigation}) {
     <Text style={styles.heading}>Diet Recommendations</Text>
     
     <ScrollView horizontal={true} style={styles.scroll}>
-    <View style={[styles.box2, {backgroundColor:"#EBF1FF"}]}>
+    <View style={[styles.box2, {backgroundColor:"#EBF2FF"}]}>
     <Diet1 width={96} height={60} style={{marginBottom: 10}}/>
       <Text style={styles.name}>Honey Pancake</Text>
       <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
@@ -107,23 +107,13 @@ export default function SearchRecipe({navigation}) {
     <Pop1 width={48} height={47} style={{marginRight: 20}}/>
     <View>  
       <Text style={styles.name}>Blueberry Pancake</Text>
-      <Text style={[styles.desc,{marginTop:0}]}>Medium | 30mins | 230kCal</Text>
+      <Text style={[styles.desc,{marginTop:0, marginRight:50}]}>Medium | 230kCal</Text>
     </View>
     <TouchableOpacity>
     <Forw width={24} height={24} style={{marginLeft: 20}}/>
     </TouchableOpacity>
     </View>
 
-    <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
-    <Pop1 width={48} height={47} style={{marginRight: 20}}/>
-    <View>  
-      <Text style={styles.name}>Blueberry Pancake</Text>
-      <Text style={[styles.desc,{marginTop:0}]}>Medium | 30mins | 230kCal</Text>
-    </View>
-    <TouchableOpacity>
-    <Forw width={24} height={24} style={{marginLeft: 20}}/>
-    </TouchableOpacity>
-    </View>
 
     </ScrollView>
     </ScrollView>

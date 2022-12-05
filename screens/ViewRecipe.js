@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, ScrollView,TouchableOpacity,TextInput } from 'react-native';
+import { Avatar} from 'react-native-paper';
 import Recipe1 from '../assets/images/recipe1.svg'
 import Macro1 from '../assets/images/macro1.svg'
 import Macro2 from '../assets/images/macro2.svg'
@@ -21,7 +22,7 @@ export default function ViewRecipe({navigation}) {
     <View style={styles.container}>
       <ScrollView>
       <View style={styles.container2}>
-      <Recipe1 width={200} height={200} style={{borderRadius:40}}/>
+      <Avatar.Image size={200} source={require('../assets/images/recipe1.png')} />
       
       <Text style={styles.heading}>Blueberry Pancake</Text>
       <Text style={styles.name}>by James Ruth</Text>
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems:'center',
     justifyContent: 'center',
-    padding: 8,
+    padding: 12,
     paddingTop:20,
   },
   container2:{

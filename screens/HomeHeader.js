@@ -11,7 +11,7 @@ const HomeHeader = ({navigation}) => {
 
 
   return (
-    <Provider style={styles.hehe}>
+    <Provider>
     <View style={styles.flex}>
       <Text style={{color:'black', fontFamily:"Inter-Bold", fontSize:20, alignSelf:"center", marginLeft:50}}>Recipe Book</Text>
       <TouchableOpacity>
@@ -51,18 +51,18 @@ const HomeHeader = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
- 
 
   flex: {
-    width:'100%',
+    width:"100%",
     flex:1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor:"red",
-    
+    borderBottomColor:"#EAEAEA",
+    borderBottomWidth:1,
 
   },
+
 });
 
 export default HomeHeader;

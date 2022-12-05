@@ -44,8 +44,15 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}>
-        
-        <Stack.Screen name="Login" component={Login} />
+         <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Intro" component={Intro} />
+        <Stack.Screen name="userFitnessGoal" component={userFitnessGoal} />
+        <Stack.Screen name="userGwh" component={userGwh} />
+        <Stack.Screen name="userAllergies" component={userAllergies} />
+        <Stack.Screen name="userDiet" component={userDiet} />
+        <Stack.Screen name="userIng" component={userIng} />
+        <Stack.Screen name="register" component={register} options={{headerShown: true}}/>
+        <Stack.Screen name="Login" component={Login}  options={{headerShown: true}} />
         <Stack.Screen name="Home" component={Home} options={{headerShown: true}}/>
         <Stack.Screen name="TabStack" component={TabStack} options={{headerShown: false}}/>
         <Stack.Screen name="ViewRecipe" component={ViewRecipe} options={{headerShown: true}} />
