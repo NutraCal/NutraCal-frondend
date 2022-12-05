@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import Welcome from './screens/Welcome';
 import Intro from './screens/Intro';
 import userFitnessGoal from './screens/userFitnessGoal';
@@ -9,7 +9,6 @@ import userIng from './screens/userIng';
 import register from './screens/register';
 import Login from './screens/Login';
 import Home from './screens/homeDummy';
-import {LogBox} from 'react-native';
 LogBox.ignoreAllLogs();
 import {
   SafeAreaView,
@@ -17,14 +16,17 @@ import {
   ScrollView,
   StatusBar,
   Image,
+  Button,
   StyleSheet,
   TouchableOpacity,
   Text,
   useColorScheme,
   View,
+  LogBox
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+import { NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,7 +41,7 @@ export default function App() {
     };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
