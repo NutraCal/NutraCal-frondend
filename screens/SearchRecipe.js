@@ -1,18 +1,30 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, Image} from 'react-native';
-import { Searchbar,Button } from 'react-native-paper';
+import { Text, View, StyleSheet, Image, ScrollView,TouchableOpacity} from 'react-native';
+import { Searchbar,Button,Avatar } from 'react-native-paper';
 import Sortic from '../assets/sorticon.svg'
 import Arrowdown from '../assets/arrowdownicon.svg'
 import Filter from '../assets/filtericon.svg'
+import Pic1 from '../assets/images/pic1.svg'
+import Pic2 from '../assets/images/pic2.svg'
+import Pic3 from '../assets/images/pic3.svg'
+import Pic4 from '../assets/images/pic4.svg'
+import Diet1 from '../assets/images/dietpic1.svg'
+import Diet2 from '../assets/images/dietpic2.svg'
+import Pop1 from '../assets/images/pop1.svg'
+import Forw from '../assets/forwardbtn.svg'
+import HomeHeader from './HomeHeader';
 
 
 
-export default function SearchRecipe() {
+export default function SearchRecipe({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
   return (
+    
+    
     <View style={styles.container}>
+      <ScrollView>
       <Searchbar
       placeholder="Recipes"
       onChangeText={onChangeSearch}
@@ -29,17 +41,98 @@ export default function SearchRecipe() {
 
     <View style={styles.btn}>
     <Filter width={20} height={20}/>
-    <Text style={styles.label}>Filter</Text>
+    <Text style={styles.label} onPress={() => navigation.navigate('ApplyFilters')}>Filter</Text>
     <Arrowdown width={20} height={20}/>
     </View>
+    </View>
+    <Text style={styles.heading}>Category</Text>
+
+    <ScrollView horizontal={true} style={styles.scroll}>
+    
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
+      <Pic1 width={60} height={61} style={{marginBottom:8}}/>
+      <Text style={styles.name1}>Salad</Text>
+    </TouchableOpacity>
 
 
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
+    <Pic2 width={60} height={61} style={{marginBottom: 10}}/>
+      <Text style={styles.name1}>Cake</Text>
+    </TouchableOpacity>
+
+
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#EBF2FF"}]}>
+    <Pic3 width={60} height={61} style={{marginBottom: 10}}/>
+      <Text style={styles.name1}>Pie</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={[styles.box, {backgroundColor:"#F9EBF8"}]}>
+    <Pic4 width={60} height={61} style={{marginBottom: 10}}/>
+      <Text style={styles.name1}>Smoothie</Text>
+    </TouchableOpacity>
+
+    </ScrollView>
+    <Text style={styles.heading}>Diet Recommendations</Text>
+    
+    <ScrollView horizontal={true} style={styles.scroll}>
+    <View style={[styles.box2, {backgroundColor:"#EBF1FF"}]}>
+    <Diet1 width={96} height={60} style={{marginBottom: 10}}/>
+      <Text style={styles.name}>Honey Pancake</Text>
+      <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('ViewRecipe')}>
+      <View style={[styles.btn1,{backgroundColor:"#91C788",borderColor:"#91C788", borderWidth: 1, }]}>
+      <Text style={[styles.label1,{color:"white"}]}>View</Text>
+      </View>
+      </TouchableOpacity>
     </View>
 
 
-    <Text style={{fontFamily:"Inter-ExtraBold", color:"black", fontSize:20 }}>This is a bunch of gibberish to see how good the custom font looks. I would love to see this crap. So sleepy rn. My neck hurts but all is well</Text>
+    <View style={[styles.box2, {backgroundColor:"#F9EBF8"}]}>
+    <Diet2 width={110} height={57} style={{marginBottom: 10}}/>
+    <Text style={styles.name}>Canai Bread</Text>
+    <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
+    <TouchableOpacity>
+      <View style={styles.btn1}>
+      <Text style={[styles.label1,{color:"#91C788",fontFamily:"Inter-Bold"}]}>View</Text>
+      </View>
+      </TouchableOpacity>
     </View>
+
+    </ScrollView>
+    <Text style={styles.heading}>Popular</Text>
+
+    <ScrollView>
+
+    <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+    <Pop1 width={48} height={47} style={{marginRight: 20}}/>
+    <View>  
+      <Text style={styles.name}>Blueberry Pancake</Text>
+      <Text style={[styles.desc,{marginTop:0}]}>Medium | 30mins | 230kCal</Text>
+    </View>
+    <TouchableOpacity>
+    <Forw width={24} height={24} style={{marginLeft: 20}}/>
+    </TouchableOpacity>
+    </View>
+
+    <View style={[styles.box3, {backgroundColor:"#EBF2FF"}]}>
+    <Pop1 width={48} height={47} style={{marginRight: 20}}/>
+    <View>  
+      <Text style={styles.name}>Blueberry Pancake</Text>
+      <Text style={[styles.desc,{marginTop:0}]}>Medium | 30mins | 230kCal</Text>
+    </View>
+    <TouchableOpacity>
+    <Forw width={24} height={24} style={{marginLeft: 20}}/>
+    </TouchableOpacity>
+    </View>
+
+    </ScrollView>
+    </ScrollView>
+    
+    
+    </View>
+    
   );
+
 }
 
 const styles = StyleSheet.create({
@@ -51,13 +144,21 @@ const styles = StyleSheet.create({
     borderRadius:20,
     margin: 15,
     elevation:0,
+    backgroundColor:'#F8F9FE',
   },
   label:{
-    fontSize:20,
+    fontSize:16,
     color:"black",
+    fontFamily:"Inter-Regular",
+  },
+
+  label1:{
+    fontSize:16,
+    color:"white",
     fontFamily:"Inter-Regular"
     
   },
+
   icon:{
     width:15,
     height:15,
@@ -69,10 +170,20 @@ const styles = StyleSheet.create({
    alignItems:'center',
    borderWidth: 1,
    paddingHorizontal:2,
-   paddingVertical:6,
+   paddingVertical:8,
    borderColor:"#C5C6CC",
-   borderRadius:9,
+   borderRadius:12,
    marginVertical:8
+
+  },
+
+  btn1:{
+   
+    paddingHorizontal:30,
+    paddingVertical:4,
+    marginTop:15,
+    borderRadius:20,
+
   },
 
   cont:{
@@ -81,5 +192,72 @@ const styles = StyleSheet.create({
     paddingHorizontal:13,
     alignItems:'center',
   },
+
+  heading:{
+  fontFamily:"Inter-Bold", 
+  color:"black", 
+  fontSize:20,
+  marginTop:10,
+  marginLeft:12,
+},
+
+box:{
+  height:120,
+  width:100,
+  borderRadius:12,
+  margin:8,
+  flexDirection:"column",
+  alignItems:"center",
+  justifyContent:"center",
+},
+
+
+box2:{
+  height:220, 
+  width: 180,
+  borderRadius:12,
+  margin:10,
+  flexDirection:"column",
+  alignItems:"center",
+  justifyContent:"center",
+},
+
+box3:{
+  height:80, 
+  width: 350,
+  borderRadius:12,
+  margin:10,
+  flexDirection:"row",
+  alignItems:"center",
+  justifyContent:'center',
+},
+
+scroll:{
+  marginTop:10,
+   flexDirection:"row",
+
+},
+
+name1:{
+  fontSize: 16,
+  color: 'black',
+  fontFamily:"Inter-Medium",
+  marginTop:5,
+},
+
+name:{
+  fontSize: 16,
+  color: 'black',
+  fontFamily:"Inter-SemiBold",
+  marginTop:5,
+},
+
+
+desc:{
+  fontSize: 14,
+  color: '#7B6F72',
+  fontFamily:"Inter-Light",
+  marginTop:5,
+},
 
 });
