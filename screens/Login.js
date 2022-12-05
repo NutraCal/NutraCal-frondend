@@ -25,7 +25,7 @@ export default function Login({route, navigation}) {
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
     ) {
-      fetch('http://192.168.100.101:3000/users/login', {
+      fetch('http://10.113.12.243:3000/users/login', {
         method: 'POST',
 
         headers: {
