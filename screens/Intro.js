@@ -17,6 +17,8 @@ import Mobile from '../assets/mobile.svg';
 import Ob1 from '../assets/Ob1.svg';
 import Ob2 from '../assets/Ob2.svg';
 import Ob3 from '../assets/Ob3.svg';
+
+import Login from './Login';
 import userFitnessGoal from './userFitnessGoal';
 
 const Intro = ({navigation, route}) => {
@@ -57,7 +59,7 @@ const Intro = ({navigation, route}) => {
       </TouchableOpacity>
       <View style={{flexDirection: 'row', marginTop: 20}}>
         <Text style={styles.TextOnboarding}>Already have an account? </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.TextOnboarding2}>Log in</Text>
         </TouchableOpacity>
       </View>
@@ -132,9 +134,9 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: '#FFFFFF',
-    fontSize: 30,
+    fontSize: 26,
     textAlign: 'center',
-    fontFamily: 'Inter-SemiBold',
+    fontFamily: 'Inter-Medium',
   },
 });
 

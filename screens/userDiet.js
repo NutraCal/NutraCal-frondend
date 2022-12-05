@@ -8,6 +8,7 @@ import {
   ScrollView,
   StatusBar,
   Image,
+  Alert,
   StyleSheet,
   TouchableOpacity,
   TouchableHighlight,
@@ -23,60 +24,73 @@ import Dp3 from '../assets/dp3.svg';
 import Dp4 from '../assets/dp4.svg';
 const Stack = createNativeStackNavigator();
 const userDiet = ({navigation, route}) => {
-  const [pressed, setPressed] = useState(1);
-  const [pressed1, setPressed1] = useState(1);
-  const [pressed2, setPressed2] = useState(1);
-  const [pressed3, setPressed3] = useState(1);
-  const setColor = () => {
-    if (pressed == 0) {
-      setPressed(1);
-      setPressed1(1);
-      setPressed2(1);
-      setPressed3(1);
-    } else {
-      setPressed(0);
-      setPressed1(1);
-      setPressed2(1);
-      setPressed3(1);
+  const [goal, setGoal] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [heightUnit, setHeightUnit] = useState('');
+  const [weight, setWeight] = useState(0);
+  const [weightUnit, setWeightUnit] = useState('');
+  const [allergies, setAllergies] = useState('');
+  const [diet, setDiet] = useState('');
+  React.useEffect(() => {
+    if (
+      route.params?.fitnessGoal &&
+      route.params?.gender &&
+      route.params?.age &&
+      route.params?.height &&
+      route.params?.heightUnit &&
+      route.params?.weight &&
+      route.params?.weightUnit &&
+      route.params?.allergies
+    ) {
+      const fitnessGoal = route.params?.fitnessGoal;
+      const gender = route.params?.gender;
+      const age = route.params?.age;
+      const height = route.params?.height;
+      const heightUnit = route.params?.heightUnit;
+      const weight = route.params?.weight;
+      const weightUnit = route.params?.weightUnit;
+      const allergies = route.params?.allergies;
+      setGoal(fitnessGoal);
+      setGender(gender);
+      setAge(age);
+      setHeight(height);
+      setHeightUnit(heightUnit);
+      setWeight(weight);
+      setWeightUnit(weightUnit);
+      setAllergies(allergies);
     }
+  }, [
+    route.params?.fitnessGoal,
+    route.params?.gender,
+    route.params?.age,
+    route.params?.height,
+    route.params?.heightUnit,
+    route.params?.weight,
+    route.params?.weightUnit,
+    route.params?.allergies,
+  ]);
+  const setDietPref = inp => {
+    setDiet(inp);
   };
-  const setColor1 = () => {
-    if (pressed1 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-      setPressed3(1);
+  const inputValidation = () => {
+    if (diet != '') {
+      navigation.navigate('userIng', {
+        fitnessGoal: goal,
+        gender: gender,
+        age: age,
+        height: height,
+        heightUnit: heightUnit,
+        weight: weight,
+        weightUnit: weightUnit,
+        allergies: allergies,
+        diet: diet,
+      });
     } else {
-      setPressed1(0);
-      setPressed(1);
-      setPressed2(1);
-      setPressed3(1);
-    }
-  };
-  const setColor2 = () => {
-    if (pressed2 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-      setPressed3(1);
-    } else {
-      setPressed2(0);
-      setPressed1(1);
-      setPressed(1);
-      setPressed3(1);
-    }
-  };
-  const setColor3 = () => {
-    if (pressed3 == 0) {
-      setPressed3(1);
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-    } else {
-      setPressed3(0);
-      setPressed2(1);
-      setPressed1(1);
-      setPressed(1);
+      Alert.alert('Invalid Input', 'Please select your Goal', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
     }
   };
   return (
@@ -87,56 +101,54 @@ const userDiet = ({navigation, route}) => {
       </Text>
 
       <TouchableOpacity
-        onPress={() => setColor()}
+        onPress={() => setDietPref('None')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'None' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Dp1 style={styles.vector} />
         <Text style={styles.listText}>None</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor1()}
+        onPress={() => setDietPref('Vegetarian')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed1 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Vegetarian' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Dp2 style={styles.vector} />
         <Text style={styles.listText}>Vegetarian</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor2()}
+        onPress={() => setDietPref('Low-Carb')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed2 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Low-Carb' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Dp3 style={styles.vector} />
         <Text style={styles.listText}>Low-Carb</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor3()}
+        onPress={() => setDietPref('Keto')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed3 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Keto' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Dp4 style={styles.vector} />
         <Text style={styles.listText}>Keto</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate('userIng')}>
+      <TouchableOpacity style={styles.btn} onPress={inputValidation}>
         <Text style={styles.btnText}>Next</Text>
       </TouchableOpacity>
     </View>
