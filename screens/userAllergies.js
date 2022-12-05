@@ -103,7 +103,7 @@ const userAllergies = ({navigation, route}) => {
                 : '#f3f3f3',
           },
         }}>
-        <Text style={styles.listText}>Lactose Intolerant{gender}</Text>
+        <Text style={styles.listText}>Lactose Intolerant</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => setAllergens('Nut Allergy')}
