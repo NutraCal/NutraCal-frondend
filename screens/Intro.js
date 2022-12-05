@@ -35,6 +35,7 @@ const Intro = ({navigation, route}) => {
           </Text>
           <Ob1 style={styles.image2} />
         </View>
+      
         <View style={styles.MainDiv3}>
           <Cooking style={styles.image} />
           <Text style={styles.HeadingOnboarding}>Healthy Recipes</Text>
@@ -52,12 +53,17 @@ const Intro = ({navigation, route}) => {
           <Ob3 style={styles.image2} />
         </View>
       </ScrollView>
+
+  
       <TouchableOpacity
         style={styles.btn}
         onPress={() => navigation.navigate('userFitnessGoal')}>
         <Text style={styles.btnText}>Get Started</Text>
       </TouchableOpacity>
-      <View style={{flexDirection: 'row', marginTop: 20}}>
+    
+
+
+      <View style={{flexDirection: 'row', marginTop: 10}}>
         <Text style={styles.TextOnboarding}>Already have an account? </Text>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={styles.TextOnboarding2}>Log in</Text>
@@ -124,19 +130,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 30,
   },
-  btn: {
-    backgroundColor: '#91C788',
-    height: 72,
-    marginTop: 55,
-    justifyContent: 'center',
-    width: 290,
-    borderRadius: 24,
+
+  btn:{
+    width:330, 
+    height:48, 
+    backgroundColor:"#91C788",
+    alignSelf:"center", 
+    borderRadius:12,
+     alignItems:"center", 
+     justifyContent:"center",
+     marginTop:40, 
+     marginBottom:10,
   },
+
+  
   btnText: {
-    color: '#FFFFFF',
-    fontSize: 26,
-    textAlign: 'center',
-    fontFamily: 'Inter-Medium',
+    color:"white", 
+    fontSize:16, 
+    fontFamily:"Inter-SemiBold"
   },
 });
 

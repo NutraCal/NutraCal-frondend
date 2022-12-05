@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  TextInput
 } from 'react-native';
 import type {Node} from 'react';
-import {Button, TextInput} from 'react-native-paper';
 import Login from './Login';
 const register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
@@ -126,13 +126,15 @@ const register = ({route, navigation}) => {
 
       <View style={styles.midcontainer}>
         <View>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            placeholder="Enter your email"
+          <Text style={styles.label1}>Email</Text>
+     
+            <TextInput 
+            style={styles.txtinput} 
+            placeholder="Enter your email" 
             value={email}
-            mode="outlined"
+            placeholderTextColor="#C5C6CC" 
             onChangeText={text => setEmail(text)}
-            style={styles.input}></TextInput>
+            style={styles.txtinput}/>
           <Text
             style={{
               color: email != '' ? '#f3f3f3' : '#FF0000',
@@ -143,41 +145,46 @@ const register = ({route, navigation}) => {
             Please fill out the field
           </Text>
         </View>
+
         <View>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            placeholder="Enter your password"
+        
+          <Text style={styles.label1}>Password</Text>
+          <TextInput 
+            style={styles.txtinput} 
+            placeholder="Enter your password" 
             value={password.value}
-            mode="outlined"
+            placeholderTextColor="#C5C6CC" 
             onChangeText={text => setPassword(text)}
-            style={styles.input}
-            secureTextEntry></TextInput>
+            secureTextEntry/>
+          
+          
           <Text
             style={{
               color: email != '' ? '#f3f3f3' : '#FF0000',
               fontSize: 12,
               marginBottom: 10,
               fontFamily: 'Inter-Light',
+            
             }}>
             Please fill out the field
           </Text>
+          
         </View>
-        <Text style={styles.Text}>I agree to the terms and conditions,</Text>
-        <Button
-          style={styles.btn}
-          onPress={credentialsValidation}
-          color="#90C888"
-          labelStyle={{color: 'white'}}
-          mode="contained">
-          Sign Up
-        </Button>
+      
+
+        <TouchableOpacity style={styles.btn} onPress={credentialsValidation}>
+        <Text style={styles.btnText}>Sign Up</Text>
+        </TouchableOpacity>
+
 
         <View style={styles.row}>
+
           <Text
             style={{
-              marginBottom: 10,
+              
               color: 'black',
               fontFamily: 'Inter-Regular',
+              
             }}>
             Already Have An Account?{' '}
           </Text>
@@ -197,16 +204,17 @@ const register = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 60,
-    padding: 20,
     marginTop: 50,
+    marginHorizontal: 20,
+    justifyContent: 'center',
+    
   },
 
   midcontainer: {
     justifyContent: 'center',
-    alignItems: 'center',
+  
   },
+
   h1: {
     fontSize: 25,
     fontFamily: 'Inter-SemiBold',
@@ -221,6 +229,17 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'Inter-Regular',
   },
+  
+  label1: {
+    marginTop: 24,
+    marginBottom:10,
+    fontSize: 17,
+    fontFamily: 'Inter-Medium',
+    textAlign: 'left',
+    color:"black",
+    alignSelf:'flex-start'
+  },
+  
   Text: {
     color: 'grey',
     marginVertical: 30,
@@ -229,50 +248,44 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
   },
 
-  label: {
-    fontSize: 16,
-    marginHorizontal: 10,
-    color: 'black',
-    fontFamily: 'Inter-Regular',
-  },
 
-  input: {
-    height: 50,
-    marginBottom: 10,
-    width: 300,
-  },
-
-  btn: {
-    marginTop: 20,
-    width: 300,
-    marginBottom: 40,
-    fontFamily: 'Inter-SemiBold',
-  },
-
-  touchable: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    borderWidth: 1,
-    alignItems: 'center',
-    width: 150,
-    height: 35,
-    borderRadius: 10,
-    borderColor: '#90C888',
-  },
-
-  icon: {
-    height: 25,
-    width: 25,
-    marginRight: 6,
-  },
-
-  hcontainer: {
-    marginTop: 20,
-    justifyContent: 'center',
-    marginBottom: 30,
-  },
+ 
   row: {
     flexDirection: 'row',
+    alignItems:"center",
+    justifyContent:"center",
+  },
+
+  btn:{
+    width:330, 
+    height:48, 
+    backgroundColor:"#91C788",
+    alignSelf:"center", 
+    borderRadius:12,
+     alignItems:"center", 
+     justifyContent:"center",
+     marginTop:20,
+     marginBottom:20,
+  },
+  
+  btnText: {
+    color:"white", 
+    fontSize:16, 
+    fontFamily:"Inter-SemiBold"
+  },
+
+  txtinput:{ 
+    borderColor: '#E1E3E8', 
+    borderWidth: 1,
+    height: 48,
+    width:350,
+    paddingHorizontal:15,
+    borderRadius:10,
+    fontFamily:"Inter-Regular",
+    color:"black",
+    fontSize:16,
+    marginBottom:5,
+    
   },
 });
 export default register;

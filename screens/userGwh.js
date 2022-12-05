@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import userAllergies from './userAllergies';
 import userDiet from './userDiet';
 import userIng from './userIng';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../assets/progressbar2';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
   SafeAreaView,
@@ -173,9 +173,9 @@ const userGwh = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar />
+      <ProgressBar width={350} style={{marginBottom:20}}/>
       <Text style={styles.Heading}>What is your Gender?</Text>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', alignItems:"center", justifyContent:"center"}}>
         <TouchableOpacity
           onPress={() => setGender('Male')}
           style={{
@@ -208,7 +208,7 @@ const userGwh = ({navigation, route}) => {
         />
       </View>
       <Text style={styles.Heading}>What is your Height?</Text>
-      <View style={{flexDirection: 'row', marginBottom: 30}}>
+      <View style={{flexDirection: 'row'}}>
         <TextInput
           style={styles.listItem2}
           keyboardType="numeric"
@@ -229,7 +229,7 @@ const userGwh = ({navigation, route}) => {
       </View>
 
       <Text style={styles.Heading}>What is your current Weight?</Text>
-      <View style={{flexDirection: 'row', marginBottom: 30}}>
+      <View style={{flexDirection: 'row'}}>
         <TextInput
           style={styles.listItem2}
           keyboardType="numeric"
@@ -276,7 +276,6 @@ const styles = StyleSheet.create({
   listItem: {
     height: 52,
     marginHorizontal: 10,
-    marginVertical: 20,
     width: 170,
     justifyContent: 'center',
     alignItems: 'center',
@@ -287,7 +286,7 @@ const styles = StyleSheet.create({
   },
   listItem1: {
     height: 52,
-    width: 370,
+    width: 350,
     color: 'black',
     justifyContent: 'center',
     borderWidth: 1,
@@ -312,7 +311,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     marginBottom: 20,
-    marginLeft: 15,
+    marginLeft: 10,
   },
   listText: {
     color: '#1F2024',
@@ -331,19 +330,22 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginLeft: 8,
   },
-  btn: {
-    backgroundColor: '#91C788',
-    height: 50,
-    width: 370,
-    marginTop: 40,
-    borderRadius: 18,
-    justifyContent: 'center',
+  btn:{
+    width:330, 
+    height:48, 
+    backgroundColor:"#91C788",
+    alignSelf:"center", 
+    borderRadius:12,
+     alignItems:"center", 
+     justifyContent:"center",
+     marginTop:80, 
+     marginBottom:20,
   },
+
   btnText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily: 'Inter-SemiBold',
+    color:"white", 
+    fontSize:16, 
+    fontFamily:"Inter-SemiBold"
   },
 });
 export default userGwh;

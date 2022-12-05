@@ -81,7 +81,6 @@ const TabStack=()=>{
         headerStyle: {
           borderWidth:1,
           backgroundColor: '#f4511e',
-         
           elevation:5,
         },
         headerTitleStyle: {

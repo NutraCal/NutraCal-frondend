@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import userGwh from './userGwh';
 import userIng from './userIng';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../assets/progressbar4';
 import {
   SafeAreaView,
   Platform,
@@ -95,7 +95,7 @@ const userDiet = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar />
+      <ProgressBar width={350} style={{marginBottom:20}} />
       <Text style={styles.Heading}>
         Do you follow any of the{'\n'}following diets?
       </Text>
@@ -106,7 +106,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'None' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'None' ? 'rgba(145, 199, 136, 0.2)' : '##ffffff',
           },
         }}>
         <Dp1 style={styles.vector} />
@@ -118,7 +118,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'Vegetarian' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Vegetarian' ? 'rgba(145, 199, 136, 0.2)' : '##ffffff',
           },
         }}>
         <Dp2 style={styles.vector} />
@@ -130,7 +130,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'Low-Carb' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Low-Carb' ? 'rgba(145, 199, 136, 0.2)' : '##ffffff',
           },
         }}>
         <Dp3 style={styles.vector} />
@@ -142,7 +142,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'Keto' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Keto' ? 'rgba(145, 199, 136, 0.2)' : '#ffffff',
           },
         }}>
         <Dp4 style={styles.vector} />
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     height: 80,
-    width: 370,
+    width: 350,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
@@ -184,19 +184,22 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginLeft: 8,
   },
-  btn: {
-    backgroundColor: '#91C788',
-    height: 50,
-    width: 370,
-    borderRadius: 18,
-    marginTop: 190,
-    justifyContent: 'center',
+  btn:{
+    width:330, 
+    height:48, 
+    backgroundColor:"#91C788",
+    alignSelf:"center", 
+    borderRadius:12,
+     alignItems:"center", 
+     justifyContent:"center",
+     marginTop:140, 
+     marginBottom:20,
   },
+
   btnText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily: 'Inter-SemiBold',
+    color:"white", 
+    fontSize:16, 
+    fontFamily:"Inter-SemiBold"
   },
   vector: {
     height: 50,

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import userGwh from './userGwh';
 import userDiet from './userDiet';
 import userIng from './userIng';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../assets/progressbar3';
 import {
   SafeAreaView,
   Platform,
@@ -87,7 +87,7 @@ const userAllergies = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar />
+      <ProgressBar width={350} style={{marginBottom:20}}/>
       <Text style={styles.Heading}>
         Which restrictions/allergies do you have?
       </Text>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     height: 72,
-    width: 370,
+    width: 350,
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
@@ -175,19 +175,23 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginLeft: 8,
   },
-  btn: {
-    backgroundColor: '#91C788',
-    height: 50,
-    width: 370,
-    borderRadius: 18,
-    marginTop: 220,
-    justifyContent: 'center',
+  btn:{
+    width:330, 
+    height:48, 
+    backgroundColor:"#91C788",
+    alignSelf:"center", 
+    borderRadius:12,
+     alignItems:"center", 
+     justifyContent:"center",
+     marginTop:180, 
+     marginBottom:20,
   },
+
+  
   btnText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    textAlign: 'center',
-    fontFamily: 'Inter-SemiBold',
+    color:"white", 
+    fontSize:16, 
+    fontFamily:"Inter-SemiBold"
   },
 });
 export default userAllergies;
