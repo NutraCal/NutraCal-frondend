@@ -10,6 +10,7 @@ import {
   ScrollView,
   StatusBar,
   Image,
+  Alert,
   StyleSheet,
   TouchableOpacity,
   TouchableHighlight,
@@ -21,40 +22,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 const userFitnessGoal = ({navigation, route}) => {
-  const [pressed, setPressed] = useState(1);
-  const [pressed1, setPressed1] = useState(1);
-  const [pressed2, setPressed2] = useState(1);
-  const setColor = () => {
-    if (pressed == 0) {
-      setPressed(1);
-      setPressed1(1);
-      setPressed2(1);
-    } else {
-      setPressed(0);
-      setPressed1(1);
-      setPressed2(1);
-    }
+  const [goal, setFitnessGoal] = useState('');
+  const setGoal = goal => {
+    setFitnessGoal(goal);
   };
-  const setColor1 = () => {
-    if (pressed1 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
+  const inputValidation = () => {
+    if (goal != '') {
+      navigation.navigate('userGwh', {fitnessGoal: goal});
     } else {
-      setPressed1(0);
-      setPressed(1);
-      setPressed2(1);
-    }
-  };
-  const setColor2 = () => {
-    if (pressed2 == 0) {
-      setPressed1(1);
-      setPressed(1);
-      setPressed2(1);
-    } else {
-      setPressed2(0);
-      setPressed1(1);
-      setPressed(1);
+      Alert.alert('Invalid Input', 'Please select your Goal', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
     }
   };
   return (
@@ -65,41 +43,39 @@ const userFitnessGoal = ({navigation, route}) => {
         It will help us choose the best program{'\n'}for you
       </Text>
       <TouchableOpacity
-        onPress={() => setColor()}
+        onPress={() => setGoal('Lose Weight')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              goal == 'Lose Weight' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Lose Weight</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor1()}
+        onPress={() => setGoal('Gain Weight')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed1 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              goal == 'Gain Weight' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Gain Weight</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setColor2()}
+        onPress={() => setGoal('Be Healthier')}
         style={{
           ...styles.listItem,
           ...{
             backgroundColor:
-              pressed2 == 0 ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              goal == 'Be Healthier' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
           },
         }}>
         <Text style={styles.listText}>Be Healthier</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => navigation.navigate('userGwh')}>
+      <TouchableOpacity style={styles.btn} onPress={inputValidation}>
         <Text style={styles.btnText}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -116,13 +92,15 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: 20,
     fontFamily: 'Inter-SemiBold',
+    marginBottom: 10,
   },
   Text: {
     color: 'rgba(0, 0, 0, 0.45)',
     fontSize: 17,
     fontFamily: 'Inter-Light',
     lineHeight: 30,
-    marginVertical: 20,
+    marginBottom: 20,
+    marginTop: 5,
   },
   listItem: {
     height: 72,
