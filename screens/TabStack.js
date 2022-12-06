@@ -30,23 +30,49 @@ const TabStack=()=>{
       let iconName;
       
       if (route.name === 'Home') {
-        iconName = focused? 'home': 'home-outline';
+        return focused ? (
+          <Icon name="home" size={30} color="#91C788" />
+        ) : (
+
+          <Icon name="home-outline" size={30} color="black" />
+        );
+
       } 
+
+
       else if (route.name === 'RecipeBook') {
-        iconName = focused ? 'fast-food' : 'fast-food-outline';
+        return focused ? (
+          <Icon name="fast-food" size={30} color="#91C788" />
+        ) : (
+
+          <Icon name="fast-food-outline" size={30} color="black"/>
+        );
       }
       else if(route.name === 'DietPlans'){
-        iconName = focused ? 'ios-newspaper' : 'ios-newspaper-outline';
+        return focused ? (
+          <Icon name="map" size={30} color="#91C788" />
+        ) : (
+
+          <Icon name="map-outline" size={30} color="black"/>
+        );
       }
       else if(route.name === 'Shopping'){
-        iconName = focused ? 'ios-newspaper' : 'ios-newspaper-outline';
+        return focused ? (
+          <Icon name="ios-checkmark-done-circle" size={30} color="#91C788" />
+        ) : (
+
+          <Icon name="ios-checkmark-done-circle-outline" size={30} color="black"/>
+        );
       }
       else if(route.name === 'Blogs'){
-        iconName = focused ? 'ios-newspaper' : 'ios-newspaper-outline';
+        return focused ? (
+          <Icon name="people-sharp" size={30} color="#91C788" />
+        ) : (
+
+          <Icon name="people-outline" size={30} color="black"/>
+        );
       }
    
-   
-
       // You can return any component that you like here!
       return <Icon name={iconName} size={size} color={color} style={{margin: 2}}/>;
     },
@@ -56,16 +82,18 @@ const TabStack=()=>{
       tabBarStyle: {
         height: 70,
         paddingVertical:8,
+        backgroundColor:"#EFF7EE"
       },
       tabBarLabelStyle:{
         paddingBottom:10,
+        fontFamily:"Inter-Medium"
       },
     })}>
     <Tab.Screen name="Home" component={Home}
     options={{
       headerBackTitleVisible:false,
       headerTitleAlign:"center",
-      title: 'NutraCal',
+      title: 'Home',
       headerStyle: {
         borderBottomWidth:1,
         elevation:5,

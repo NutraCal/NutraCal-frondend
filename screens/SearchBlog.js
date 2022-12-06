@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems:'center',
     padding: 8,
+    paddingBottom:0,
   },
  
   searchbar:{

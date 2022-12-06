@@ -147,7 +147,7 @@ export default function Login({route, navigation}) {
           </Text>
           <Text
             style={{
-              color: '#90C888',
+              color: '#91C888',
               fontFamily: 'Inter-SemiBold',
             }}
             onPress={() => navigation.navigate('userFitnessGoal')}>

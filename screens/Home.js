@@ -16,10 +16,12 @@ export default function Home() {
       <View style={{flexDirection:"row", justifyContent:"space-between", margin:10, alignItems:"center"}}>
       <View>
       <Text style={{fontFamily:"Inter-Bold", fontSize:22, color:"black"}}>Hello,</Text>
-      <Text style={{fontFamily:"Inter-Regular", fontSize:18, color:"black"}}>Mahrukh Khan</Text>
+      <Text style={{fontFamily:"Inter-Regular", fontSize:18, color:"black"}}>Christie Doe</Text>
       </View>
       <View>
+
       <Dp width={70} height={70} style={{marginLeft:8}}/>
+
       </View>
      
       </View>
@@ -71,7 +73,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex:1,
-    marginTop:20,
+    marginTop:10,
     justifyContent: 'center',
     padding: 8,
   },

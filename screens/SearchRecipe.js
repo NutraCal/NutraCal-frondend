@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     padding: 8,
+    paddingBottom:0,
   },
   searchbar:{
     borderRadius:20,
