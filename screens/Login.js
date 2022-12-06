@@ -81,9 +81,8 @@ export default function Login({route, navigation}) {
             style={styles.txtinput}/>
           <Text
             style={{
-              color: email != '' ? '#f3f3f3' : '#FF0000',
+              color: email != '' ? '#ffffff' : '#FF0000',
               fontSize: 12,
-              marginBottom: 10,
               fontFamily: 'Inter-Light',
             }}>
             Please fill out the field
@@ -100,9 +99,8 @@ export default function Login({route, navigation}) {
             secureTextEntry></TextInput>
           <Text
             style={{
-              color: password != '' ? '#f3f3f3' : '#FF0000',
+              color: password != '' ? '#ffffff' : '#FF0000',
               fontSize: 12,
-              marginBottom: 10,
               fontFamily: 'Inter-Light',
             }}>
             Please fill out the field

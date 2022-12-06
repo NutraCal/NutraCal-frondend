@@ -1,26 +1,31 @@
 import * as React from 'react';
-import { Text, View, StyleSheet,TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet,TouchableOpacity,BackHandler } from 'react-native';
 import Dp from '../assets/images/homedp.svg'
 import Calories from '../assets/icons/calories.svg'
 import Weight from '../assets/icons/weight.svg'
 import Water from '../assets/icons/water.svg'
 import Steps from '../assets/icons/steps.svg'
 import Forw from '../assets/forwardbtn.svg'
+import Login from './Login';
 
 
 
-export default function Home() {
+export default function Home({route, navigation}) {
   return (
     <View style={styles.container}>
 
-      <View style={{flexDirection:"row", justifyContent:"space-between", margin:10, alignItems:"center"}}>
+      <View style={{flexDirection:"row", justifyContent:"space-between", margin:10, marginTop:0, alignItems:"center"}}>
       <View>
       <Text style={{fontFamily:"Inter-Bold", fontSize:22, color:"black"}}>Hello,</Text>
       <Text style={{fontFamily:"Inter-Regular", fontSize:18, color:"black"}}>Christie Doe</Text>
       </View>
-      <View>
-
-      <Dp width={70} height={70} style={{marginLeft:8}}/>
+      
+      <View style={{alignItems:"center"}}>
+      <Dp width={70} height={70} style={{marginLeft:8, marginBottom: 5}}/>
+      <TouchableOpacity style={{backgroundColor:"#91C788", paddingHorizontal:12, paddingVertical:5, borderRadius:10}} onPress={() => navigation.navigate('Login')} >
+          <Text style={{color:"white"}}>Log Out</Text>
+        </TouchableOpacity>
+      
 
       </View>
      
@@ -73,7 +78,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex:1,
-    marginTop:10,
     justifyContent: 'center',
     padding: 8,
   },
@@ -89,8 +93,8 @@ const styles = StyleSheet.create({
 
   
 box2:{
-  height:176, 
-  width: 168,
+  height:156, 
+  width: 148,
   borderRadius:20,
   margin:8,
   flexDirection:"column",

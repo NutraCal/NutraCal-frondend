@@ -137,9 +137,8 @@ const register = ({route, navigation}) => {
             style={styles.txtinput}/>
           <Text
             style={{
-              color: email != '' ? '#f3f3f3' : '#FF0000',
+              color: email != '' ? '#ffffff' : '#FF0000',
               fontSize: 12,
-              marginBottom: 10,
               fontFamily: 'Inter-Light',
             }}>
             Please fill out the field
@@ -160,9 +159,8 @@ const register = ({route, navigation}) => {
           
           <Text
             style={{
-              color: email != '' ? '#f3f3f3' : '#FF0000',
+              color: email != '' ? '#ffffff' : '#FF0000',
               fontSize: 12,
-              marginBottom: 10,
               fontFamily: 'Inter-Light',
             
             }}>
@@ -231,7 +229,7 @@ const styles = StyleSheet.create({
   },
   
   label1: {
-    marginTop: 24,
+    marginTop: 10,
     marginBottom:10,
     fontSize: 17,
     fontFamily: 'Inter-Medium',
