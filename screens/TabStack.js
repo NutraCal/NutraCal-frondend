@@ -12,7 +12,8 @@ import Shopping from './Shopping';
 import Blogs from './SearchBlog';
 import AddMeal from './AddMeal';
 import HomeHeader from './HomeHeader';
-
+import CallHome from './CallHome';
+import Call from './Call';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/Entypo';
 import {HeaderTitle} from '@react-navigation/elements';
@@ -206,7 +207,7 @@ const TabStack = () => {
 
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => navigation.navigate('BarcodeScan')}
+              onPress={() => navigation.navigate('CallHome')}
               styles={{backgroundColor: '#91C788'}}>
               <Text
                 style={{

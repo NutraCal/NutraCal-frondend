@@ -39,6 +39,9 @@ import AddRecipeScan from './screens/AddRecipeScan';
 import BarcodeScan from './screens/BarcodeScan';
 import AddMeal from './screens/AddMeal';
 
+import CallHome from './screens/CallHome';
+import Call from './screens/Call';
+
 LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
@@ -156,6 +159,16 @@ export default function App() {
         <Stack.Screen
           name="AddMeal"
           component={AddMeal}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="CallHome"
+          component={CallHome}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="Call"
+          component={Call}
           options={{headerShown: true}}
         />
       </Stack.Navigator>
