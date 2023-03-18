@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import userGwh from './userGwh';
-import userDiet from './userDiet';
-import userIng from './userIng';
+import UserGwh from './UserGwh';
+import UserDiet from './UserDiet';
+import UserIng from './UserIng';
 import ProgressBar from '../assets/progressbar3';
 import {
   SafeAreaView,
@@ -20,7 +20,7 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
-const userAllergies = ({navigation, route}) => {
+const UserAllergies = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -69,7 +69,7 @@ const userAllergies = ({navigation, route}) => {
   };
   const inputValidation = () => {
     if (allergies != '') {
-      navigation.navigate('userDiet', {
+      navigation.navigate('UserDiet', {
         fitnessGoal: goal,
         gender: gender,
         age: age,
@@ -87,7 +87,7 @@ const userAllergies = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom:20}}/>
+      <ProgressBar width={350} style={{marginBottom: 20}} />
       <Text style={styles.Heading}>
         Which restrictions/allergies do you have?
       </Text>
@@ -175,23 +175,22 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginLeft: 8,
   },
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:180, 
-     marginBottom:20,
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 180,
+    marginBottom: 20,
   },
 
-  
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
 });
-export default userAllergies;
+export default UserAllergies;

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import userAllergies from './userAllergies';
-import userDiet from './userDiet';
-import userIng from './userIng';
+import UserAllergies from './UserAllergies';
+import UserDiet from './UserDiet';
+import UserIng from './UserIng';
 import ProgressBar from '../assets/progressbar2';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -22,7 +22,7 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
-const userGwh = ({navigation, route}) => {
+const UserGwh = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
   const [pressed, setPressed] = useState('');
   const [open, setOpen] = useState(false);
@@ -55,7 +55,7 @@ const userGwh = ({navigation, route}) => {
         if (height >= 1 && height <= 7 && age >= 10) {
           if (weight >= 15 && weight <= 200) {
             if (pressed == 'Male' || pressed == 'Female') {
-              navigation.navigate('userAllergies', {
+              navigation.navigate('UserAllergies', {
                 fitnessGoal: goal,
                 gender: pressed,
                 age: age,
@@ -90,7 +90,7 @@ const userGwh = ({navigation, route}) => {
         if (height >= 1 && height <= 7 && age >= 10) {
           if (weight >= 34 && weight <= 441) {
             if (pressed == 'Male' || pressed == 'Female') {
-              navigation.navigate('userAllergies');
+              navigation.navigate('UserAllergies');
             } else {
               Alert.alert(
                 'Invalid Input',
@@ -119,7 +119,7 @@ const userGwh = ({navigation, route}) => {
         if (height >= 54 && height <= 214 && age >= 10) {
           if (weight >= 15 && weight <= 200) {
             if (pressed == 'Male' || pressed == 'Female') {
-              navigation.navigate('userAllergies');
+              navigation.navigate('UserAllergies');
             } else {
               Alert.alert(
                 'Invalid Input',
@@ -146,7 +146,7 @@ const userGwh = ({navigation, route}) => {
         if (height >= 54 && height <= 214 && age >= 10) {
           if (weight >= 15 && weight <= 200) {
             if (pressed == 'Male' || pressed == 'Female') {
-              navigation.navigate('userAllergies');
+              navigation.navigate('UserAllergies');
             } else {
               Alert.alert(
                 'Invalid Input',
@@ -173,9 +173,14 @@ const userGwh = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom:20}}/>
+      <ProgressBar width={350} style={{marginBottom: 20}} />
       <Text style={styles.Heading}>What is your Gender?</Text>
-      <View style={{flexDirection: 'row', alignItems:"center", justifyContent:"center"}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <TouchableOpacity
           onPress={() => setGender('Male')}
           style={{
@@ -330,22 +335,22 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginLeft: 8,
   },
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:80, 
-     marginBottom:20,
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 80,
+    marginBottom: 20,
   },
 
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
 });
-export default userGwh;
+export default UserGwh;

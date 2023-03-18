@@ -19,7 +19,7 @@ import Ob2 from '../assets/Ob2.svg';
 import Ob3 from '../assets/Ob3.svg';
 
 import Login from './Login';
-import userFitnessGoal from './userFitnessGoal';
+import UserFitnessGoal from './UserFitnessGoal';
 
 const Intro = ({navigation, route}) => {
   return (
@@ -35,7 +35,7 @@ const Intro = ({navigation, route}) => {
           </Text>
           <Ob1 style={styles.image2} />
         </View>
-      
+
         <View style={styles.MainDiv3}>
           <Cooking style={styles.image} />
           <Text style={styles.HeadingOnboarding}>Healthy Recipes</Text>
@@ -54,14 +54,11 @@ const Intro = ({navigation, route}) => {
         </View>
       </ScrollView>
 
-  
       <TouchableOpacity
         style={styles.btn}
-        onPress={() => navigation.navigate('userFitnessGoal')}>
+        onPress={() => navigation.navigate('UserFitnessGoal')}>
         <Text style={styles.btnText}>Get Started</Text>
       </TouchableOpacity>
-    
-
 
       <View style={{flexDirection: 'row', marginTop: 10}}>
         <Text style={styles.TextOnboarding}>Already have an account? </Text>
@@ -131,23 +128,22 @@ const styles = StyleSheet.create({
     lineHeight: 30,
   },
 
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:40, 
-     marginBottom:10,
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40,
+    marginBottom: 10,
   },
 
-  
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
 });
 

@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  TextInput
+  TextInput,
 } from 'react-native';
 import type {Node} from 'react';
 import Login from './Login';
-const register = ({route, navigation}) => {
+const Register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [goal, setGoal] = useState('');
@@ -127,14 +127,15 @@ const register = ({route, navigation}) => {
       <View style={styles.midcontainer}>
         <View>
           <Text style={styles.label1}>Email</Text>
-     
-            <TextInput 
-            style={styles.txtinput} 
-            placeholder="Enter your email" 
+
+          <TextInput
+            style={styles.txtinput}
+            placeholder="Enter your email"
             value={email}
-            placeholderTextColor="#C5C6CC" 
+            placeholderTextColor="#C5C6CC"
             onChangeText={text => setEmail(text)}
-            style={styles.txtinput}/>
+            style={styles.txtinput}
+          />
           <Text
             style={{
               color: email != '' ? '#ffffff' : '#FF0000',
@@ -146,43 +147,35 @@ const register = ({route, navigation}) => {
         </View>
 
         <View>
-        
           <Text style={styles.label1}>Password</Text>
-          <TextInput 
-            style={styles.txtinput} 
-            placeholder="Enter your password" 
+          <TextInput
+            style={styles.txtinput}
+            placeholder="Enter your password"
             value={password.value}
-            placeholderTextColor="#C5C6CC" 
+            placeholderTextColor="#C5C6CC"
             onChangeText={text => setPassword(text)}
-            secureTextEntry/>
-          
-          
+            secureTextEntry
+          />
+
           <Text
             style={{
               color: email != '' ? '#ffffff' : '#FF0000',
               fontSize: 12,
               fontFamily: 'Inter-Light',
-            
             }}>
             Please fill out the field
           </Text>
-          
         </View>
-      
 
         <TouchableOpacity style={styles.btn} onPress={credentialsValidation}>
-        <Text style={styles.btnText}>Sign Up</Text>
+          <Text style={styles.btnText}>Sign Up</Text>
         </TouchableOpacity>
 
-
         <View style={styles.row}>
-
           <Text
             style={{
-              
               color: 'black',
               fontFamily: 'Inter-Regular',
-              
             }}>
             Already Have An Account?{' '}
           </Text>
@@ -205,12 +198,10 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginHorizontal: 20,
     justifyContent: 'center',
-    
   },
 
   midcontainer: {
     justifyContent: 'center',
-  
   },
 
   h1: {
@@ -227,17 +218,17 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'Inter-Regular',
   },
-  
+
   label1: {
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
     fontSize: 17,
     fontFamily: 'Inter-Medium',
     textAlign: 'left',
-    color:"black",
-    alignSelf:'flex-start'
+    color: 'black',
+    alignSelf: 'flex-start',
   },
-  
+
   Text: {
     color: 'grey',
     marginVertical: 30,
@@ -246,44 +237,41 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
   },
 
-
- 
   row: {
     flexDirection: 'row',
-    alignItems:"center",
-    justifyContent:"center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:20,
-     marginBottom:20,
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
-  
+
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
 
-  txtinput:{ 
-    borderColor: '#E1E3E8', 
+  txtinput: {
+    borderColor: '#E1E3E8',
     borderWidth: 1,
     height: 48,
-    width:350,
-    paddingHorizontal:15,
-    borderRadius:10,
-    fontFamily:"Inter-Regular",
-    color:"black",
-    fontSize:16,
-    marginBottom:5,
-    
+    width: 350,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
-export default register;
+export default Register;

@@ -6,17 +6,17 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  TextInput
+  TextInput,
 } from 'react-native';
-import register from './register';
+import Register from './Register';
 import Home from './homeDummy';
-import userGwh from './userGwh';
-import userFitnessGoal from './userFitnessGoal';
+import UserGwh from './UserGwh';
+import UserFitnessGoal from './UserFitnessGoal';
 import Facebook from '../assets/Facebook.svg';
 import Google from '../assets/Google.svg';
 import ErrorMessage from '../components/ErrorMessage';
 import TabStack from './TabStack';
-
+import DrawerNav from './DrawerNav';
 
 export default function Login({route, navigation}) {
   const [email, setEmail] = useState('');
@@ -72,13 +72,14 @@ export default function Login({route, navigation}) {
       <View style={styles.midcontainer}>
         <View>
           <Text style={styles.label1}>Email</Text>
-          <TextInput 
-            style={styles.txtinput} 
-            placeholder="Enter your email" 
+          <TextInput
+            style={styles.txtinput}
+            placeholder="Enter your email"
             value={email}
-            placeholderTextColor="#C5C6CC" 
+            placeholderTextColor="#C5C6CC"
             onChangeText={text => setEmail(text)}
-            style={styles.txtinput}/>
+            style={styles.txtinput}
+          />
           <Text
             style={{
               color: email != '' ? '#ffffff' : '#FF0000',
@@ -92,10 +93,10 @@ export default function Login({route, navigation}) {
         <View>
           <TextInput
             placeholder="Enter your password"
-            placeholderTextColor="#C5C6CC" 
+            placeholderTextColor="#C5C6CC"
             value={password}
             onChangeText={text => setPassword(text)}
-            style={styles.txtinput} 
+            style={styles.txtinput}
             secureTextEntry></TextInput>
           <Text
             style={{
@@ -107,12 +108,16 @@ export default function Login({route, navigation}) {
           </Text>
         </View>
 
-        <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('TabStack')}>
-        <Text style={styles.btnText}>Log In</Text>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => navigation.navigate('DrawerNav')}>
+          <Text style={styles.btnText}>Log In</Text>
         </TouchableOpacity>
 
-
-        <Text style={styles.label}> ─────────── or Login with ─────────── </Text>
+        <Text style={styles.label}>
+          {' '}
+          ─────────── or Login with ───────────{' '}
+        </Text>
 
         <View style={styles.hcontainer}>
           <TouchableOpacity style={styles.touchable}>
@@ -148,7 +153,7 @@ export default function Login({route, navigation}) {
               color: '#91C888',
               fontFamily: 'Inter-SemiBold',
             }}
-            onPress={() => navigation.navigate('userFitnessGoal')}>
+            onPress={() => navigation.navigate('UserFitnessGoal')}>
             Sign Up
           </Text>
         </View>
@@ -163,7 +168,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     justifyContent: 'center',
   },
-
 
   midcontainer: {
     justifyContent: 'center',
@@ -186,18 +190,18 @@ const styles = StyleSheet.create({
 
   label1: {
     marginTop: 24,
-    marginBottom:10,
+    marginBottom: 10,
     fontSize: 17,
     fontFamily: 'Inter-Medium',
     textAlign: 'left',
-    color:"black",
-    alignSelf:'flex-start'
+    color: 'black',
+    alignSelf: 'flex-start',
   },
   label: {
     fontSize: 14,
     marginHorizontal: 10,
     color: '#90C888',
-    marginTop:20,
+    marginTop: 20,
     fontFamily: 'Inter-Medium',
   },
   input: {
@@ -240,36 +244,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:20,
-     marginBottom:20,
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
-  
+
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
 
-  txtinput:{ 
-    borderColor: '#E1E3E8', 
+  txtinput: {
+    borderColor: '#E1E3E8',
     borderWidth: 1,
     height: 48,
-    width:350,
-    paddingHorizontal:15,
-    borderRadius:10,
-    fontFamily:"Inter-Regular",
-    color:"black",
-    fontSize:16,
-    marginBottom:5,
-    
+    width: 350,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+    marginBottom: 5,
   },
 });

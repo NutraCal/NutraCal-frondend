@@ -7,9 +7,11 @@ import Ing2 from '../assets/images/ing2.svg'
 
 
 
+
 export default function AddRecipe({ navigation }) {
   return (
     <View style={styles.container}>
+     
       <ScrollView >
       
       <View style={styles.container2}>
@@ -18,8 +20,6 @@ export default function AddRecipe({ navigation }) {
       <View style={{alignItems:'flex-start',padding:10, justifyContent:'center'}}>
       <Text style={styles.heading}>Recipe Name</Text>
       <TextInput style={styles.txtinput} placeholder="Enter Recipe name" placeholderTextColor="#8F9098"/>
-      <Text style={styles.heading}>Author</Text>
-      <TextInput style={styles.txtinput} placeholder="Enter your name" placeholderTextColor="#8F9098"/>
       <Text style={styles.heading}>Desciption</Text>
       <TextInput style={[styles.txtinput,{height:142,textAlignVertical : "top",}]} placeholder="Type something here" placeholderTextColor="#8F9098"/>
       <Text style={styles.heading}>Nutrition</Text>
@@ -59,7 +59,7 @@ export default function AddRecipe({ navigation }) {
       </View>
 
       <TouchableOpacity style={{width:330, height:48, backgroundColor:"#91C788",alignSelf:"center", borderRadius:12, alignItems:"center", justifyContent:"center",marginTop:40, marginBottom:20}}>
-      <Text style={{color:"white", fontSize:16, fontFamily:"Inter-SemiBold"}}>Save Recipe</Text>
+      <Text style={{color:"white", fontSize:16, fontFamily:"Inter-SemiBold"}} onPress={() => navigation.navigate('AddRecipeScan')} >Save Recipe</Text>
       </TouchableOpacity>
 
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent: 'center',
     padding: 8,
-    paddingTop:20,
+  
   },
 
   container2:{

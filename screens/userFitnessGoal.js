@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import userGwh from './userGwh';
-import userAllergies from './userAllergies';
-import userDiet from './userDiet';
-import userIng from './userIng';
+import UserGwh from './UserGwh';
+import UserAllergies from './UserAllergies';
+import UserDiet from './UserDiet';
+import UserIng from './UserIng';
 import ProgressBar from '../assets/progressbar1';
 import {
   SafeAreaView,
@@ -21,14 +21,14 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
-const userFitnessGoal = ({navigation, route}) => {
+const UserFitnessGoal = ({navigation, route}) => {
   const [goal, setFitnessGoal] = useState('');
   const setGoal = goal => {
     setFitnessGoal(goal);
   };
   const inputValidation = () => {
     if (goal != '') {
-      navigation.navigate('userGwh', {fitnessGoal: goal});
+      navigation.navigate('UserGwh', {fitnessGoal: goal});
     } else {
       Alert.alert('Invalid Input', 'Please select your Goal', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
@@ -37,7 +37,7 @@ const userFitnessGoal = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom:20}}/>
+      <ProgressBar width={350} style={{marginBottom: 20}} />
       <Text style={styles.Heading}>What is your Goal?</Text>
       <Text style={styles.Text}>
         It will help us choose the best program{'\n'}for you
@@ -76,13 +76,9 @@ const userFitnessGoal = ({navigation, route}) => {
         <Text style={styles.listText}>Be Healthier</Text>
       </TouchableOpacity>
 
-  
       <TouchableOpacity style={styles.btn} onPress={inputValidation}>
         <Text style={styles.btnText}>Next</Text>
       </TouchableOpacity>
-   
-
-
     </View>
   );
 };
@@ -124,24 +120,22 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:220, 
-     marginBottom:20,
-  
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 220,
+    marginBottom: 20,
   },
 
-  
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
 });
-export default userFitnessGoal;
+export default UserFitnessGoal;

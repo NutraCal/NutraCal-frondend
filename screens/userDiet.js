@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import userGwh from './userGwh';
-import userIng from './userIng';
+import UserGwh from './UserGwh';
+import UserIng from './UserIng';
 import ProgressBar from '../assets/progressbar4';
 import {
   SafeAreaView,
@@ -23,7 +23,7 @@ import Dp2 from '../assets/dp2.svg';
 import Dp3 from '../assets/dp3.svg';
 import Dp4 from '../assets/dp4.svg';
 const Stack = createNativeStackNavigator();
-const userDiet = ({navigation, route}) => {
+const UserDiet = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -76,7 +76,7 @@ const userDiet = ({navigation, route}) => {
   };
   const inputValidation = () => {
     if (diet != '') {
-      navigation.navigate('userIng', {
+      navigation.navigate('UserIng', {
         fitnessGoal: goal,
         gender: gender,
         age: age,
@@ -95,7 +95,7 @@ const userDiet = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom:20}} />
+      <ProgressBar width={350} style={{marginBottom: 20}} />
       <Text style={styles.Heading}>
         Do you follow any of the{'\n'}following diets?
       </Text>
@@ -184,22 +184,22 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     marginLeft: 8,
   },
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:140, 
-     marginBottom:20,
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 140,
+    marginBottom: 20,
   },
 
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
   vector: {
     height: 50,
@@ -207,4 +207,4 @@ const styles = StyleSheet.create({
     margin: 15,
   },
 });
-export default userDiet;
+export default UserDiet;

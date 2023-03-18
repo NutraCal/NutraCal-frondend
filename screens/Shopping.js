@@ -5,7 +5,8 @@ import Ing2 from '../assets/images/ing2.svg'
 
 
 
-export default function AddRecipe() {
+
+export default function Shopping() {
   return (
     <View style={styles.container}>
       

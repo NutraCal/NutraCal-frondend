@@ -22,7 +22,6 @@ export default function SearchRecipe({navigation}) {
 
   return (
     
-    
     <View style={styles.container}>
       <ScrollView>
       <Searchbar

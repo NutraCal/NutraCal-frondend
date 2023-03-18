@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import register from './register';
+import Register from './Register';
 import ProgressBar from '../assets/progressbar5';
 import {
   SafeAreaView,
@@ -25,7 +25,7 @@ import Onion from '../assets/onion.svg';
 import Shrimp from '../assets/shrimp.svg';
 const Stack = createNativeStackNavigator();
 
-const userIng = ({navigation, route}) => {
+const UserIng = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -84,7 +84,7 @@ const userIng = ({navigation, route}) => {
   };
   const inputValidation = () => {
     if (ings != '') {
-      navigation.navigate('register', {
+      navigation.navigate('Register', {
         fitnessGoal: goal,
         gender: gender,
         age: age,
@@ -105,9 +105,15 @@ const userIng = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom:20}} />
+      <ProgressBar width={350} style={{marginBottom: 20}} />
       <Text style={styles.Heading}>Which ingredient do you dislike?</Text>
-      <View style={{flexDirection: 'row',justifyContent:"space-between", alignItems:'center', width:350}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: 350,
+        }}>
         <TouchableOpacity
           onPress={() => setIngredient('Mushroom')}
           style={{
@@ -133,7 +139,13 @@ const userIng = ({navigation, route}) => {
           <Text style={styles.listText}>Olives</Text>
         </TouchableOpacity>
       </View>
-      <View style={{flexDirection: 'row', justifyContent:"space-between", alignItems:'center', width:350}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: 350,
+        }}>
         <TouchableOpacity
           onPress={() => setIngredient('Tofu')}
           style={{
@@ -159,7 +171,13 @@ const userIng = ({navigation, route}) => {
           <Text style={styles.listText}>Brocolli</Text>
         </TouchableOpacity>
       </View>
-      <View style={{flexDirection: 'row', justifyContent:"space-between", alignItems:'center', width:350}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: 350,
+        }}>
         <TouchableOpacity
           onPress={() => setIngredient('Onion')}
           style={{
@@ -197,8 +215,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginHorizontal: 20,
     justifyContent: 'center',
-    
-    
   },
   Heading: {
     marginTop: 20,
@@ -219,7 +235,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: 170,
     alignItems: 'center',
-    justifyContent:"center",
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 25,
@@ -232,30 +248,30 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     lineHeight: 30,
     marginLeft: 2,
-    width:90,
+    width: 90,
   },
-  btn:{
-    width:330, 
-    height:48, 
-    backgroundColor:"#91C788",
-    alignSelf:"center", 
-    borderRadius:12,
-     alignItems:"center", 
-     justifyContent:"center",
-     marginTop:340, 
-     marginBottom:20,
+  btn: {
+    width: 330,
+    height: 48,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 340,
+    marginBottom: 20,
   },
 
   btnText: {
-    color:"white", 
-    fontSize:16, 
-    fontFamily:"Inter-SemiBold"
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
   vector: {
     height: 50,
     width: 50,
-    marginRight:10,
-    marginLeft:10,
+    marginRight: 10,
+    marginLeft: 10,
   },
 });
-export default userIng;
+export default UserIng;
