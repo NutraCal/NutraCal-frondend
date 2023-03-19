@@ -67,13 +67,17 @@ export default function Home({route, navigation}) {
 
       <View style={{marginTop: 10}}>
         <View style={styles.hbox}>
-          <TouchableOpacity style={styles.box2}>
+          <TouchableOpacity
+            style={styles.box2}
+            onPress={() => navigation.navigate('Calories')}>
             <Calories width={70} height={70} />
             <Text style={styles.name}>Calories</Text>
             <Text style={styles.desc}>3 min ago</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.box2}>
+          <TouchableOpacity
+            style={styles.box2}
+            onPress={() => navigation.navigate('Bmi')}>
             <Weight width={70} height={70} />
             <Text style={styles.name}>Weight</Text>
             <Text style={styles.desc}>4 days ago</Text>
@@ -81,12 +85,16 @@ export default function Home({route, navigation}) {
         </View>
 
         <View style={styles.hbox}>
-          <TouchableOpacity style={styles.box2}>
+          <TouchableOpacity
+            style={styles.box2}
+            onPress={() => navigation.navigate('WaterLog')}>
             <Water width={70} height={70} />
             <Text style={styles.name}>Water</Text>
             <Text style={styles.desc}>1 hour ago</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.box2}>
+          <TouchableOpacity
+            style={styles.box2}
+            onPress={() => navigation.navigate('StepCount')}>
             <Steps width={70} height={70} />
             <Text style={styles.name}>Steps</Text>
             <Text style={styles.desc}>1 min ago</Text>

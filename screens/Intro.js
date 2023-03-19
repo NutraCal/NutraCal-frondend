@@ -25,7 +25,7 @@ const Intro = ({navigation, route}) => {
   return (
     <View style={styles.MainDiv2}>
       <Text style={styles.PrimaryColor}>NutraCal</Text>
-      <ScrollView horizontal={true}>
+      <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
         <View style={styles.MainDiv3}>
           <Eating style={styles.image} />
           <Text style={styles.HeadingOnboarding}>Eat Healthy</Text>

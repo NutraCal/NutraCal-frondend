@@ -42,6 +42,14 @@ import AddMeal from './screens/AddMeal';
 import CallHome from './screens/CallHome';
 import Call from './screens/Call';
 
+import ViewProfile from './screens/ViewProfile';
+import EditProfile from './screens/EditProfile';
+import WaterLog from './screens/WaterLog';
+
+import Bmi from './screens/Bmi';
+import Calories from './screens/Calories';
+import StepCount from './screens/StepCount';
+
 LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
@@ -169,6 +177,36 @@ export default function App() {
         <Stack.Screen
           name="Call"
           component={Call}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="ViewProfile"
+          component={ViewProfile}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="WaterLog"
+          component={WaterLog}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="Bmi"
+          component={Bmi}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="Calories"
+          component={Calories}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="StepCount"
+          component={StepCount}
           options={{headerShown: true}}
         />
       </Stack.Navigator>

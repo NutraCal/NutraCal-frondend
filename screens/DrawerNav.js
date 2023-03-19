@@ -6,14 +6,7 @@ import TabStack from './TabStack';
 import Login from './Login';
 import CustomDrawer from '../components/CustomDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-function LogoutScreen({navigation}) {
-  return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Button onPress={() => navigation.navigate('Login')} />
-    </View>
-  );
-}
+import ViewProfile from './ViewProfile';
 
 const Drawer = createDrawerNavigator();
 
@@ -34,18 +27,18 @@ const DrawerNav = () => {
       <Drawer.Screen
         name="Home"
         component={TabStack}
-        options={{headerShown: false}}
         options={{
+          headerShown: false,
           drawerIcon: ({color}) => (
             <Ionicons name="home-outline" size={22} color={color} />
           ),
         }}
       />
       <Drawer.Screen
-        name="Settings"
-        component={Login}
-        options={{headerShown: true, headerLeft: false}}
+        name="Profile"
+        component={ViewProfile}
         options={{
+          headerShown: true,
           drawerIcon: ({color}) => (
             <Ionicons name="settings-outline" size={22} color={color} />
           ),

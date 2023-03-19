@@ -85,12 +85,12 @@ const TabStack = () => {
 
         tabBarStyle: {
           height: 60,
-          positiion: 'absolute',
-          bottom: 16,
-          borderRadius: 16,
-          right: 16,
-          left: 16,
-          width: 360,
+          // positiion: 'absolute',
+          // bottom: 16,
+          // borderRadius: 16,
+          // right: 16,
+          // left: 16,
+          // width: 360,
 
           paddingVertical: 8,
           backgroundColor: '#EFF7EE',
