@@ -69,40 +69,6 @@ export default function Login({route, navigation}) {
     }
   };
 
-  // const credentialsValidation = async res => {
-  //   var data = JSON.stringify({
-  //     email: email,
-  //     password: password,
-  //   });
-
-  //   console.log(data);
-  //   try {
-  //     const response = await axios({
-  //       method: 'post',
-  //       url: endpoint + '/users/login',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       data: data,
-  //     });
-  //     console.log('got response');
-  //     console.log(JSON.stringify(response.data));
-  //     if (response.status == 200) {
-  //       console.log('success');
-  //       navigation.navigate('DrawerNav', {
-  //         email: email,
-  //       });
-  //     } else {
-  //       Alert.alert('Invalid Credentials', 'Invalid email and password', [
-  //         {text: 'OK', onPress: () => console.log('OK Pressed')},
-  //       ]);
-  //     }
-  //   } catch (error) {
-  //     console.log('no response');
-  //     console.log(error.ErrorMessage);
-  //   }
-  // };
-
   return (
     <View style={styles.container}>
       <View>
