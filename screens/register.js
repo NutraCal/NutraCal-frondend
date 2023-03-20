@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import type {Node} from 'react';
 import Login from './Login';
+import {endpoint} from '../util/config';
 const Register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -72,11 +73,14 @@ const Register = ({route, navigation}) => {
     route.params?.ingredients,
   ]);
   const credentialsValidation = () => {
+    console.log('trying');
+    console.log('email');
+
     if (
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
     ) {
-      fetch('http://10.113.12.243:3000/users/createUser', {
+      fetch(endpoint + '/users/createUser', {
         method: 'POST',
 
         headers: {

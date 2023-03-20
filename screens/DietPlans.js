@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from 'react-native';
 import B1 from '../assets/images/breakfast1.svg';
 import L1 from '../assets/images/lunch1.svg';
@@ -13,8 +14,18 @@ import S1 from '../assets/images/snack1.svg';
 import Forw from '../assets/forwardbtn.svg';
 
 export default function AddRecipe() {
+  const [open, setOpen] = useState(false); //open and closes model
+
+  function handleOnPress() {
+    setOpen(!open);
+  }
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={handleOnPress}>
+        <Text>Open</Text>
+      </TouchableOpacity>
+
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal={true}

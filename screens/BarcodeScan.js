@@ -8,9 +8,11 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 //import {RNCamera} from 'react-native-camera';
+import Modal from 'react-native-modal';
 
 import {
   Colors,
@@ -45,7 +47,6 @@ function BarcodeScan(): JSX.Element {
   };
 
   const getData = data => {
-    
     var myHeaders = new Headers();
     myHeaders.append(
       'Authorization',
@@ -71,10 +72,42 @@ function BarcodeScan(): JSX.Element {
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
   };
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <View style={styles.sectionContainer}>
       <QRCodeScanner onRead={onSuccessScan} reactivate={true} />
-      <Text style={{color:"black", marginBottom:20, fontWeight:'bold'}}>{val}</Text>
+      <Text style={{color: 'black', marginBottom: 20, fontWeight: 'bold'}}>
+        {val}
+      </Text>
+      <View style={{marginBottom: 20}}>
+        <Button title="Show Bottom Sheet" onPress={toggleModal} />
+      </View>
+      <Modal
+        onBackdropPress={() => setModalVisible(false)}
+        onBackButtonPress={() => setModalVisible(false)}
+        isVisible={isModalVisible}
+        swipeDirection="down"
+        onSwipeComplete={toggleModal}
+        // animationIn="bounceInUp"
+        // animationOut="bounceOutDown"
+        animationInTiming={900}
+        animationOutTiming={500}
+        backdropTransitionInTiming={1000}
+        backdropTransitionOutTiming={500}
+        style={styles.modal}>
+        <View style={styles.modalContent}>
+          <View style={styles.center}>
+            <View style={styles.barIcon} />
+            <Text style={styles.text}>Welcome To My Bottom Sheet</Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -96,6 +129,35 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: '#ffffff',
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    minHeight: 400,
+    paddingBottom: 20,
+  },
+  center: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  barIcon: {
+    width: 60,
+    height: 5,
+    backgroundColor: '#bbb',
+    borderRadius: 3,
+  },
+  text: {
+    color: '#bbb',
+    fontSize: 24,
+    marginTop: 100,
   },
 });
 

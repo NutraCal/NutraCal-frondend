@@ -17,18 +17,22 @@ import Google from '../assets/Google.svg';
 import ErrorMessage from '../components/ErrorMessage';
 import TabStack from './TabStack';
 import DrawerNav from './DrawerNav';
+import {endpoint} from '../util/config';
+import axios from 'axios';
 
 export default function Login({route, navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
+
   const credentialsValidation = () => {
+    console.log(endpoint + '/users/login');
     if (
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
     ) {
-      fetch('http://10.113.12.243:3000/users/login', {
+      fetch(endpoint + '/users/login', {
         method: 'POST',
 
         headers: {
@@ -41,7 +45,10 @@ export default function Login({route, navigation}) {
         }),
       }).then(response => {
         if (response.status == 200) {
-          navigation.navigate('Home');
+          console.log('success');
+          navigation.navigate('DrawerNav', {
+            email: email,
+          });
         } else {
           Alert.alert('Invalid Credentials', 'Invalid email and password', [
             {text: 'OK', onPress: () => console.log('OK Pressed')},
@@ -61,6 +68,40 @@ export default function Login({route, navigation}) {
       ]);
     }
   };
+
+  // const credentialsValidation = async res => {
+  //   var data = JSON.stringify({
+  //     email: email,
+  //     password: password,
+  //   });
+
+  //   console.log(data);
+  //   try {
+  //     const response = await axios({
+  //       method: 'post',
+  //       url: endpoint + '/users/login',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       data: data,
+  //     });
+  //     console.log('got response');
+  //     console.log(JSON.stringify(response.data));
+  //     if (response.status == 200) {
+  //       console.log('success');
+  //       navigation.navigate('DrawerNav', {
+  //         email: email,
+  //       });
+  //     } else {
+  //       Alert.alert('Invalid Credentials', 'Invalid email and password', [
+  //         {text: 'OK', onPress: () => console.log('OK Pressed')},
+  //       ]);
+  //     }
+  //   } catch (error) {
+  //     console.log('no response');
+  //     console.log(error.ErrorMessage);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -108,9 +149,7 @@ export default function Login({route, navigation}) {
           </Text>
         </View>
 
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => navigation.navigate('DrawerNav')}>
+        <TouchableOpacity style={styles.btn} onPress={credentialsValidation}>
           <Text style={styles.btnText}>Log In</Text>
         </TouchableOpacity>
 

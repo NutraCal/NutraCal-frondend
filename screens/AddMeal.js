@@ -39,6 +39,7 @@ export default function AddMeal() {
       console.log('hehe');
     }
   };
+
   const convertBinary = async response => {
     console.log('img', image);
     const res = await RNFS.readFile(response.assets[0].uri, 'base64');

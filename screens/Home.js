@@ -15,6 +15,8 @@ import Forw from '../assets/forwardbtn.svg';
 import Login from './Login';
 
 export default function Home({route, navigation}) {
+  const {email} = route.params;
+
   return (
     <View style={styles.container}>
       <View
@@ -87,7 +89,11 @@ export default function Home({route, navigation}) {
         <View style={styles.hbox}>
           <TouchableOpacity
             style={styles.box2}
-            onPress={() => navigation.navigate('WaterLog')}>
+            onPress={() =>
+              navigation.navigate('WaterLog', {
+                email: email,
+              })
+            }>
             <Water width={70} height={70} />
             <Text style={styles.name}>Water</Text>
             <Text style={styles.desc}>1 hour ago</Text>

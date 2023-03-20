@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,12 +11,17 @@ import {
 } from 'react-native';
 import {Overlay} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import {endpoint} from '../util/config';
 
-const WaterLog = () => {
+const WaterLog = ({route, navigation}) => {
+  const {email} = route.params;
+  console.log(email);
   const [isVisible, setIsVisible] = useState(false);
   const [isGoalVisible, setIsGoalVisible] = useState(false);
-  const [glasses, setGlasses] = useState(0);
+  const [glasses, setGlasses] = useState('');
   const [goal, setGoal] = useState(0);
+  const [loadData, setLoadData] = useState(true);
 
   const handleSave = () => {
     // Call Node server to save data to MongoDB
@@ -27,10 +32,58 @@ const WaterLog = () => {
     setIsGoalVisible(false);
   };
 
+  const updateWaterIntake = async res => {
+    var data = JSON.stringify({
+      email: email,
+      water: glasses,
+    });
+
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/users/updateWaterIntake',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      setLoadData(true);
+      setIsVisible(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const getWaterIntake = async res => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: endpoint + '/users/getWaterIntake/' + email,
+        headers: {},
+      });
+
+      console.log(JSON.stringify(response.data));
+      const w = response.data.toString();
+      setGlasses(w);
+      // console.log('glasses');
+      // console.log(glasses);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    if (loadData) {
+      getWaterIntake();
+      setLoadData(false);
+    }
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.waterContainer}>
-        {/* <Ionicons name="water" size={100} color="#3c96f5" /> */}
         <Image
           style={{width: 300, height: 200, marginBottom: 30}}
           source={require('../assets/images/water.png')}
@@ -102,14 +155,14 @@ const WaterLog = () => {
             style={styles.input}
             keyboardType="numeric"
             placeholder="Number of glasses"
-            onChangeText={value => setGlasses(value)}
+            onChangeText={value => setGlasses(value.toString())}
             value={glasses}
           />
         </View>
         <View style={styles.buttonContainer}>
           <Button
             title="Save"
-            onPress={handleSave}
+            onPress={updateWaterIntake}
             buttonStyle={styles.button}
           />
         </View>

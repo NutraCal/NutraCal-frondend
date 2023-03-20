@@ -22,7 +22,8 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
 
-const TabStack = () => {
+const TabStack = ({route, navigation}) => {
+  const {email} = route.params;
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -102,6 +103,7 @@ const TabStack = () => {
       })}>
       <Tab.Screen
         name="Home"
+        initialParams={{email: email}}
         component={Home}
         options={{
           headerBackTitleVisible: false,
@@ -162,6 +164,7 @@ const TabStack = () => {
       />
       <Tab.Screen
         name="Shopping"
+        initialParams={{email: email}}
         component={Shopping}
         options={({navigation}) => ({
           headerShown: true,

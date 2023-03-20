@@ -1,19 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import {endpoint} from '../util/config';
 
-const ViewProfile = () => {
-  const [email, setEmail] = useState('mahrukh@gmail.com');
-  const [password, setPassword] = useState('hheheheheh');
+const ViewProfile = ({route, navigation}) => {
+  const {email} = route.params;
+  const {editable} = route.params;
+  const [editProfile, IsEditableProfile] = useState(editable);
+  const [edit, IsEditable] = useState(false);
+
+  const [email1, setEmail1] = useState(email);
+  const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
-  const [gender, setGender] = useState('Female');
-  const [age, setAge] = useState('23');
-
-  const [editProfile, IsEditableProfile] = useState(false);
+  const [gender, setGender] = useState('');
 
   const [isDisabled, setIsDisabled] = useState(true);
-  const [edit, IsEditable] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -24,8 +33,12 @@ const ViewProfile = () => {
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);
 
-  const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
+  const [age, setAge] = useState('');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
+
+  const [loadData, setLoadData] = useState(true);
+  const [obj, setObject] = useState('');
 
   const [heightUnit, setHeightUnit] = useState([
     {label: 'cm', value: 'cm'},
@@ -37,8 +50,8 @@ const ViewProfile = () => {
   ]);
 
   const [fitnessGoal, setFitnessGoal] = useState([
-    {label: 'Weight Loss', value: 'Weight Loss'},
-    {label: 'Weight Gain', value: 'Weight Gain'},
+    {label: 'Lose Weight', value: 'Lose Weight'},
+    {label: 'Gain Weight', value: 'Gain Weight'},
     {label: 'Maintain Weight', value: 'Maintain Weight'},
   ]);
 
@@ -46,7 +59,72 @@ const ViewProfile = () => {
     setHidePassword(!hidePassword);
   };
 
+  const setProfileInfo = async res => {
+    var data = JSON.stringify({
+      email: email,
+      password: 'mirror56#',
+      gender: gender,
+      weight: parseInt(weight),
+      weightUnit: value,
+      height: parseInt(height),
+      heightUnit: value2,
+      age: parseInt(age),
+      fitnessGoal: value3,
+    });
+
+    console.log(data);
+
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/users/updateUser',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      if (response.status == 200) {
+        alert('updated successfully');
+      }
+
+      console.log(JSON.stringify(response.data));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const getProfileInfo = async res => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: endpoint + '/users/viewUser/' + email,
+        headers: {},
+      });
+      console.log(JSON.stringify(response.data));
+
+      setPassword(response.data[0].password);
+      setGender(response.data[0].gender);
+      setValue2(response.data[0].heightUnit);
+      setValue(response.data[0].weightUnit);
+      console.log(value2);
+      setValue3(response.data[0].fitnessGoal);
+      const age = response.data[0].age.toString();
+      setAge(age);
+      const height = response.data[0].height.toString();
+      setHeight(height);
+      const weight = response.data[0].weight.toString();
+      setWeight(weight);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   useEffect(() => {
+    if (loadData) {
+      getProfileInfo();
+      setLoadData(false);
+    }
     setIsDisabled(!editProfile);
     IsEditable(editProfile);
   }, [editProfile]);
@@ -58,8 +136,8 @@ const ViewProfile = () => {
         <TextInput
           style={styles.input}
           placeholderTextColor="#8F9098"
-          value={email}
-          editable={edit}
+          value={email1}
+          editable={false}
         />
       </View>
 
@@ -250,6 +328,31 @@ const ViewProfile = () => {
           disabled={isDisabled}
         />
       </View>
+      {editable && (
+        <TouchableOpacity
+          style={{
+            width: 330,
+            height: 48,
+            backgroundColor: '#91C788',
+            alignSelf: 'center',
+            borderRadius: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 60,
+            marginBottom: 20,
+            zIndex: 0,
+          }}
+          onPress={setProfileInfo}>
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 16,
+              fontFamily: 'Inter-SemiBold',
+            }}>
+            Save changes
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
