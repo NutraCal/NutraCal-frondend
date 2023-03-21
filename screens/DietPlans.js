@@ -13,7 +13,8 @@ import D1 from '../assets/images/dinner1.svg';
 import S1 from '../assets/images/snack1.svg';
 import Forw from '../assets/forwardbtn.svg';
 
-export default function AddRecipe() {
+export default function DietPlans({route, navigation}) {
+  const {email} = route.params;
   const [open, setOpen] = useState(false); //open and closes model
 
   function handleOnPress() {
@@ -22,10 +23,6 @@ export default function AddRecipe() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleOnPress}>
-        <Text>Open</Text>
-      </TouchableOpacity>
-
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal={true}
@@ -64,73 +61,85 @@ export default function AddRecipe() {
         </TouchableOpacity>
       </ScrollView>
 
-      <View style={styles.section}>
-        <View style={styles.subsection}>
-          <Text style={styles.heading}>Breakfast</Text>
-          <Text style={styles.desc}>230 calories</Text>
-        </View>
-        <View style={[styles.subsection, {marginTop: 10}]}>
-          <B1 width={60} height={60} />
-          <View style={{width: 150}}>
-            <Text style={styles.name1}>Honey Pancake</Text>
-            <Text style={styles.desc}>7:00 am</Text>
+      <ScrollView showsVerticalScrollIndicator={false} style={{}}>
+        <View style={styles.section}>
+          <View style={styles.subsection}>
+            <Text style={styles.heading}>Breakfast</Text>
+            <Text style={styles.desc}>230 calories</Text>
           </View>
-          <TouchableOpacity>
-            <Forw width={24} height={24} style={{marginLeft: 20}} />
-          </TouchableOpacity>
+          <View style={[styles.subsection, {marginTop: 10}]}>
+            <B1 width={60} height={60} />
+            <View style={{width: 150}}>
+              <Text style={styles.name1}>Honey Pancake</Text>
+              <Text style={styles.desc}>7:00 am</Text>
+            </View>
+            <TouchableOpacity>
+              <Forw width={24} height={24} style={{marginLeft: 20}} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.section}>
-        <View style={styles.subsection}>
-          <Text style={styles.heading}>Lunch</Text>
-          <Text style={styles.desc}>500 calories</Text>
-        </View>
-        <View style={[styles.subsection, {marginTop: 10}]}>
-          <L1 width={60} height={60} />
-          <View style={{width: 150}}>
-            <Text style={styles.name1}>Chicken Steak</Text>
-            <Text style={styles.desc}>1:00 pm</Text>
+        <View style={styles.section}>
+          <View style={styles.subsection}>
+            <Text style={styles.heading}>Lunch</Text>
+            <Text style={styles.desc}>500 calories</Text>
           </View>
-          <TouchableOpacity>
-            <Forw width={24} height={24} style={{marginLeft: 20}} />
-          </TouchableOpacity>
+          <View style={[styles.subsection, {marginTop: 10}]}>
+            <L1 width={60} height={60} />
+            <View style={{width: 150}}>
+              <Text style={styles.name1}>Chicken Steak</Text>
+              <Text style={styles.desc}>1:00 pm</Text>
+            </View>
+            <TouchableOpacity>
+              <Forw width={24} height={24} style={{marginLeft: 20}} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.section}>
-        <View style={styles.subsection}>
-          <Text style={styles.heading}>Snacks</Text>
-          <Text style={styles.desc}>50 calories</Text>
-        </View>
-        <View style={[styles.subsection, {marginTop: 10}]}>
-          <S1 width={60} height={60} />
-          <View style={{width: 150}}>
-            <Text style={styles.name1}>Orange</Text>
-            <Text style={styles.desc}>5:00 pm</Text>
+        <View style={styles.section}>
+          <View style={styles.subsection}>
+            <Text style={styles.heading}>Snacks</Text>
+            <Text style={styles.desc}>50 calories</Text>
           </View>
-          <TouchableOpacity>
-            <Forw width={24} height={24} style={{marginLeft: 20}} />
-          </TouchableOpacity>
+          <View style={[styles.subsection, {marginTop: 10}]}>
+            <S1 width={60} height={60} />
+            <View style={{width: 150}}>
+              <Text style={styles.name1}>Orange</Text>
+              <Text style={styles.desc}>5:00 pm</Text>
+            </View>
+            <TouchableOpacity>
+              <Forw width={24} height={24} style={{marginLeft: 20}} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.section}>
-        <View style={styles.subsection}>
-          <Text style={styles.heading}>Dinner</Text>
-          <Text style={styles.desc}>120 calories</Text>
-        </View>
-        <View style={[styles.subsection, {marginTop: 10}]}>
-          <D1 width={60} height={60} />
-          <View style={{width: 150}}>
-            <Text style={styles.name1}>Salad</Text>
-            <Text style={styles.desc}>7:10 pm</Text>
+        <View style={styles.section}>
+          <View style={styles.subsection}>
+            <Text style={styles.heading}>Dinner</Text>
+            <Text style={styles.desc}>120 calories</Text>
           </View>
-          <TouchableOpacity>
-            <Forw width={24} height={24} style={{marginLeft: 20}} />
-          </TouchableOpacity>
+          <View style={[styles.subsection, {marginTop: 10}]}>
+            <D1 width={60} height={60} />
+            <View style={{width: 150}}>
+              <Text style={styles.name1}>Salad</Text>
+              <Text style={styles.desc}>7:10 pm</Text>
+            </View>
+            <TouchableOpacity>
+              <Forw width={24} height={24} style={{marginLeft: 20}} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() =>
+            navigation.navigate('AddMeal', {
+              email: email,
+            })
+          }>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -188,5 +197,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  addButton: {
+    backgroundColor: '#91C788',
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    marginTop: 40,
+    bottom: 10,
+    right: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });

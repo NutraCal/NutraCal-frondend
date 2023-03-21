@@ -5,7 +5,8 @@ import Myrec1 from '../assets/images/myrec1.svg';
 import Myrec2 from '../assets/images/myrec2.svg';
 import Hearticon from '../assets/images/heart.svg';
 
-export default function MyRecipes() {
+export default function MyRecipes({route, navigation}) {
+  const {email} = route.params;
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>

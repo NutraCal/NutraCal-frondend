@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
@@ -16,9 +17,52 @@ export default function Shopping({route, navigation}) {
   const {email} = route.params;
 
   const [loadId, setLoadId] = useState(true);
-  const [loadData, setLoadData] = useState(true);
+  const [loadData, setLoadData] = useState(false);
   const [userId, setUserId] = useState('');
   const [json, setJson] = useState('');
+
+  const [getlist, setList] = useState([]);
+
+  const [item, setItem] = useState('');
+  const [editItem, setEditItem] = useState(0);
+
+  const updateList = () => {
+    setList(list =>
+      getlist.map(element =>
+        element.key === editItem ? {key: element.key, data: item} : element,
+      ),
+    );
+    setItem('');
+    setEditItem(0);
+  };
+
+  const updateItems = item => {
+    setItem(item.data);
+    setEditItem(item.key);
+  };
+
+  const additems = () => {
+    console.log('in add item function');
+    // setList([...getlist, {key: Math.random().toString(), data: item}]);
+    setList([...getlist, item]);
+    // console.log('list' + getlist);
+
+    setItem('');
+    console.log(getlist);
+    // addItem();
+    // setLoadData(!loadData);
+  };
+
+  const deleteItem = key => {
+    console.log(key);
+
+    // setList(list => getlist.filter(element => element.key != key));
+    const list = getlist.filter(ele => key != getlist.indexOf(ele));
+    console.log('list', list);
+    setList(list);
+
+    console.log(getlist);
+  };
 
   const getUserId = async res => {
     console.log('inside');
@@ -29,9 +73,10 @@ export default function Shopping({route, navigation}) {
         headers: {},
       });
 
-      console.log(JSON.stringify(response.data));
-
-      setJson(response.data);
+      // console.log(JSON.stringify(response.data));
+      setUserId(response.data);
+      setLoadData(!loadData);
+      // return json;
     } catch (error) {
       console.log(error.response);
     }
@@ -47,9 +92,13 @@ export default function Shopping({route, navigation}) {
         headers: {},
       });
 
-      console.log(JSON.stringify(response.data[0]));
+      // console.log(JSON.stringify(response.data[0].list));
+      console.log('res', response.data);
+      const slist = response.data[0].list;
+      console.log(...slist);
+      setList([...slist]);
     } catch (error) {
-      console.log('errpr');
+      console.log('error');
       console.log(error.response.data);
     }
   };
@@ -57,23 +106,23 @@ export default function Shopping({route, navigation}) {
   const addItem = async res => {
     var data = JSON.stringify({
       userId: userId,
-      list: ['Sugar', 'Butter', 'Rice', 'Corn'],
+      list: getlist,
     });
 
-    console.log(data);
-    try {
-      const response = await axios({
-        method: 'post',
-        url: endpoint + '/shoppingList/addList',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: data,
-      });
-      console.log(JSON.stringify(response.data));
-    } catch (error) {
-      console.log(error.message);
-    }
+    console.log('data' + data);
+    // try {
+    //   const response = await axios({
+    //     method: 'post',
+    //     url: endpoint + '/shoppingList/addList',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     data: data,
+    //   });
+    //   console.log(JSON.stringify(response.data));
+    // } catch (error) {
+    //   console.log(error.message);
+    // }
   };
 
   const delItem = async res => {
@@ -99,18 +148,13 @@ export default function Shopping({route, navigation}) {
   };
 
   useEffect(() => {
-    if (loadId) {
-      getUserId();
-      setLoadId(false);
-    }
-    if (json) {
-      setUserId(json);
-      console.log('user id here');
-      console.log(userId);
-      getShoppingList();
-      setLoadData(false);
-    }
-  });
+    getUserId();
+  }, []);
+
+  useEffect(() => {
+    console.log(userId);
+    getShoppingList();
+  }, [loadData]);
 
   return (
     <View style={styles.container}>
@@ -120,54 +164,48 @@ export default function Shopping({route, navigation}) {
             style={[styles.txtinput, {width: 300}]}
             placeholder="Type and add your ingredients"
             placeholderTextColor="#C5C6CC"
+            value={item}
+            onChangeText={text => setItem(text)}
           />
-          <TouchableOpacity style={styles.cbtn} onPress={addItem}>
+          <TouchableOpacity style={styles.cbtn} onPress={additems}>
             <Text style={{fontSize: 20, color: 'white'}}>+</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Ing1 width={40} height={39} style={{marginRight: 20}} />
-            <Text style={styles.name}>Sugar</Text>
-          </View>
-          <TouchableOpacity
-            onPress={delItem}
-            style={[
-              styles.cbtn,
-              {marginLeft: 50, elevation: 2, backgroundColor: 'white'},
-            ]}>
-            <Text style={{fontSize: 20, color: '#91C788', alignSelf: 'center'}}>
-              -
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.box3, {backgroundColor: '#F9EBF8'}]}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Ing2 width={40} height={39} style={{marginRight: 20}} />
-            <Text style={styles.name}>Baking Soda</Text>
-          </View>
-          <TouchableOpacity
-            onPress={delItem}
-            style={[
-              styles.cbtn,
-              {marginLeft: 50, elevation: 2, backgroundColor: 'white'},
-            ]}>
-            <Text style={{fontSize: 20, color: '#91C788', alignSelf: 'center'}}>
-              -
-            </Text>
-          </TouchableOpacity>
+        <View style={{width: 350}}>
+          <FlatList
+            data={getlist}
+            renderItem={({index, item}) => (
+              <View key={index}>
+                <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Ing1 width={40} height={39} style={{marginRight: 20}} />
+                    <Text style={styles.name}>{item}</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => deleteItem(index)}
+                    style={[
+                      styles.cbtn,
+                      {marginLeft: 50, elevation: 2, backgroundColor: 'white'},
+                    ]}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: '#91C788',
+                        alignSelf: 'center',
+                      }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          />
         </View>
       </ScrollView>
     </View>

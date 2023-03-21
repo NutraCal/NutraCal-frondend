@@ -21,7 +21,8 @@ import Pop1 from '../assets/images/pop1.svg';
 import Forw from '../assets/forwardbtn.svg';
 import HomeHeader from './HomeHeader';
 
-export default function SearchRecipe({navigation}) {
+export default function SearchRecipe({route, navigation}) {
+  const {email} = route.params;
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 

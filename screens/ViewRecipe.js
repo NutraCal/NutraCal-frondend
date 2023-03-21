@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -6,8 +6,9 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  FlatList,
 } from 'react-native';
-import {Avatar} from 'react-native-paper';
+import {Avatar, Title} from 'react-native-paper';
 import Recipe1 from '../assets/images/recipe1.svg';
 import Macro1 from '../assets/images/macro1.svg';
 import Macro2 from '../assets/images/macro2.svg';
@@ -23,8 +24,59 @@ import Dp2 from '../assets/images/dp2.svg';
 import Dp3 from '../assets/images/dp3.svg';
 import Reply from '../assets/images/reply.svg';
 import Like from '../assets/images/like.svg';
+import axios from 'axios';
+import {endpoint} from '../util/config';
 
 export default function ViewRecipe({navigation}) {
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [calories, setCalories] = useState('');
+  const [fats, setFats] = useState('');
+  const [proteins, setProteins] = useState('');
+  const [carbs, setCarbs] = useState('');
+  const [servingSize, setServingSize] = useState('');
+  const [ingredients, setIngredients] = useState([]);
+  const [quantity, setQuantity] = useState([]);
+  const [item, setItem] = useState('');
+  const [getlist, setList] = useState([]);
+
+  const searchRecipeByName = async res => {
+    var data = JSON.stringify({
+      title: 'Broccoli Salad',
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/recipes/searchRecipes',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      setName(response.data[0].Title);
+      setDesc(response.data[0].RecipeMethod);
+      const c = response.data[0].Calories.toString();
+      setCalories(c);
+      const f = response.data[0].Fats.toString();
+      setFats(f);
+      const p = response.data[0].Proteins.toString();
+      setProteins(p);
+      const ca = response.data[0].Carbs.toString();
+      setCarbs(ca);
+      const slist = response.data[0].Ingredients;
+      console.log(...slist);
+      setList([...slist]);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  useEffect(() => {
+    searchRecipeByName();
+  }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -34,8 +86,7 @@ export default function ViewRecipe({navigation}) {
             source={require('../assets/images/recipe1.png')}
           />
 
-          <Text style={styles.heading}>Blueberry Pancake</Text>
-          <Text style={styles.name}>by James Ruth</Text>
+          <Text style={styles.heading}>{name}</Text>
 
           <Text style={styles.heading}>Nutrition</Text>
 
@@ -44,7 +95,7 @@ export default function ViewRecipe({navigation}) {
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
                   <View style={{marginRight: 10}}>
-                    <Text style={styles.name}>180</Text>
+                    <Text style={styles.name}>{calories}</Text>
                     <Text style={styles.tag}>kCal</Text>
                   </View>
                   <Macro1 width={20} height={21} />
@@ -56,7 +107,7 @@ export default function ViewRecipe({navigation}) {
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
                   <View style={{marginRight: 10}}>
-                    <Text style={styles.name}>24</Text>
+                    <Text style={styles.name}>{fats}</Text>
                     <Text style={styles.tag}>fats</Text>
                   </View>
                   <Macro2 width={20} height={21} />
@@ -68,7 +119,7 @@ export default function ViewRecipe({navigation}) {
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
                   <View style={{marginRight: 10}}>
-                    <Text style={styles.name}>30</Text>
+                    <Text style={styles.name}>{proteins}</Text>
                     <Text style={styles.tag}>proteins</Text>
                   </View>
                   <Macro3 width={20} height={21} />
@@ -80,7 +131,7 @@ export default function ViewRecipe({navigation}) {
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
                   <View style={{marginRight: 10}}>
-                    <Text style={styles.name}>56</Text>
+                    <Text style={styles.name}>{carbs}</Text>
                     <Text style={styles.tag}>carbs</Text>
                   </View>
                   <Macro4 width={20} height={21} />
@@ -90,98 +141,28 @@ export default function ViewRecipe({navigation}) {
           </ScrollView>
 
           <Text style={styles.heading}>Desciption</Text>
-          <Text style={styles.desc}>
-            Pancakes are some people's favorite breakfast, who doesn't like
-            pancakes? Especially with the real honey splash on top of the
-            pancakes, of course everyone loves that! besides being lorem ipsum.{' '}
-          </Text>
+          <Text style={styles.desc}>{desc}</Text>
 
           <Text style={[styles.heading, {width: 250}]}>
             Ingredients That You Will Need
           </Text>
 
-          <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-            <View style={{alignItems: 'center'}}>
-              <View style={styles.box1}>
-                <Icon1 width={50} height={50} />
-              </View>
-              <View style={{}}>
-                <Text style={styles.name}>Wheat Flour</Text>
-                <Text style={styles.tag}>100gr</Text>
-              </View>
-            </View>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={getlist}
+            renderItem={({index, item}) => (
+              <View key={index} style={{alignItems: 'center'}}>
+                <View style={styles.box1}>
+                  <Icon1 width={50} height={50} />
+                </View>
 
-            <View style={{alignItems: 'center'}}>
-              <View style={styles.box1}>
-                <Icon2 width={50} height={50} />
+                <View style={{}}>
+                  <Text style={styles.name}>{item}</Text>
+                </View>
               </View>
-              <View style={{}}>
-                <Text style={styles.name}>Sugar</Text>
-                <Text style={styles.tag}>3 tbsp</Text>
-              </View>
-            </View>
-
-            <View style={{alignItems: 'center'}}>
-              <View style={styles.box1}>
-                <Icon3 width={50} height={50} />
-              </View>
-              <View>
-                <Text style={styles.name}>Baking Soda</Text>
-                <Text style={styles.tag}>2 tsp</Text>
-              </View>
-            </View>
-
-            <View style={{alignItems: 'center'}}>
-              <View style={styles.box1}>
-                <Icon4 width={50} height={50} />
-              </View>
-              <View>
-                <Text style={styles.name}>Eggs</Text>
-                <Text style={styles.tag}>2 items</Text>
-              </View>
-            </View>
-          </ScrollView>
-
-          <TouchableOpacity
-            style={{
-              width: 330,
-              height: 48,
-              backgroundColor: '#91C788',
-              alignSelf: 'center',
-              borderRadius: 12,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: 30,
-              marginBottom: 10,
-            }}>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 16,
-                fontFamily: 'Inter-SemiBold',
-              }}>
-              + Add Ingredients
-            </Text>
-          </TouchableOpacity>
-
-          <Text style={styles.heading}>Steps</Text>
-
-          <Text style={styles.tag}>
-            Prepare all of the ingredients that needed.
-          </Text>
-          <Text style={styles.tag}>
-            Mix flour, sugar, salt, and baking powder.
-          </Text>
-          <Text style={styles.tag}>
-            In a seperate place, mix the eggs and liquid milk until blended.
-          </Text>
-          <Text style={styles.tag}>
-            Put the egg and milk mixture into the dry ingredients, Stir untul
-            smooth and smooth.
-          </Text>
-          <Text style={styles.tag}>
-            Prepare all of the ingredients that needed.
-          </Text>
+            )}
+          />
 
           <View
             style={{

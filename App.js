@@ -37,6 +37,7 @@ import TabStack from './screens/TabStack';
 import DrawerNav from './screens/DrawerNav';
 import AddRecipeScan from './screens/AddRecipeScan';
 import BarcodeScan from './screens/BarcodeScan';
+import AddMealScan from './screens/AddMealScan';
 import AddMeal from './screens/AddMeal';
 
 import CallHome from './screens/CallHome';
@@ -49,6 +50,7 @@ import WaterLog from './screens/WaterLog';
 import Bmi from './screens/Bmi';
 import Calories from './screens/Calories';
 import StepCount from './screens/StepCount';
+import DietPlans from './screens/DietPlans';
 
 LogBox.ignoreAllLogs();
 
@@ -150,8 +152,35 @@ export default function App() {
           })}
         />
         <Stack.Screen
+          name="AddMeal"
+          component={AddMeal}
+          options={({navigation}) => ({
+            headerShown: true,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('AddMealScan')}
+                styles={{backgroundColor: '#91C788'}}>
+                <Text
+                  style={{
+                    color: '#91C788',
+                    fontSize: 16,
+                    marginRight: 10,
+                    fontWeight: 'bold',
+                  }}>
+                  Scan
+                </Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
+        <Stack.Screen
           name="SuggestRecipe"
           component={SuggestRecipe}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="DietPlans"
+          component={DietPlans}
           options={{headerShown: true}}
         />
         <Stack.Screen
@@ -165,10 +194,11 @@ export default function App() {
           options={{headerShown: true}}
         />
         <Stack.Screen
-          name="AddMeal"
-          component={AddMeal}
+          name="AddMealScan"
+          component={AddMealScan}
           options={{headerShown: true}}
         />
+
         <Stack.Screen
           name="CallHome"
           component={CallHome}

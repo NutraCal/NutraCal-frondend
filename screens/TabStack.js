@@ -10,7 +10,9 @@ import RecipeBook from './SearchRecipe';
 import DietPlans from './DietPlans';
 import Shopping from './Shopping';
 import Blogs from './SearchBlog';
+import AddMealScan from './AddMealScan';
 import AddMeal from './AddMeal';
+
 import HomeHeader from './HomeHeader';
 import CallHome from './CallHome';
 import Call from './Call';
@@ -124,16 +126,20 @@ const TabStack = ({route, navigation}) => {
       />
       <Tab.Screen
         name="RecipeBook"
+        initialParams={{email: email}}
         component={RecipeBook}
         options={({navigation}) => {
           return {
-            headerTitle: () => <HomeHeader navigation={navigation} />,
+            headerTitle: props => (
+              <HomeHeader navigation={navigation} email={email} />
+            ),
           };
         }}
       />
 
       <Tab.Screen
         name="DietPlans"
+        initialParams={{email: email}}
         component={DietPlans}
         options={({navigation}) => ({
           headerShown: true,
@@ -145,21 +151,21 @@ const TabStack = ({route, navigation}) => {
             marginLeft: 20,
           },
 
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('AddMeal')}
-              styles={{backgroundColor: '#91C788'}}>
-              <Text
-                style={{
-                  color: '#91C788',
-                  fontSize: 16,
-                  marginRight: 30,
-                  fontWeight: 'bold',
-                }}>
-                Scan
-              </Text>
-            </TouchableOpacity>
-          ),
+          // headerRight: () => (
+          //   <TouchableOpacity
+          //     onPress={() => navigation.navigate('AddMealScan')}
+          //     styles={{backgroundColor: '#91C788'}}>
+          //     <Text
+          //       style={{
+          //         color: '#91C788',
+          //         fontSize: 16,
+          //         marginRight: 30,
+          //         fontWeight: 'bold',
+          //       }}>
+          //       Scan
+          //     </Text>
+          //   </TouchableOpacity>
+          // ),
         })}
       />
       <Tab.Screen
