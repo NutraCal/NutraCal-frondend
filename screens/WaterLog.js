@@ -119,7 +119,7 @@ const WaterLog = ({route, navigation}) => {
           <Text style={styles.heading}>Water Log</Text>
           <Text style={styles.waterCount}>{glasses} glasses</Text>
         </View>
-        <View style={[styles.subsection, {marginTop: 10, marginBottom: 10}]}>
+        {/* <View style={[styles.subsection, {marginTop: 10, marginBottom: 10}]}>
           <Ionicons name="water" size={50} color="#3c96f5" />
           <View
             style={{
@@ -136,7 +136,7 @@ const WaterLog = ({route, navigation}) => {
             <Text style={styles.name1}>2 glasses</Text>
             <Text style={styles.desc}>5:00 pm</Text>
           </View>
-        </View>
+        </View> */}
       </View>
 
       <TouchableOpacity

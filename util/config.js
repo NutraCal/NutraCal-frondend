@@ -1,1 +1,1 @@
-export const endpoint = 'http://192.168.10.123:8000';
+export const endpoint = 'http://10.113.5.162:8000';

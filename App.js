@@ -16,6 +16,8 @@ import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {LogBox} from 'react-native';
 
+import {AuthProvider} from './context/AuthContext';
+
 import Welcome from './screens/Welcome';
 import Intro from './screens/Intro';
 import UserFitnessGoal from './screens/UserFitnessGoal';
@@ -66,181 +68,183 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Welcome" component={Welcome} />
-        <Stack.Screen name="Intro" component={Intro} />
-        <Stack.Screen name="UserFitnessGoal" component={UserFitnessGoal} />
-        <Stack.Screen name="UserGwh" component={UserGwh} />
-        <Stack.Screen name="UserAllergies" component={UserAllergies} />
-        <Stack.Screen name="UserDiet" component={UserDiet} />
-        <Stack.Screen name="UserIng" component={UserIng} />
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{headerShown: true}}
-        />
+    <AuthProvider>
+      <NavigationContainer theme={MyTheme}>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Intro" component={Intro} />
+          <Stack.Screen name="UserFitnessGoal" component={UserFitnessGoal} />
+          <Stack.Screen name="UserGwh" component={UserGwh} />
+          <Stack.Screen name="UserAllergies" component={UserAllergies} />
+          <Stack.Screen name="UserDiet" component={UserDiet} />
+          <Stack.Screen name="UserIng" component={UserIng} />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{headerShown: true}}
+          />
 
-        <Stack.Screen
-          name="DrawerNav"
-          component={DrawerNav}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="DrawerNav"
+            component={DrawerNav}
+            options={{headerShown: false}}
+          />
 
-        <Stack.Screen
-          name="ViewRecipe"
-          component={ViewRecipe}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="MyRecipes"
-          component={MyRecipes}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="ApplyFilters"
-          component={ApplyFilters}
-          options={{headerShown: true}}
-        />
+          <Stack.Screen
+            name="ViewRecipe"
+            component={ViewRecipe}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="MyRecipes"
+            component={MyRecipes}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="ApplyFilters"
+            component={ApplyFilters}
+            options={{headerShown: true}}
+          />
 
-        <Stack.Screen
-          name="SearchRecipe"
-          component={SearchRecipe}
-          options={{
-            headerBackTitleVisible: false,
-            headerTitleAlign: 'center',
-            title: 'Recipe Book',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          }}
-        />
+          <Stack.Screen
+            name="SearchRecipe"
+            component={SearchRecipe}
+            options={{
+              headerBackTitleVisible: false,
+              headerTitleAlign: 'center',
+              title: 'Recipe Book',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+          />
 
-        <Stack.Screen
-          name="AddRecipe"
-          component={AddRecipe}
-          options={({navigation}) => ({
-            headerShown: true,
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('AddRecipeScan')}
-                styles={{backgroundColor: '#91C788'}}>
-                <Text
-                  style={{
-                    color: '#91C788',
-                    fontSize: 16,
-                    marginRight: 10,
-                    fontWeight: 'bold',
-                  }}>
-                  Scan
-                </Text>
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="AddMeal"
-          component={AddMeal}
-          options={({navigation}) => ({
-            headerShown: true,
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('AddMealScan')}
-                styles={{backgroundColor: '#91C788'}}>
-                <Text
-                  style={{
-                    color: '#91C788',
-                    fontSize: 16,
-                    marginRight: 10,
-                    fontWeight: 'bold',
-                  }}>
-                  Scan
-                </Text>
-              </TouchableOpacity>
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="SuggestRecipe"
-          component={SuggestRecipe}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="DietPlans"
-          component={DietPlans}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="AddRecipeScan"
-          component={AddRecipeScan}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="BarcodeScan"
-          component={BarcodeScan}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="AddMealScan"
-          component={AddMealScan}
-          options={{headerShown: true}}
-        />
+          <Stack.Screen
+            name="AddRecipe"
+            component={AddRecipe}
+            options={({navigation}) => ({
+              headerShown: true,
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('AddRecipeScan')}
+                  styles={{backgroundColor: '#91C788'}}>
+                  <Text
+                    style={{
+                      color: '#91C788',
+                      fontSize: 16,
+                      marginRight: 10,
+                      fontWeight: 'bold',
+                    }}>
+                    Scan
+                  </Text>
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="AddMeal"
+            component={AddMeal}
+            options={({navigation}) => ({
+              headerShown: true,
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('AddMealScan')}
+                  styles={{backgroundColor: '#91C788'}}>
+                  <Text
+                    style={{
+                      color: '#91C788',
+                      fontSize: 16,
+                      marginRight: 10,
+                      fontWeight: 'bold',
+                    }}>
+                    Scan
+                  </Text>
+                </TouchableOpacity>
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="SuggestRecipe"
+            component={SuggestRecipe}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="DietPlans"
+            component={DietPlans}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="AddRecipeScan"
+            component={AddRecipeScan}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="BarcodeScan"
+            component={BarcodeScan}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="AddMealScan"
+            component={AddMealScan}
+            options={{headerShown: true}}
+          />
 
-        <Stack.Screen
-          name="CallHome"
-          component={CallHome}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="Call"
-          component={Call}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="ViewProfile"
-          component={ViewProfile}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="EditProfile"
-          component={EditProfile}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="WaterLog"
-          component={WaterLog}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="Bmi"
-          component={Bmi}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="Calories"
-          component={Calories}
-          options={{headerShown: true}}
-        />
-        <Stack.Screen
-          name="StepCount"
-          component={StepCount}
-          options={{headerShown: true}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="CallHome"
+            component={CallHome}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="Call"
+            component={Call}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="ViewProfile"
+            component={ViewProfile}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="WaterLog"
+            component={WaterLog}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="Bmi"
+            component={Bmi}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="Calories"
+            component={Calories}
+            options={{headerShown: true}}
+          />
+          <Stack.Screen
+            name="StepCount"
+            component={StepCount}
+            options={{headerShown: true}}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
 

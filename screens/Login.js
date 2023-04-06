@@ -19,6 +19,26 @@ import TabStack from './TabStack';
 import DrawerNav from './DrawerNav';
 import {endpoint} from '../util/config';
 import axios from 'axios';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+
+GoogleSignin.configure();
+
+let res = {};
+
+export const googleSignIn = async () => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    await GoogleSignin.signOut();
+    const userInfo = await GoogleSignin.signIn();
+    return {code: 'Success', data: userInfo};
+    // console.log(userInfo);
+  } catch (error) {
+    return {code: 'Failed', data: ''};
+  }
+};
 
 export default function Login({route, navigation}) {
   const [email, setEmail] = useState('');
@@ -26,7 +46,7 @@ export default function Login({route, navigation}) {
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
 
-  const credentialsValidation = () => {
+  const credentialsValidation = async () => {
     console.log(endpoint + '/users/login');
     if (
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
@@ -34,7 +54,6 @@ export default function Login({route, navigation}) {
     ) {
       fetch(endpoint + '/users/login', {
         method: 'POST',
-
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -43,23 +62,26 @@ export default function Login({route, navigation}) {
           email: email,
           password: password,
         }),
-      }).then(response => {
-        if (response.status == 200) {
-          console.log('success');
-          navigation.navigate('DrawerNav', {
-            email: email,
-          });
-        } else {
-          Alert.alert('Invalid Credentials', 'Invalid email and password', [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ]);
-        }
-        console.log(response.status); // returns 200
-      });
-      setIsEmailValid('true');
-      setIsPasswordValid('true');
-      setEmail('');
-      setPassword('');
+      })
+        .then(response => {
+          if (response.status == 200) {
+            console.log('success');
+            navigation.navigate('DrawerNav', {
+              email: email,
+            });
+          } else {
+            Alert.alert('Invalid Credentials', 'Invalid email and password', [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
+          }
+          console.log(response.status); // returns 200
+        })
+        .then(() => {
+          setIsEmailValid('true');
+          setIsPasswordValid('true');
+          setEmail('');
+          setPassword('');
+        });
     } else {
       setIsEmailValid('false');
       setIsPasswordValid('false');
@@ -67,6 +89,30 @@ export default function Login({route, navigation}) {
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]);
     }
+  };
+
+  const socialLogIn = email => {
+    console.log(email);
+    fetch('http://192.168.10.89:8000/users/googleLogIn', {
+      method: 'POST',
+
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+      }),
+    }).then(response => {
+      if (response.status == 200) {
+        navigation.navigate('Login');
+      } else {
+        Alert.alert('User already exists', 'Create Account with new Email', [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
+      }
+      console.log(response.status); // returns 200
+    });
   };
 
   return (
@@ -125,7 +171,21 @@ export default function Login({route, navigation}) {
         </Text>
 
         <View style={styles.hcontainer}>
-          <TouchableOpacity style={styles.touchable}>
+          <TouchableOpacity
+            style={styles.touchable}
+            onPress={async () => {
+              try {
+                const call = await googleSignIn();
+                if (call.code !== 'Failed') {
+                  socialLogIn(call?.data?.user?.email);
+                  alert('Sign In');
+                } else {
+                  alert('Sign in Failed');
+                }
+              } catch (e) {
+                console.log(e);
+              }
+            }}>
             <Google style={styles.icon} />
             <Text
               style={{
@@ -135,12 +195,12 @@ export default function Login({route, navigation}) {
               Google
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchable}>
+          {/* <TouchableOpacity style={styles.touchable}>
             <Facebook style={styles.icon} />
             <Text style={{color: 'black', fontFamily: 'Inter-SemiBold'}}>
               Facebook
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <View style={styles.row}>
