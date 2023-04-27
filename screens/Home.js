@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -13,9 +13,17 @@ import Water from '../assets/icons/water.svg';
 import Steps from '../assets/icons/steps.svg';
 import Forw from '../assets/forwardbtn.svg';
 import Login from './Login';
+import dim from '../util/dim';
 
 export default function Home({route, navigation}) {
   const {email} = route.params;
+
+  useEffect(() => {
+    const hehe = (156 / 872.72) * dim.Height;
+    console.log('width ' + dim.Width);
+    console.log('height ' + dim.Height);
+    console.log('height ' + hehe);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -127,18 +135,19 @@ const styles = StyleSheet.create({
   },
 
   box2: {
-    height: 156,
-    width: 148,
+    height: (156 / dim.h) * dim.Height,
+    width: (148 / dim.w) * dim.Width,
     borderRadius: 20,
     margin: 8,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F8F8FB',
+    // backgroundColor: '#F8F8FB',
+    backgroundColor: 'red',
   },
 
   box3: {
-    height: 80,
+    height: (80 / dim.h) * dim.Height,
     width: 350,
     borderRadius: 20,
     margin: 10,
