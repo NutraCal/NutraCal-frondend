@@ -2,9 +2,20 @@ import {React, createContext, useState, useEffect} from 'react';
 
 export const AuthContext = createContext();
 
-import deviceStorage from 'utils/deviceStorage';
+import deviceStorage from '../util/deviceStorage';
 
-import {verifyToken} from 'api/authApi';
+import axios from 'axios';
+
+import {endpoint} from '../util/config';
+
+const API = axios.create({
+  baseURL: `${endpoint}/users`,
+  withCredentials: true,
+});
+
+const verifyToken = data => {
+  return API.post('/verifyToken', data);
+};
 
 export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +84,7 @@ export const AuthProvider = ({children}) => {
 
   return (
     <AuthContext.Provider
-      value={{login, logout, userData, isLoading, token, user, userData}}>
+      value={{login, logout, userData, isLoading, token, user}}>
       {children}
     </AuthContext.Provider>
   );

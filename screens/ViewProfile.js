@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,12 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import {AuthContext} from '../context/AuthContext';
 
 const ViewProfile = ({route, navigation}) => {
-  const {email} = route.params;
+  const {user} = useContext(AuthContext);
+
+  const email = user?.data?.user?.email;
   const {editable} = route.params;
   const [editProfile, IsEditableProfile] = useState(editable);
   const [edit, IsEditable] = useState(false);

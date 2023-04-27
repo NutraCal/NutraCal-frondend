@@ -16,19 +16,20 @@
 //   },
 // };
 
-const { getDefaultConfig } = require("metro-config");
+const {getDefaultConfig} = require('metro-config');
 
 module.exports = (async () => {
   const {
-    resolver: { sourceExts, assetExts }
+    resolver: {sourceExts, assetExts},
   } = await getDefaultConfig();
   return {
+    resetCache: true,
     transformer: {
-      babelTransformerPath: require.resolve("react-native-svg-transformer")
+      babelTransformerPath: require.resolve('react-native-svg-transformer'),
     },
     resolver: {
-      assetExts: assetExts.filter(ext => ext !== "svg"),
-      sourceExts: [...sourceExts, "ts", "tsx", "svg"]
-    }
+      assetExts: assetExts.filter(ext => ext !== 'svg'),
+      sourceExts: [...sourceExts, 'ts', 'tsx', 'svg'],
+    },
   };
 })();

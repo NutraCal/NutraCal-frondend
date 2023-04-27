@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -24,6 +24,8 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 
+import {AuthContext} from '../context/AuthContext';
+
 GoogleSignin.configure();
 
 let res = {};
@@ -45,6 +47,7 @@ export default function Login({route, navigation}) {
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
+  const {login} = useContext(AuthContext);
 
   const credentialsValidation = async () => {
     console.log(endpoint + '/users/login');
@@ -52,36 +55,29 @@ export default function Login({route, navigation}) {
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
     ) {
-      fetch(endpoint + '/users/login', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const res = await axios.post(endpoint + '/users/login', {
+        email: email,
+        password: password,
+      });
+
+      console.log(res?.data);
+      console.log(res?.status);
+
+      if (res.status == 200) {
+        await login(res?.data);
+        navigation.navigate('DrawerNav', {
           email: email,
-          password: password,
-        }),
-      })
-        .then(response => {
-          if (response.status == 200) {
-            console.log('success');
-            navigation.navigate('DrawerNav', {
-              email: email,
-            });
-          } else {
-            Alert.alert('Invalid Credentials', 'Invalid email and password', [
-              {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ]);
-          }
-          console.log(response.status); // returns 200
-        })
-        .then(() => {
-          setIsEmailValid('true');
-          setIsPasswordValid('true');
-          setEmail('');
-          setPassword('');
         });
+
+        setIsEmailValid('true');
+        setIsPasswordValid('true');
+        setEmail('');
+        setPassword('');
+      } else {
+        Alert.alert('Invalid Credentials', 'Invalid email and password', [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ]);
+      }
     } else {
       setIsEmailValid('false');
       setIsPasswordValid('false');

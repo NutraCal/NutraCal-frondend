@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   Platform,
@@ -20,8 +20,38 @@ import Ob3 from '../assets/Ob3.svg';
 
 import Login from './Login';
 import UserFitnessGoal from './UserFitnessGoal';
+import axios from 'axios';
+import {endpoint} from '../util/config';
+import {URL} from '@env';
 
 const Intro = ({navigation, route}) => {
+  console.log(`${URL}recipes/viewRecipes`);
+  useEffect(() => {
+    const getRecipe = async () => {
+      try {
+        const response = await axios({
+          method: 'get',
+          url: `${URL}recipes/viewRecipes`,
+          // headers: {
+          //   'Content-Type': 'application/json',
+          // },
+          headers: {
+            'content-type': 'multipart/form-data',
+            // 'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          },
+          withCredentials: true,
+        });
+        console.log(JSON.stringify(response.data));
+      } catch (error) {
+        // console.log(error.message);
+        // console.log(error.response);
+        console.info(error);
+      }
+    };
+    getRecipe();
+  }, []);
+
   return (
     <View style={styles.MainDiv2}>
       <Text style={styles.PrimaryColor}>NutraCal</Text>

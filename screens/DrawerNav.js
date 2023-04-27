@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useContext} from 'react';
 import {Button, View, TouchableOpacity, Text} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
@@ -10,8 +10,12 @@ import ViewProfile from './ViewProfile';
 
 const Drawer = createDrawerNavigator();
 
+import {AuthContext} from '../context/AuthContext';
+
 const DrawerNav = ({route, navigation}) => {
-  const {email} = route.params;
+  const user = route?.params;
+
+  const email = user?.data?.user?.email;
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}
