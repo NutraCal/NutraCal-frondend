@@ -26,7 +26,6 @@ import UserDiet from './screens/UserDiet';
 import UserIng from './screens/UserIng';
 import Register from './screens/Register';
 import Login from './screens/Login';
-import Home from './screens/homeDummy';
 
 import SearchRecipe from './screens/SearchRecipe';
 import ApplyFilters from './screens/ApplyFilters';
@@ -40,18 +39,19 @@ import AddRecipeScan from './screens/AddRecipeScan';
 import BarcodeScan from './screens/BarcodeScan';
 import AddMealScan from './screens/AddMealScan';
 import AddMeal from './screens/AddMeal';
+import Home from './screens/Home';
 
 import CallHome from './screens/CallHome';
 import Call from './screens/Call';
 
 import ViewProfile from './screens/ViewProfile';
-import EditProfile from './screens/EditProfile';
 import WaterLog from './screens/WaterLog';
 
 import Bmi from './screens/Bmi';
 import Calories from './screens/Calories';
 import StepCount from './screens/StepCount';
 import DietPlans from './screens/DietPlans';
+import dim from './util/dim';
 
 LogBox.ignoreAllLogs();
 
@@ -164,7 +164,7 @@ export default function MainNavigator() {
                   style={{
                     color: '#91C788',
                     fontSize: 16,
-                    marginRight: 10,
+                    marginRight: (10 / dim.w) * dim.Width,
                     fontWeight: 'bold',
                   }}>
                   Scan
@@ -186,7 +186,7 @@ export default function MainNavigator() {
                   style={{
                     color: '#91C788',
                     fontSize: 16,
-                    marginRight: 10,
+                    marginRight: (10 / dim.w) * dim.Width,
                     fontWeight: 'bold',
                   }}>
                   Scan
@@ -236,11 +236,7 @@ export default function MainNavigator() {
           component={ViewProfile}
           options={{headerShown: true}}
         />
-        <Stack.Screen
-          name="EditProfile"
-          component={EditProfile}
-          options={{headerShown: true}}
-        />
+
         <Stack.Screen
           name="WaterLog"
           component={WaterLog}
@@ -271,10 +267,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: '#ecf0f1',
-    padding: 8,
+    padding: (8 / dim.h) * dim.Height,
   },
   paragraph: {
-    margin: 24,
+    margin: (24 / dim.h) * dim.Height,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',

@@ -8,6 +8,7 @@ import {
   Image,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import dim from '../util/dim';
 
 export default function Bmi() {
   const [height, setHeight] = useState(0);
@@ -77,7 +78,11 @@ export default function Bmi() {
   return (
     <View style={styles.container}>
       <Image
-        style={{width: 300, height: 200, marginBottom: 30}}
+        style={{
+          width: (300 / dim.w) * dim.Width,
+          height: (200 / dim.w) * dim.Width,
+          marginBottom: (30 / dim.h) * dim.Height,
+        }}
         source={require('../assets/images/bmi.png')}
       />
       <View style={styles.fieldContainer}>
@@ -87,8 +92,8 @@ export default function Bmi() {
             flexDirection: 'row',
             borderColor: '#E1E3E8',
             borderWidth: 1,
-            height: 48,
-            width: 350,
+            height: (48 / dim.h) * dim.Height,
+            width: (350 / dim.w) * dim.Width,
             borderRadius: 10,
             alignItems: 'center',
             zIndex: 2,
@@ -97,7 +102,7 @@ export default function Bmi() {
             style={[
               styles.input,
               {
-                width: 270,
+                width: (270 / dim.w) * dim.Width,
                 borderWidth: 0,
               },
             ]}
@@ -106,16 +111,16 @@ export default function Bmi() {
           />
           <DropDownPicker
             style={{
-              width: 80,
+              width: (80 / dim.w) * dim.Width,
               borderWidth: 0.5,
-              height: 20,
+              height: (20 / dim.h) * dim.Height,
             }}
             containerStyle={{
-              width: 80,
+              width: (80 / dim.w) * dim.Width,
             }}
             arrowIconStyle={{
-              width: 20,
-              height: 20,
+              width: (20 / dim.w) * dim.Width,
+              height: (20 / dim.w) * dim.Width,
             }}
             textStyle={{
               fontSize: 16,
@@ -140,8 +145,8 @@ export default function Bmi() {
             flexDirection: 'row',
             borderColor: '#E1E3E8',
             borderWidth: 1,
-            height: 48,
-            width: 350,
+            height: (48 / dim.h) * dim.Height,
+            width: (350 / dim.w) * dim.Width,
             borderRadius: 10,
             alignItems: 'center',
             zIndex: 1,
@@ -150,7 +155,7 @@ export default function Bmi() {
             style={[
               styles.input,
               {
-                width: 270,
+                width: (270 / dim.w) * dim.Width,
                 borderWidth: 0,
               },
             ]}
@@ -159,12 +164,12 @@ export default function Bmi() {
           />
           <DropDownPicker
             style={{
-              width: 80,
+              width: (80 / dim.w) * dim.Width,
               borderWidth: 0.5,
-              height: 20,
+              height: (20 / dim.h) * dim.Height,
             }}
             containerStyle={{
-              width: 80,
+              width: (80 / dim.w) * dim.Width,
             }}
             textStyle={{
               fontSize: 16,
@@ -181,15 +186,15 @@ export default function Bmi() {
       </View>
       <TouchableOpacity
         style={{
-          width: 330,
-          height: 48,
+          width: (330 / dim.w) * dim.Width,
+          height: (48 / dim.h) * dim.Height,
           backgroundColor: '#91C788',
           alignSelf: 'center',
           borderRadius: 12,
           alignItems: 'center',
           justifyContent: 'center',
-          marginTop: 20,
-          marginBottom: 20,
+          marginTop: (20 / dim.h) * dim.Height,
+          marginBottom: (20 / dim.h) * dim.Height,
           zIndex: 0,
         }}
         onPress={calculateBmi}>
@@ -213,22 +218,22 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 8,
-    paddingTop: 50,
+    padding: (8 / dim.h) * dim.Height,
+    paddingTop: (50 / dim.h) * dim.Height,
   },
   label: {
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 
   input: {
     borderColor: '#E1E3E8',
     borderWidth: 1,
-    height: 48,
-    width: 350,
-    paddingHorizontal: 15,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 10,
     fontFamily: 'Inter-Regular',
     color: 'black',
@@ -237,12 +242,12 @@ const styles = StyleSheet.create({
 
   fieldContainer: {
     alignItems: 'flex-start',
-    marginBottom: 15,
+    marginBottom: (15 / dim.h) * dim.Height,
   },
 
   resultText: {
     fontSize: 16,
-    marginTop: 10,
+    marginTop: (10 / dim.h) * dim.Height,
     color: 'black',
     fontFamily: 'Inter-Medium',
   },

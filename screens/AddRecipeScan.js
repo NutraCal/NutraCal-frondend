@@ -14,6 +14,8 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 import TextRecognition from 'react-native-text-recognition';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import dim from '../util/dim';
+
 const AddRecipeScan = () => {
   const [cameraPhoto, setCameraPhoto] = useState();
   const [image, setImage] = useState(null);
@@ -23,7 +25,6 @@ const AddRecipeScan = () => {
     saveToPhotos: true,
     mediaType: 'photo',
   };
-
 
   const openCamera = async () => {
     const granted = await PermissionsAndroid.request(
@@ -37,8 +38,6 @@ const AddRecipeScan = () => {
     }
   };
 
-
-
   const selectImage = () => {
     launchImageLibrary({}, setImage);
     (async () => {
@@ -48,20 +47,18 @@ const AddRecipeScan = () => {
       }
     })();
   };
-  
-  useEffect(() => {
-   
-  });
 
-  const imagePick = ()=>{
+  useEffect(() => {});
+
+  const imagePick = () => {
     ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true
+      width: (300 / dim.w) * dim.Width,
+      height: (400 / dim.h) * dim.Height,
+      cropping: true,
     }).then(image => {
       console.log(image);
     });
-  }
+  };
 
   // const storeData = () => {
   //   fetch('http://10.0.2.2:3000/abc', {
@@ -83,15 +80,15 @@ const AddRecipeScan = () => {
         style={{
           color: 'black',
           fontSize: 25,
-          margin: 10,
+          margin: (10 / dim.h) * dim.Height,
           fontWeight: 'bold',
         }}>
         Optical Character Recognition
       </Text>
       <TouchableOpacity
         style={{
-          height: 60,
-          margin: 10,
+          height: (60 / dim.h) * dim.Height,
+          margin: (10 / dim.h) * dim.Height,
           backgroundColor: 'red',
           borderColor: 'white',
           borderWidth: 2,
@@ -102,7 +99,7 @@ const AddRecipeScan = () => {
           style={{
             color: 'white',
             fontSize: 25,
-            margin: 10,
+            margin: (10 / dim.h) * dim.Height,
             fontWeight: 'bold',
           }}>
           Select from Camera
@@ -110,8 +107,8 @@ const AddRecipeScan = () => {
       </TouchableOpacity>
       <TouchableOpacity
         style={{
-          height: 60,
-          margin: 10,
+          height: (60 / dim.h) * dim.Height,
+          margin: (10 / dim.h) * dim.Height,
           backgroundColor: 'purple',
           borderColor: 'white',
           borderWidth: 2,
@@ -122,7 +119,7 @@ const AddRecipeScan = () => {
           style={{
             color: 'white',
             fontSize: 25,
-            margin: 10,
+            margin: (10 / dim.h) * dim.Height,
             fontWeight: 'bold',
           }}>
           Select from Gallery
@@ -133,7 +130,6 @@ const AddRecipeScan = () => {
           color: 'yellow',
           fontSize: 25,
           fontWeight: 'bold',
-
         }}>
         Result
       </Text>
@@ -148,12 +144,11 @@ const AddRecipeScan = () => {
       <Text
         style={{
           color: 'black',
-          margin: 10,
+          margin: (10 / dim.h) * dim.Height,
           fontSize: 18,
-          margin: 10,
           fontWeight: 'bold',
-          width:350,
-          textAlign:'justify',
+          width: (350 / dim.w) * dim.Width,
+          textAlign: 'justify',
         }}>
         {text}
       </Text>
@@ -162,7 +157,6 @@ const AddRecipeScan = () => {
       }}>
         <Text style={{color:'black'}}>Open me</Text>
       </TouchableOpacity> */}
-
     </View>
   );
 };

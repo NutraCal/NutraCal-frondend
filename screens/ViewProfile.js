@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import {AuthContext} from '../context/AuthContext';
+import dim from '../util/dim';
 
 const ViewProfile = ({route, navigation}) => {
   const {user} = useContext(AuthContext);
@@ -162,7 +163,7 @@ const ViewProfile = ({route, navigation}) => {
             style={[
               styles.input,
               {
-                width: 200,
+                width: (200 / dim.w) * dim.Width,
                 borderWidth: 0,
                 paddingHorizontal: 0,
               },
@@ -173,7 +174,7 @@ const ViewProfile = ({route, navigation}) => {
 
           <Icon
             name={hidePassword ? 'eye-off-outline' : 'eye-outline'}
-            size={25}
+            size={(25 / dim.w) * dim.Width}
             onPress={togglePasswordVisibility}
           />
         </View>
@@ -201,8 +202,8 @@ const ViewProfile = ({route, navigation}) => {
               flexDirection: 'row',
               borderColor: '#E1E3E8',
               borderWidth: 1,
-              height: 48,
-              width: 170,
+              height: (48 / dim.h) * dim.Height,
+              width: (170 / dim.w) * dim.Width,
               borderRadius: 10,
               alignItems: 'center',
             }}>
@@ -210,7 +211,7 @@ const ViewProfile = ({route, navigation}) => {
               style={[
                 styles.input,
                 {
-                  width: 90,
+                  width: (90 / dim.w) * dim.Width,
                   borderWidth: 0,
                 },
               ]}
@@ -220,16 +221,16 @@ const ViewProfile = ({route, navigation}) => {
             />
             <DropDownPicker
               style={{
-                width: 80,
+                width: (80 / dim.w) * dim.Width,
                 borderWidth: 0.5,
-                height: 20,
+                height: (20 / dim.h) * dim.Height,
               }}
               containerStyle={{
-                width: 80,
+                width: (80 / dim.w) * dim.Width,
               }}
               arrowIconStyle={{
-                width: 20,
-                height: 20,
+                width: (20 / dim.w) * dim.Width,
+                height: (20 / dim.h) * dim.Height,
               }}
               textStyle={{
                 fontSize: 16,
@@ -253,8 +254,8 @@ const ViewProfile = ({route, navigation}) => {
               flexDirection: 'row',
               borderColor: '#E1E3E8',
               borderWidth: 1,
-              height: 48,
-              width: 170,
+              height: (48 / dim.h) * dim.Height,
+              width: (170 / dim.w) * dim.Width,
               borderRadius: 10,
               alignItems: 'center',
             }}>
@@ -262,7 +263,7 @@ const ViewProfile = ({route, navigation}) => {
               style={[
                 styles.input,
                 {
-                  width: 90,
+                  width: (90 / dim.w) * dim.Width,
                   borderWidth: 0,
                 },
               ]}
@@ -272,12 +273,12 @@ const ViewProfile = ({route, navigation}) => {
             />
             <DropDownPicker
               style={{
-                width: 80,
+                width: (80 / dim.w) * dim.Width,
                 borderWidth: 0.5,
-                height: 20,
+                height: (20 / dim.h) * dim.Height,
               }}
               containerStyle={{
-                width: 80,
+                width: (80 / dim.w) * dim.Width,
               }}
               textStyle={{
                 fontSize: 16,
@@ -309,13 +310,13 @@ const ViewProfile = ({route, navigation}) => {
         <Text style={styles.label}>Fitness Goal:</Text>
         <DropDownPicker
           style={{
-            width: 350,
+            width: (350 / dim.w) * dim.Width,
             borderWidth: 1,
-            height: 20,
+            height: (20 / dim.h) * dim.Height,
             borderColor: '#E1E3E8',
           }}
           containerStyle={{
-            width: 350,
+            width: (350 / dim.w) * dim.Width,
           }}
           textStyle={{
             fontSize: 16,
@@ -334,15 +335,15 @@ const ViewProfile = ({route, navigation}) => {
       {editable && (
         <TouchableOpacity
           style={{
-            width: 330,
-            height: 48,
+            width: (330 / dim.w) * dim.Width,
+            height: (48 / dim.h) * dim.Height,
             backgroundColor: '#91C788',
             alignSelf: 'center',
             borderRadius: 12,
             alignItems: 'center',
             justifyContent: 'center',
-            marginTop: 60,
-            marginBottom: 20,
+            marginTop: (60 / dim.h) * dim.Height,
+            marginBottom: (20 / dim.h) * dim.Height,
             zIndex: 0,
           }}
           onPress={setProfileInfo}>
@@ -363,7 +364,7 @@ const ViewProfile = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: (20 / dim.h) * dim.Height,
     backgroundColor: '#fff',
   },
 
@@ -371,15 +372,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 
   input: {
     borderColor: '#E1E3E8',
     borderWidth: 1,
-    height: 48,
-    width: 350,
-    paddingHorizontal: 15,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 10,
     fontFamily: 'Inter-Regular',
     color: 'black',
@@ -388,7 +389,7 @@ const styles = StyleSheet.create({
 
   fieldContainer: {
     alignItems: 'flex-start',
-    marginBottom: 10,
+    marginBottom: (10 / dim.h) * dim.Height,
   },
 });
 

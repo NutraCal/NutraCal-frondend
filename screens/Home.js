@@ -18,12 +18,12 @@ import dim from '../util/dim';
 export default function Home({route, navigation}) {
   const {email} = route.params;
 
-  useEffect(() => {
-    const hehe = (156 / 872.72) * dim.Height;
-    console.log('width ' + dim.Width);
-    console.log('height ' + dim.Height);
-    console.log('height ' + hehe);
-  }, []);
+  // useEffect(() => {
+  //   const hehe = (156 / 872.72) * dim.Height;
+  //   console.log('width ' + dim.Width);
+  //   console.log('height ' + dim.Height);
+  //   console.log('height ' + hehe);
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -31,7 +31,7 @@ export default function Home({route, navigation}) {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          margin: 10,
+          margin: (10 / dim.h) * dim.Height,
           marginTop: 0,
           alignItems: 'center',
         }}>
@@ -49,9 +49,12 @@ export default function Home({route, navigation}) {
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Dp
-              width={70}
-              height={70}
-              style={{marginLeft: 8, marginBottom: 5}}
+              width={(70 / dim.w) * dim.Width}
+              height={(70 / dim.w) * dim.Width}
+              style={{
+                marginLeft: (8 / dim.w) * dim.Width,
+                marginBottom: (5 / dim.w) * dim.Width,
+              }}
             />
           </TouchableOpacity>
         </View>
@@ -63,24 +66,31 @@ export default function Home({route, navigation}) {
             color: 'white',
             fontFamily: 'Inter-SemiBold',
             fontSize: 18,
-            width: 200,
-            lineHeight: 25,
+            width: (200 / dim.w) * dim.Width,
+            lineHeight: (25 / dim.h) * dim.Height,
           }}>
           Track Your Weekly Progress
         </Text>
         <TouchableOpacity>
-          <Forw width={24} height={24} style={{marginLeft: 20}} />
+          <Forw
+            width={(24 / dim.w) * dim.Width}
+            height={(24 / dim.w) * dim.Width}
+            style={{marginLeft: (20 / dim.w) * dim.Width}}
+          />
         </TouchableOpacity>
       </View>
 
       <Text style={styles.heading}>Your Insights</Text>
 
-      <View style={{marginTop: 10}}>
+      <View style={{marginTop: (10 / dim.h) * dim.Height}}>
         <View style={styles.hbox}>
           <TouchableOpacity
             style={styles.box2}
             onPress={() => navigation.navigate('Calories')}>
-            <Calories width={70} height={70} />
+            <Calories
+              width={(70 / dim.w) * dim.Width}
+              height={(70 / dim.w) * dim.Width}
+            />
             <Text style={styles.name}>Calories</Text>
             <Text style={styles.desc}>3 min ago</Text>
           </TouchableOpacity>
@@ -88,7 +98,10 @@ export default function Home({route, navigation}) {
           <TouchableOpacity
             style={styles.box2}
             onPress={() => navigation.navigate('Bmi')}>
-            <Weight width={70} height={70} />
+            <Weight
+              width={(70 / dim.w) * dim.Width}
+              height={(70 / dim.w) * dim.Width}
+            />
             <Text style={styles.name}>Weight</Text>
             <Text style={styles.desc}>4 days ago</Text>
           </TouchableOpacity>
@@ -102,14 +115,20 @@ export default function Home({route, navigation}) {
                 email: email,
               })
             }>
-            <Water width={70} height={70} />
+            <Water
+              width={(70 / dim.w) * dim.Width}
+              height={(70 / dim.w) * dim.Width}
+            />
             <Text style={styles.name}>Water</Text>
             <Text style={styles.desc}>1 hour ago</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.box2}
             onPress={() => navigation.navigate('StepCount')}>
-            <Steps width={70} height={70} />
+            <Steps
+              width={(70 / dim.w) * dim.Width}
+              height={(70 / dim.w) * dim.Width}
+            />
             <Text style={styles.name}>Steps</Text>
             <Text style={styles.desc}>1 min ago</Text>
           </TouchableOpacity>
@@ -123,11 +142,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 8,
+    padding: (8 / dim.h) * dim.Height,
   },
 
   paragraph: {
-    marginLeft: 8,
+    marginLeft: (8 / dim.w) * dim.Width,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'left',
@@ -138,19 +157,18 @@ const styles = StyleSheet.create({
     height: (156 / dim.h) * dim.Height,
     width: (148 / dim.w) * dim.Width,
     borderRadius: 20,
-    margin: 8,
+    margin: (8 / dim.h) * dim.Height,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: '#F8F8FB',
-    backgroundColor: 'red',
+    backgroundColor: '#F8F8FB',
   },
 
   box3: {
     height: (80 / dim.h) * dim.Height,
-    width: 350,
+    width: (350 / dim.w) * dim.Width,
     borderRadius: 20,
-    margin: 10,
+    margin: (10 / dim.h) * dim.Height,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -167,20 +185,20 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-ExtraBold',
     color: 'black',
     fontSize: 20,
-    marginTop: 20,
-    marginLeft: 12,
+    marginTop: (20 / dim.h) * dim.Height,
+    marginLeft: (12 / dim.w) * dim.Width,
   },
   name: {
     fontSize: 18,
     color: 'black',
     fontFamily: 'Inter-Medium',
-    marginTop: 10,
+    marginTop: (10 / dim.h) * dim.Height,
   },
 
   desc: {
     fontSize: 14,
     color: '#7B6F72',
     fontFamily: 'Inter-Light',
-    marginTop: 5,
+    marginTop: (5 / dim.h) * dim.Height,
   },
 });

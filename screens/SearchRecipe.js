@@ -20,6 +20,7 @@ import Diet2 from '../assets/images/dietpic2.svg';
 import Pop1 from '../assets/images/pop1.svg';
 import Forw from '../assets/forwardbtn.svg';
 import HomeHeader from './HomeHeader';
+import dim from '../util/dim';
 
 export default function SearchRecipe({route, navigation}) {
   const {email} = route.params;
@@ -37,19 +38,31 @@ export default function SearchRecipe({route, navigation}) {
         />
         <View style={styles.cont}>
           <View style={styles.btn}>
-            <Sortic width={20} height={20} />
+            <Sortic
+              width={(20 / dim.w) * dim.Width}
+              height={(20 / dim.w) * dim.Width}
+            />
             <Text style={styles.label}>Sort</Text>
-            <Arrowdown width={20} height={20} />
+            <Arrowdown
+              width={(20 / dim.w) * dim.Width}
+              height={(20 / dim.w) * dim.Width}
+            />
           </View>
 
           <View style={styles.btn}>
-            <Filter width={20} height={20} />
+            <Filter
+              width={(20 / dim.w) * dim.Width}
+              height={(20 / dim.w) * dim.Width}
+            />
             <Text
               style={styles.label}
               onPress={() => navigation.navigate('ApplyFilters')}>
               Filter
             </Text>
-            <Arrowdown width={20} height={20} />
+            <Arrowdown
+              width={(20 / dim.w) * dim.Width}
+              height={(20 / dim.w) * dim.Width}
+            />
           </View>
         </View>
         <Text style={styles.heading}>Category</Text>
@@ -59,22 +72,38 @@ export default function SearchRecipe({route, navigation}) {
           horizontal={true}
           style={styles.scroll}>
           <TouchableOpacity style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
-            <Pic1 width={60} height={61} style={{marginBottom: 8}} />
+            <Pic1
+              width={(60 / dim.w) * dim.Width}
+              height={(61 / dim.w) * dim.Width}
+              style={{marginBottom: (8 / dim.h) * dim.Height}}
+            />
             <Text style={styles.name1}>Salad</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.box, {backgroundColor: '#F9EBF8'}]}>
-            <Pic2 width={60} height={61} style={{marginBottom: 10}} />
+            <Pic2
+              width={(60 / dim.w) * dim.Width}
+              height={(61 / dim.w) * dim.Width}
+              style={{marginBottom: (10 / dim.h) * dim.Height}}
+            />
             <Text style={styles.name1}>Cake</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
-            <Pic3 width={60} height={61} style={{marginBottom: 10}} />
+            <Pic3
+              width={(60 / dim.w) * dim.Width}
+              height={(61 / dim.w) * dim.Width}
+              style={{marginBottom: (10 / dim.h) * dim.Height}}
+            />
             <Text style={styles.name1}>Pie</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.box, {backgroundColor: '#F9EBF8'}]}>
-            <Pic4 width={60} height={61} style={{marginBottom: 10}} />
+            <Pic4
+              width={(60 / dim.w) * dim.Width}
+              height={(61 / dim.w) * dim.Width}
+              style={{marginBottom: (10 / dim.h) * dim.Height}}
+            />
             <Text style={styles.name1}>Smoothie</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -85,7 +114,11 @@ export default function SearchRecipe({route, navigation}) {
           horizontal={true}
           style={styles.scroll}>
           <View style={[styles.box2, {backgroundColor: '#EBF2FF'}]}>
-            <Diet1 width={96} height={60} style={{marginBottom: 10}} />
+            <Diet1
+              width={(96 / dim.w) * dim.Width}
+              height={(60 / dim.w) * dim.Width}
+              style={{marginBottom: (10 / dim.h) * dim.Height}}
+            />
             <Text style={styles.name}>Honey Pancake</Text>
             <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
             <TouchableOpacity onPress={() => navigation.navigate('ViewRecipe')}>
@@ -104,7 +137,11 @@ export default function SearchRecipe({route, navigation}) {
           </View>
 
           <View style={[styles.box2, {backgroundColor: '#F9EBF8'}]}>
-            <Diet2 width={110} height={57} style={{marginBottom: 10}} />
+            <Diet2
+              width={(110 / dim.w) * dim.Width}
+              height={(57 / dim.w) * dim.Width}
+              style={{marginBottom: (10 / dim.h) * dim.Height}}
+            />
             <Text style={styles.name}>Canai Bread</Text>
             <Text style={styles.desc}>Easy | 30mins | 180kCal</Text>
             <TouchableOpacity>
@@ -124,15 +161,27 @@ export default function SearchRecipe({route, navigation}) {
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
-            <Pop1 width={48} height={47} style={{marginRight: 20}} />
+            <Pop1
+              width={(48 / dim.w) * dim.Width}
+              height={(47 / dim.w) * dim.Width}
+              style={{marginRight: (20 / dim.w) * dim.Width}}
+            />
             <View>
               <Text style={styles.name}>Blueberry Pancake</Text>
-              <Text style={[styles.desc, {marginTop: 0, marginRight: 50}]}>
+              <Text
+                style={[
+                  styles.desc,
+                  {marginTop: 0, marginRight: (50 / dim.w) * dim.Width},
+                ]}>
                 Medium | 230kCal
               </Text>
             </View>
             <TouchableOpacity>
-              <Forw width={24} height={24} style={{marginLeft: 20}} />
+              <Forw
+                width={(24 / dim.w) * dim.Width}
+                height={(24 / dim.w) * dim.Width}
+                style={{marginLeft: (20 / dim.w) * dim.Width}}
+              />
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -144,12 +193,12 @@ export default function SearchRecipe({route, navigation}) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: 8,
+    padding: (8 / dim.h) * dim.Height,
     paddingBottom: 0,
   },
   searchbar: {
     borderRadius: 20,
-    margin: 15,
+    margin: (15 / dim.w) * dim.Width,
     elevation: 0,
     backgroundColor: '#F8F9FE',
   },
@@ -166,33 +215,33 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: 15,
-    height: 15,
+    width: (15 / dim.w) * dim.Width,
+    height: (15 / dim.h) * dim.Height,
   },
   btn: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: 120,
+    width: (120 / dim.w) * dim.Width,
     alignItems: 'center',
     borderWidth: 1,
-    paddingHorizontal: 2,
-    paddingVertical: 8,
+    paddingHorizontal: (2 / dim.w) * dim.Width,
+    paddingVertical: (8 / dim.h) * dim.Height,
     borderColor: '#C5C6CC',
     borderRadius: 12,
-    marginVertical: 8,
+    marginVertical: (8 / dim.h) * dim.Height,
   },
 
   btn1: {
-    paddingHorizontal: 30,
-    paddingVertical: 4,
-    marginTop: 15,
+    paddingHorizontal: (30 / dim.w) * dim.Width,
+    paddingVertical: (4 / dim.h) * dim.Height,
+    marginTop: (15 / dim.h) * dim.Height,
     borderRadius: 20,
   },
 
   cont: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 13,
+    paddingHorizontal: (13 / dim.w) * dim.Width,
     alignItems: 'center',
   },
 
@@ -200,42 +249,42 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 20,
-    marginTop: 10,
-    marginLeft: 12,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginLeft: (12 / dim.w) * dim.Width,
   },
 
   box: {
-    height: 120,
-    width: 100,
+    height: (120 / dim.h) * dim.Height,
+    width: (100 / dim.w) * dim.Width,
     borderRadius: 12,
-    margin: 8,
+    margin: (8 / dim.w) * dim.Width,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   box2: {
-    height: 220,
-    width: 180,
+    height: (220 / dim.h) * dim.Height,
+    width: (180 / dim.w) * dim.Width,
     borderRadius: 12,
-    margin: 10,
+    margin: (10 / dim.w) * dim.Width,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   box3: {
-    height: 80,
-    width: 350,
+    height: (80 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
     borderRadius: 12,
-    margin: 10,
+    margin: (10 / dim.w) * dim.Width,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   scroll: {
-    marginTop: 10,
+    marginTop: (10 / dim.h) * dim.Height,
     flexDirection: 'row',
   },
 
@@ -243,20 +292,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-Medium',
-    marginTop: 5,
+    marginTop: (5 / dim.h) * dim.Height,
   },
 
   name: {
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-SemiBold',
-    marginTop: 5,
+    marginTop: (5 / dim.h) * dim.Height,
   },
 
   desc: {
     fontSize: 14,
     color: '#7B6F72',
     fontFamily: 'Inter-Light',
-    marginTop: 5,
+    marginTop: (5 / dim.h) * dim.Height,
   },
 });

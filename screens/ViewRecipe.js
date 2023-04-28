@@ -26,6 +26,7 @@ import Reply from '../assets/images/reply.svg';
 import Like from '../assets/images/like.svg';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import dim from '../util/dim';
 
 export default function ViewRecipe({navigation}) {
   const [name, setName] = useState('');
@@ -82,7 +83,7 @@ export default function ViewRecipe({navigation}) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container2}>
           <Avatar.Image
-            size={200}
+            size={(200 / dim.w) * dim.Width}
             source={require('../assets/images/recipe1.png')}
           />
 
@@ -94,11 +95,14 @@ export default function ViewRecipe({navigation}) {
             <View>
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
-                  <View style={{marginRight: 10}}>
+                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
                     <Text style={styles.name}>{calories}</Text>
                     <Text style={styles.tag}>kCal</Text>
                   </View>
-                  <Macro1 width={20} height={21} />
+                  <Macro1
+                    width={(20 / dim.w) * dim.Width}
+                    height={(21 / dim.w) * dim.Width}
+                  />
                 </View>
               </View>
             </View>
@@ -106,11 +110,14 @@ export default function ViewRecipe({navigation}) {
             <View>
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
-                  <View style={{marginRight: 10}}>
+                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
                     <Text style={styles.name}>{fats}</Text>
                     <Text style={styles.tag}>fats</Text>
                   </View>
-                  <Macro2 width={20} height={21} />
+                  <Macro2
+                    width={(20 / dim.w) * dim.Width}
+                    height={(21 / dim.w) * dim.Width}
+                  />
                 </View>
               </View>
             </View>
@@ -118,11 +125,14 @@ export default function ViewRecipe({navigation}) {
             <View>
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
-                  <View style={{marginRight: 10}}>
+                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
                     <Text style={styles.name}>{proteins}</Text>
                     <Text style={styles.tag}>proteins</Text>
                   </View>
-                  <Macro3 width={20} height={21} />
+                  <Macro3
+                    width={(20 / dim.w) * dim.Width}
+                    height={(21 / dim.w) * dim.Width}
+                  />
                 </View>
               </View>
             </View>
@@ -130,11 +140,14 @@ export default function ViewRecipe({navigation}) {
             <View>
               <View>
                 <View style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
-                  <View style={{marginRight: 10}}>
+                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
                     <Text style={styles.name}>{carbs}</Text>
                     <Text style={styles.tag}>carbs</Text>
                   </View>
-                  <Macro4 width={20} height={21} />
+                  <Macro4
+                    width={(20 / dim.w) * dim.Width}
+                    height={(21 / dim.w) * dim.Width}
+                  />
                 </View>
               </View>
             </View>
@@ -143,7 +156,7 @@ export default function ViewRecipe({navigation}) {
           <Text style={styles.heading}>Desciption</Text>
           <Text style={styles.desc}>{desc}</Text>
 
-          <Text style={[styles.heading, {width: 250}]}>
+          <Text style={[styles.heading, {width: (250 / dim.w) * dim.Width}]}>
             Ingredients That You Will Need
           </Text>
 
@@ -154,7 +167,10 @@ export default function ViewRecipe({navigation}) {
             renderItem={({index, item}) => (
               <View key={index} style={{alignItems: 'center'}}>
                 <View style={styles.box1}>
-                  <Icon1 width={50} height={50} />
+                  <Icon1
+                    width={(50 / dim.w) * dim.Width}
+                    height={(50 / dim.w) * dim.Width}
+                  />
                 </View>
 
                 <View style={{}}>
@@ -167,21 +183,40 @@ export default function ViewRecipe({navigation}) {
           <View
             style={{
               flexDirection: 'row',
-              width: 370,
+              width: (370 / dim.w) * dim.Width,
               justifyContent: 'space-between',
-              marginTop: 10,
+              marginTop: (10 / dim.h) * dim.Height,
             }}>
             <Text style={[styles.heading]}>Rate & Review</Text>
 
             <View style={{flexDirection: 'row', marginTop: 10}}>
-              <Star width={20} height={20} style={{marginLeft: 5}} />
-              <Star width={20} height={20} style={{marginLeft: 5}} />
-              <Star width={20} height={20} style={{marginLeft: 5}} />
-              <Star width={20} height={20} style={{marginLeft: 5}} />
               <Star
-                width={20}
-                height={20}
-                style={{marginLeft: 5, marginRight: 10}}
+                width={(20 / dim.w) * dim.Width}
+                height={(20 / dim.w) * dim.Width}
+                style={{marginLeft: (5 / dim.w) * dim.Width}}
+              />
+              <Star
+                width={(20 / dim.w) * dim.Width}
+                height={(20 / dim.w) * dim.Width}
+                style={{marginLeft: (5 / dim.w) * dim.Width}}
+              />
+              <Star
+                width={(20 / dim.w) * dim.Width}
+                height={(20 / dim.w) * dim.Width}
+                style={{marginLeft: (5 / dim.w) * dim.Width}}
+              />
+              <Star
+                width={(20 / dim.w) * dim.Width}
+                height={(20 / dim.w) * dim.Width}
+                style={{marginLeft: (5 / dim.w) * dim.Width}}
+              />
+              <Star
+                width={(20 / dim.w) * dim.Width}
+                height={(20 / dim.h) * dim.Height}
+                style={{
+                  marginLeft: (5 / dim.w) * dim.Width,
+                  marginRight: (10 / dim.w) * dim.Width,
+                }}
               />
             </View>
           </View>
@@ -192,50 +227,96 @@ export default function ViewRecipe({navigation}) {
             placeholderTextColor="#8F9098"
           />
 
-          <View style={{marginTop: 10, flexDirection: 'row'}}>
-            <Dp1 width={50} height={50} />
-            <View style={{marginLeft: 10}}>
+          <View
+            style={{
+              marginTop: (10 / dim.h) * dim.Height,
+              flexDirection: 'row',
+            }}>
+            <Dp1
+              width={(50 / dim.w) * dim.Width}
+              height={(50 / dim.w) * dim.Width}
+            />
+            <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
               <Text style={styles.name}>Bessie Cooper</Text>
-              <Text style={[styles.tag, {width: 300}]}>
+              <Text style={[styles.tag, {width: (300 / dim.w) * dim.Width}]}>
                 I think you can tell a lot about a person by whether they use a
                 shape
               </Text>
               <View
-                style={{flexDirection: 'row', marginTop: 5, marginBottom: 10}}>
-                <Reply width={20} height={20} />
-                <Like width={20} height={20} style={{marginLeft: 10}} />
+                style={{
+                  flexDirection: 'row',
+                  marginTop: (5 / dim.h) * dim.Height,
+                  marginBottom: (10 / dim.h) * dim.Height,
+                }}>
+                <Reply
+                  width={(20 / dim.w) * dim.Width}
+                  height={(20 / dim.w) * dim.Width}
+                />
+                <Like
+                  width={(20 / dim.w) * dim.Width}
+                  height={(20 / dim.w) * dim.Width}
+                  style={{marginLeft: (10 / dim.w) * dim.Width}}
+                />
               </View>
             </View>
           </View>
 
-          <View style={{marginTop: 10, flexDirection: 'row'}}>
-            <Dp1 width={50} height={50} />
-            <View style={{marginLeft: 10}}>
+          <View
+            style={{
+              marginTop: (10 / dim.h) * dim.Height,
+              flexDirection: 'row',
+            }}>
+            <Dp1
+              width={(50 / dim.w) * dim.Width}
+              height={(50 / dim.w) * dim.Width}
+            />
+            <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
               <Text style={styles.name}>Bessie Cooper</Text>
-              <Text style={[styles.tag, {width: 300}]}>
+              <Text style={[styles.tag, {width: (300 / dim.w) * dim.Width}]}>
                 I think you can tell a lot about a person by whether they use a
                 shape
               </Text>
               <View
                 style={{flexDirection: 'row', marginTop: 5, marginBottom: 10}}>
-                <Reply width={20} height={20} />
-                <Like width={20} height={20} style={{marginLeft: 10}} />
+                <Reply
+                  width={(20 / dim.w) * dim.Width}
+                  height={(20 / dim.w) * dim.Width}
+                />
+                <Like
+                  width={(20 / dim.w) * dim.Width}
+                  height={(20 / dim.w) * dim.Width}
+                  style={{marginLeft: (10 / dim.w) * dim.Width}}
+                />
               </View>
             </View>
           </View>
 
-          <View style={{marginTop: 10, flexDirection: 'row'}}>
-            <Dp1 width={50} height={50} />
-            <View style={{marginLeft: 10}}>
+          <View
+            style={{
+              marginTop: (10 / dim.h) * dim.Height,
+              flexDirection: 'row',
+            }}>
+            <Dp1
+              width={(50 / dim.w) * dim.Width}
+              height={(50 / dim.h) * dim.Height}
+            />
+            <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
               <Text style={styles.name}>Bessie Cooper</Text>
-              <Text style={[styles.tag, {width: 300}]}>
+              <Text style={[styles.tag, {width: (300 / dim.w) * dim.Width}]}>
                 I think you can tell a lot about a person by whether they use a
                 shape
               </Text>
               <View
                 style={{flexDirection: 'row', marginTop: 5, marginBottom: 10}}>
-                <Reply width={20} height={20} />
-                <Like width={20} height={20} style={{marginLeft: 10}} />
+                <Reply
+                  width={(20 / dim.w) * dim.Width}
+                  height={(20 / dim.w) * dim.Width}
+                />
+                <Like
+                  width={(20 / dim.w) * dim.Width}
+                  height={(20 / dim.w) * dim.Width}
+                  style={{marginLeft: (10 / dim.w) * dim.Width}}
+                />
               </View>
             </View>
           </View>
@@ -249,9 +330,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 12,
-
-    paddingTop: 20,
+    padding: (12 / dim.h) * dim.Height,
+    paddingTop: (20 / dim.h) * dim.Height,
   },
   container2: {
     alignItems: 'center',
@@ -261,41 +341,41 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 20,
-    marginTop: 10,
+    marginTop: (10 / dim.h) * dim.Height,
     alignSelf: 'flex-start',
   },
   box: {
-    height: 73,
-    width: 90,
+    height: (73 / dim.h) * dim.Height,
+    width: (90 / dim.w) * dim.Width,
     borderRadius: 15,
-    marginVertical: 10,
-    marginRight: 10,
+    marginVertical: (10 / dim.h) * dim.Height,
+    marginRight: (10 / dim.w) * dim.Width,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    padding: (10 / dim.h) * dim.Height,
     justifyContent: 'space-around',
   },
 
   box1: {
-    height: 100,
-    width: 100,
+    height: (100 / dim.h) * dim.Height,
+    width: (100 / dim.w) * dim.Width,
     backgroundColor: '#F7F8F8',
     borderRadius: 15,
-    marginVertical: 10,
-    marginRight: 10,
+    marginVertical: (10 / dim.h) * dim.Height,
+    marginRight: (10 / dim.w) * dim.Width,
     alignItems: 'center',
-    padding: 10,
+    padding: (10 / dim.h) * dim.Height,
     justifyContent: 'space-around',
   },
 
   txtInput: {
-    marginVertical: 10,
+    marginVertical: (10 / dim.h) * dim.Height,
     borderColor: '#F8F9FE',
     backgroundColor: '#F8F9FE',
     borderWidth: 1,
-    height: 50,
-    width: 370,
-    paddingHorizontal: 15,
+    height: (50 / dim.h) * dim.Height,
+    width: (370 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 20,
     fontFamily: 'Inter-Regular',
     color: 'black',
@@ -314,12 +394,12 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Inter-Regular',
     alignSelf: 'flex-start',
-    marginBottom: 5,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 
   desc: {
     fontSize: 14,
-    width: 350,
+    width: (350 / dim.w) * dim.Width,
     textAlign: 'justify',
     color: 'black',
     fontFamily: 'Inter-Light',

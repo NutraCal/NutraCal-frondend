@@ -13,6 +13,7 @@ import {Overlay} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import dim from '../util/dim';
 
 const WaterLog = ({route, navigation}) => {
   const {email} = route.params;
@@ -85,14 +86,18 @@ const WaterLog = ({route, navigation}) => {
     <View style={styles.container}>
       <View style={styles.waterContainer}>
         <Image
-          style={{width: 300, height: 200, marginBottom: 30}}
+          style={{
+            width: (300 / dim.w) * dim.Width,
+            height: (200 / dim.h) * dim.Height,
+            marginBottom: (30 / dim.h) * dim.Height,
+          }}
           source={require('../assets/images/water.png')}
         />
         <ImageBackground
           source={require('../assets/images/waterbg.png')}
           style={{
-            width: 310,
-            height: 160,
+            width: (310 / dim.w) * dim.Width,
+            height: (160 / dim.h) * dim.Height,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -199,8 +204,7 @@ const WaterLog = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-
-    padding: 20,
+    padding: (20 / dim.h) * dim.Height,
     height: '100%',
   },
   waterContainer: {
@@ -210,8 +214,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 18,
-    marginTop: 10,
-    marginBottom: 5,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
   goalCount: {
     fontFamily: 'Inter-Bold',
@@ -221,14 +225,12 @@ const styles = StyleSheet.create({
   addButton: {
     backgroundColor: '#91C788',
     borderRadius: 50,
-
-    width: 50,
-    height: 50,
+    width: (50 / dim.w) * dim.Width,
+    height: (50 / dim.h) * dim.Height,
     position: 'absolute',
-
-    marginTop: 40,
-    bottom: 30,
-    right: 30,
+    marginTop: (40 / dim.h) * dim.Height,
+    bottom: (30 / dim.h) * dim.Height,
+    right: (30 / dim.w) * dim.Width,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -239,25 +241,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   overlay: {
-    width: 300,
-    height: 200,
+    width: (300 / dim.w) * dim.Width,
+    height: (200 / dim.h) * dim.Height,
     justifyContent: 'center',
     alignItems: 'center',
   },
   overlayTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
     textAlign: 'center',
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
-    padding: 10,
+    padding: (10 / dim.h) * dim.Height,
     width: '100%',
     fontSize: 18,
   },
@@ -266,9 +268,9 @@ const styles = StyleSheet.create({
   },
 
   btn1: {
-    paddingHorizontal: 30,
-    paddingVertical: 4,
-    marginTop: 15,
+    paddingHorizontal: (30 / dim.w) * dim.Width,
+    paddingVertical: (4 / dim.h) * dim.Height,
+    marginTop: (15 / dim.h) * dim.Height,
     borderRadius: 20,
   },
   label1: {
@@ -280,27 +282,27 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 18,
-    marginTop: 10,
-    marginBottom: 5,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 
   desc: {
     fontSize: 14,
     color: '#7B6F72',
     fontFamily: 'Inter-Light',
-    marginTop: 5,
+    marginTop: (5 / dim.h) * dim.Height,
   },
 
   name1: {
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-Medium',
-    marginTop: 5,
+    marginTop: (5 / dim.h) * dim.Height,
   },
 
   section: {
-    width: 350,
-    marginBottom: 20,
+    width: (350 / dim.w) * dim.Width,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   subsection: {
     flexDirection: 'row',

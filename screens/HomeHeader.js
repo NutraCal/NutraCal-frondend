@@ -17,6 +17,7 @@ import {
   Provider,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import dim from '../util/dim';
 
 const HomeHeader = ({route, navigation, email}) => {
   console.log(email);
@@ -33,7 +34,7 @@ const HomeHeader = ({route, navigation, email}) => {
             fontFamily: 'Inter-Bold',
             fontSize: 20,
             alignSelf: 'center',
-            marginLeft: 50,
+            marginLeft: (50 / dim.w) * dim.Width,
           }}>
           Recipe Book
         </Text>
@@ -42,7 +43,12 @@ const HomeHeader = ({route, navigation, email}) => {
             visible={visible}
             onDismiss={closeMenu}
             anchor={
-              <Icon name="menu" size={30} color="black" onPress={openMenu} />
+              <Icon
+                name="menu"
+                size={(30 / dim.w) * dim.Width}
+                color="black"
+                onPress={openMenu}
+              />
             }>
             <Menu.Item
               onPress={() => {

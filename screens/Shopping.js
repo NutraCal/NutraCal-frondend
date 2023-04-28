@@ -12,6 +12,7 @@ import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import dim from '../util/dim';
 
 export default function Shopping({route, navigation}) {
   const {email} = route.params;
@@ -161,7 +162,7 @@ export default function Shopping({route, navigation}) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.textinputc}>
           <TextInput
-            style={[styles.txtinput, {width: 300}]}
+            style={[styles.txtinput, {width: (300 / dim.w) * dim.Width}]}
             placeholder="Type and add your ingredients"
             placeholderTextColor="#C5C6CC"
             value={item}
@@ -172,7 +173,7 @@ export default function Shopping({route, navigation}) {
           </TouchableOpacity>
         </View>
 
-        <View style={{width: 350}}>
+        <View style={{width: (350 / dim.w) * dim.Width}}>
           <FlatList
             data={getlist}
             renderItem={({index, item}) => (
@@ -184,14 +185,22 @@ export default function Shopping({route, navigation}) {
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}>
-                    <Ing1 width={40} height={39} style={{marginRight: 20}} />
+                    <Ing1
+                      width={(40 / dim.w) * dim.Width}
+                      height={(39 / dim.w) * dim.Width}
+                      style={{marginRight: (20 / dim.w) * dim.Width}}
+                    />
                     <Text style={styles.name}>{item}</Text>
                   </View>
                   <TouchableOpacity
                     onPress={() => deleteItem(index)}
                     style={[
                       styles.cbtn,
-                      {marginLeft: 50, elevation: 2, backgroundColor: 'white'},
+                      {
+                        marginLeft: (50 / dim.w) * dim.Width,
+                        elevation: 2,
+                        backgroundColor: 'white',
+                      },
                     ]}>
                     <Text
                       style={{
@@ -215,57 +224,57 @@ export default function Shopping({route, navigation}) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: 8,
+    padding: (8 / dim.h) * dim.Height,
     alignItems: 'center',
   },
 
   txtinput: {
     borderColor: '#E1E3E8',
     borderWidth: 1,
-    height: 48,
-    width: 350,
-    paddingHorizontal: 15,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 10,
     fontFamily: 'Inter-Regular',
     color: 'black',
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 
   textinputc: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 10,
-    marginBottom: 10,
-    width: 350,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (10 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
   },
 
   box3: {
-    height: 70,
-    width: 350,
+    height: (70 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVertical: (10 / dim.h) * dim.Height,
   },
 
   cbtn: {
-    width: 30,
-    height: 30,
+    width: (30 / dim.w) * dim.Width,
+    height: (30 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
+    marginLeft: (10 / dim.w) * dim.Width,
   },
 
   name: {
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-Medium',
-    marginTop: 5,
-    width: 180,
+    marginTop: (5 / dim.h) * dim.Height,
+    width: (180 / dim.w) * dim.Width,
   },
 });

@@ -21,6 +21,7 @@ import Icon2 from 'react-native-vector-icons/Entypo';
 import {HeaderTitle} from '@react-navigation/elements';
 import ShoppingHeader from './ShoppingHeader';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import dim from '../util/dim';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,41 +35,73 @@ const TabStack = ({route, navigation}) => {
 
           if (route.name === 'Home') {
             return focused ? (
-              <Icon name="home" size={25} color="#91C788" />
+              <Icon
+                name="home"
+                size={(25 / dim.w) * dim.Width}
+                color="#91C788"
+              />
             ) : (
-              <Icon name="home-outline" size={25} color="black" />
+              <Icon
+                name="home-outline"
+                size={(25 / dim.w) * dim.Width}
+                color="black"
+              />
             );
           } else if (route.name === 'RecipeBook') {
             return focused ? (
-              <Icon name="fast-food" size={25} color="#91C788" />
+              <Icon
+                name="fast-food"
+                size={(25 / dim.w) * dim.Width}
+                color="#91C788"
+              />
             ) : (
-              <Icon name="fast-food-outline" size={25} color="black" />
+              <Icon
+                name="fast-food-outline"
+                size={(25 / dim.w) * dim.Width}
+                color="black"
+              />
             );
           } else if (route.name === 'DietPlans') {
             return focused ? (
-              <Icon name="map" size={25} color="#91C788" />
+              <Icon
+                name="map"
+                size={(25 / dim.w) * dim.Width}
+                color="#91C788"
+              />
             ) : (
-              <Icon name="map-outline" size={25} color="black" />
+              <Icon
+                name="map-outline"
+                size={(25 / dim.w) * dim.Width}
+                color="black"
+              />
             );
           } else if (route.name === 'Shopping') {
             return focused ? (
               <Icon
                 name="ios-checkmark-done-circle"
-                size={25}
+                size={(25 / dim.w) * dim.Width}
                 color="#91C788"
               />
             ) : (
               <Icon
                 name="ios-checkmark-done-circle-outline"
-                size={25}
+                size={(25 / dim.w) * dim.Width}
                 color="black"
               />
             );
           } else if (route.name === 'Blogs') {
             return focused ? (
-              <Icon name="people-sharp" size={25} color="#91C788" />
+              <Icon
+                name="people-sharp"
+                size={(25 / dim.w) * dim.Width}
+                color="#91C788"
+              />
             ) : (
-              <Icon name="people-outline" size={25} color="black" />
+              <Icon
+                name="people-outline"
+                size={(25 / dim.w) * dim.Width}
+                color="black"
+              />
             );
           }
 
@@ -78,7 +111,7 @@ const TabStack = ({route, navigation}) => {
               name={iconName}
               size={size}
               color={color}
-              style={{margin: 2}}
+              style={{margin: (2 / dim.h) * dim.Height}}
             />
           );
         },
@@ -87,7 +120,7 @@ const TabStack = ({route, navigation}) => {
         tabBarInactiveTintColor: 'grey',
 
         tabBarStyle: {
-          height: 60,
+          height: (60 / dim.h) * dim.Height,
           // positiion: 'absolute',
           // bottom: 16,
           // borderRadius: 16,
@@ -95,11 +128,11 @@ const TabStack = ({route, navigation}) => {
           // left: 16,
           // width: 360,
 
-          paddingVertical: 8,
+          paddingVertical: (8 / dim.h) * dim.Height,
           backgroundColor: '#EFF7EE',
         },
         tabBarLabelStyle: {
-          paddingBottom: 10,
+          paddingBottom: (10 / dim.h) * dim.Height,
           fontFamily: 'Inter-Medium',
         },
       })}>
@@ -148,7 +181,7 @@ const TabStack = ({route, navigation}) => {
             elevation: 5,
           },
           headerTitleStyle: {
-            marginLeft: 20,
+            marginLeft: (20 / dim.w) * dim.Width,
           },
 
           // headerRight: () => (
@@ -179,7 +212,7 @@ const TabStack = ({route, navigation}) => {
             elevation: 5,
           },
           headerTitleStyle: {
-            marginLeft: 20,
+            marginLeft: (20 / dim.w) * dim.Width,
           },
 
           headerRight: () => (
@@ -190,7 +223,7 @@ const TabStack = ({route, navigation}) => {
                 style={{
                   color: '#91C788',
                   fontSize: 16,
-                  marginRight: 30,
+                  marginRight: (30 / dim.w) * dim.Width,
                   fontWeight: 'bold',
                 }}>
                 Scan
@@ -211,7 +244,7 @@ const TabStack = ({route, navigation}) => {
             elevation: 5,
           },
           headerTitleStyle: {
-            marginLeft: 20,
+            marginLeft: (20 / dim.w) * dim.Width,
           },
 
           headerRight: () => (
@@ -222,7 +255,7 @@ const TabStack = ({route, navigation}) => {
                 style={{
                   color: '#91C788',
                   fontSize: 16,
-                  marginRight: 30,
+                  marginRight: (30 / dim.w) * dim.Width,
                   fontWeight: 'bold',
                 }}>
                 Call

@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {Button, View, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import dim from '../util/dim';
 
 export default function CallHome(props) {
   const navigation = useNavigation();

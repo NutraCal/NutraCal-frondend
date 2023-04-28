@@ -21,6 +21,8 @@ import {
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import dim from '../util/dim';
+
 const Stack = createNativeStackNavigator();
 const UserGwh = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
@@ -173,7 +175,10 @@ const UserGwh = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom: 20}} />
+      <ProgressBar
+        width={(350 / dim.w) * dim.Width}
+        style={{marginBottom: (20 / dim.h) * dim.Height}}
+      />
       <Text style={styles.Heading}>What is your Gender?</Text>
       <View
         style={{
@@ -260,13 +265,13 @@ const UserGwh = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
     justifyContent: 'center',
   },
   Heading: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: (20 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: 20,
     fontFamily: 'Inter-SemiBold',
@@ -275,48 +280,48 @@ const styles = StyleSheet.create({
     color: 'rgba(0, 0, 0, 0.45)',
     fontSize: 17,
     fontFamily: 'Inter-Light',
-    lineHeight: 30,
-    marginVertical: 20,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginVertical: (20 / dim.h) * dim.Height,
   },
   listItem: {
-    height: 52,
-    marginHorizontal: 10,
-    width: 170,
+    height: (52 / dim.h) * dim.Height,
+    marginHorizontal: (10 / dim.w) * dim.Width,
+    width: (170 / dim.w) * dim.Width,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listItem1: {
-    height: 52,
-    width: 350,
+    height: (52 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
     color: 'black',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listItem2: {
-    height: 52,
-    width: 240,
+    height: (52 / dim.h) * dim.Height,
+    width: (240 / dim.w) * dim.Width,
     color: 'black',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listItem3: {
-    height: 52,
-    width: 100,
+    height: (52 / dim.h) * dim.Height,
+    width: (100 / dim.w) * dim.Width,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    marginBottom: 20,
-    marginLeft: 10,
+    marginBottom: (20 / dim.h) * dim.Height,
+    marginLeft: (10 / dim.w) * dim.Width,
   },
   listText: {
     color: '#1F2024',
@@ -325,26 +330,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontSize: 17,
     fontFamily: 'Inter-Regular',
-    lineHeight: 30,
-    marginLeft: 8,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginLeft: (8 / dim.w) * dim.Width,
   },
   listText2: {
     color: '#1F2024',
     fontSize: 17,
     fontFamily: 'Inter-Regular',
-    lineHeight: 30,
-    marginLeft: 8,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginLeft: (8 / dim.w) * dim.Width,
   },
   btn: {
-    width: 330,
-    height: 48,
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     alignSelf: 'center',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 80,
-    marginBottom: 20,
+    marginTop: (80 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
 
   btnText: {

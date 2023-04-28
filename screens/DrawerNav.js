@@ -7,6 +7,7 @@ import Login from './Login';
 import CustomDrawer from '../components/CustomDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ViewProfile from './ViewProfile';
+import dim from '../util/dim';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,7 +37,11 @@ const DrawerNav = ({route, navigation}) => {
         options={{
           headerShown: false,
           drawerIcon: ({color}) => (
-            <Ionicons name="home-outline" size={22} color={color} />
+            <Ionicons
+              name="home-outline"
+              size={(22 / dim.w) * dim.Width}
+              color={color}
+            />
           ),
         }}
       />
@@ -59,7 +64,7 @@ const DrawerNav = ({route, navigation}) => {
                 style={{
                   color: '#91C788',
                   fontSize: 16,
-                  marginRight: 30,
+                  marginRight: (30 / dim.w) * dim.Width,
                   fontWeight: 'bold',
                 }}>
                 Edit
@@ -67,7 +72,11 @@ const DrawerNav = ({route, navigation}) => {
             </TouchableOpacity>
           ),
           drawerIcon: ({color}) => (
-            <Ionicons name="settings-outline" size={22} color={color} />
+            <Ionicons
+              name="settings-outline"
+              size={(22 / dim.w) * dim.Width}
+              color={color}
+            />
           ),
         }}
       />

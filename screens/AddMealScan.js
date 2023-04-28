@@ -12,6 +12,7 @@ import ImagePicker from 'react-native-image-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import RNFS from 'react-native-fs';
+import dim from '../util/dim';
 
 export default function AddMealScan({route, navigation}) {
   const [cameraPhoto, setCameraPhoto] = useState();
@@ -74,10 +75,6 @@ export default function AddMealScan({route, navigation}) {
     }
   };
 
-  // const handleBack = () => {
-
-  // };
-
   const convertBinary = async response => {
     console.log('img', image);
     const res = await RNFS.readFile(response.assets[0].uri, 'base64');
@@ -115,15 +112,15 @@ export default function AddMealScan({route, navigation}) {
       <TouchableOpacity
         onPress={getNutrition}
         style={{
-          width: 330,
-          height: 48,
+          width: (330 / dim.w) * dim.Width,
+          height: (48 / dim.h) * dim.Height,
           backgroundColor: '#91C788',
           alignSelf: 'center',
           borderRadius: 12,
           alignItems: 'center',
           justifyContent: 'center',
-          marginTop: 20,
-          marginBottom: 20,
+          marginTop: (20 / dim.h) * dim.Height,
+          marginBottom: (20 / dim.h) * dim.Height,
         }}>
         <Text
           style={{
@@ -149,20 +146,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width: 300,
-    height: 300,
-    marginTop: 20,
-    marginBottom: 20,
+    width: (300 / dim.w) * dim.Width,
+    height: (300 / dim.h) * dim.Height,
+    marginTop: (20 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   result: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 20,
+    marginTop: (20 / dim.h) * dim.Height,
     color: 'black',
   },
   resultText: {
     fontSize: 16,
-    marginTop: 10,
+    marginTop: (10 / dim.h) * dim.Height,
     color: 'black',
     fontFamily: 'Inter-Medium',
   },

@@ -6,6 +6,7 @@ import ZegoUIKitPrebuiltCall, {
   ONE_ON_ONE_VIDEO_CALL_CONFIG,
   ONE_ON_ONE_VOICE_CALL_CONFIG,
 } from '@zegocloud/zego-uikit-prebuilt-call-rn';
+import dim from '../util/dim';
 
 export default function Call(props) {
   const {route} = props;

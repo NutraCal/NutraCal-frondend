@@ -10,6 +10,7 @@ import {Searchbar} from 'react-native-paper';
 import N1 from '../assets/images/nutritionist1.svg';
 import N2 from '../assets/images/nutritionist2.svg';
 import N3 from '../assets/images/nutritionist3.svg';
+import dim from '../util/dim';
 
 export default function AddRecipe() {
   const [searchQuery, setSearchQuery] = React.useState('');

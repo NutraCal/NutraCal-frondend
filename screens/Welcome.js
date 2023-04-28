@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Intro from './Intro';
+import dim from '../util/dim';
 
 const Welcome = ({navigation, route}) => {
   setTimeout(() => {

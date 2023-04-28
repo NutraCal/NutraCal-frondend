@@ -23,6 +23,7 @@ import Tofu from '../assets/tofu.svg';
 import Brocolli from '../assets/brocolli.svg';
 import Onion from '../assets/onion.svg';
 import Shrimp from '../assets/shrimp.svg';
+import dim from '../util/dim';
 const Stack = createNativeStackNavigator();
 
 const UserIng = ({navigation, route}) => {
@@ -105,14 +106,17 @@ const UserIng = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom: 20}} />
+      <ProgressBar
+        width={(350 / dim.w) * dim.Width}
+        style={{marginBottom: (20 / dim.h) * dim.Height}}
+      />
       <Text style={styles.Heading}>Which ingredient do you dislike?</Text>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          width: 350,
+          width: (350 / dim.w) * dim.Width,
         }}>
         <TouchableOpacity
           onPress={() => setIngredient('Mushroom')}
@@ -144,7 +148,7 @@ const UserIng = ({navigation, route}) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          width: 350,
+          width: (350 / dim.w) * dim.Width,
         }}>
         <TouchableOpacity
           onPress={() => setIngredient('Tofu')}
@@ -176,7 +180,7 @@ const UserIng = ({navigation, route}) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          width: 350,
+          width: (350 / dim.w) * dim.Width,
         }}>
         <TouchableOpacity
           onPress={() => setIngredient('Onion')}
@@ -212,54 +216,54 @@ const UserIng = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
     justifyContent: 'center',
   },
   Heading: {
-    marginTop: 20,
+    marginTop: (20 / dim.h) * dim.Height,
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: 20,
     fontFamily: 'Inter-SemiBold',
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   Text: {
     color: 'rgba(0, 0, 0, 0.45)',
     fontSize: 17,
     fontFamily: 'Inter-Light',
-    lineHeight: 30,
-    marginBottom: 20,
-    marginTop: 5,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
+    marginTop: (5 / dim.h) * dim.Height,
   },
   listItem: {
-    height: 55,
-    width: 170,
+    height: (55 / dim.h) * dim.Height,
+    width: (170 / dim.w) * dim.Width,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 25,
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
     flexDirection: 'row',
   },
   listText: {
     color: '#1F2024',
     fontSize: 17,
     fontFamily: 'Inter-Regular',
-    lineHeight: 30,
-    marginLeft: 2,
-    width: 90,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginLeft: (2 / dim.w) * dim.Width,
+    width: (90 / dim.w) * dim.Width,
   },
   btn: {
-    width: 330,
-    height: 48,
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     alignSelf: 'center',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 340,
-    marginBottom: 20,
+    marginTop: (340 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
 
   btnText: {
@@ -268,10 +272,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
   },
   vector: {
-    height: 50,
-    width: 50,
-    marginRight: 10,
-    marginLeft: 10,
+    height: (50 / dim.h) * dim.Height,
+    width: (50 / dim.w) * dim.Width,
+    marginRight: (10 / dim.w) * dim.Width,
+    marginLeft: (10 / dim.w) * dim.Width,
   },
 });
 export default UserIng;

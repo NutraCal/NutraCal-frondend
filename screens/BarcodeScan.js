@@ -24,21 +24,22 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import axios from 'axios';
+import dim from '../util/dim';
 
-type SectionProps = PropsWithChildren<{
-  title: string,
-}>;
+// type SectionProps = PropsWithChildren<{
+//   title: string,
+// }>;
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-}
+// function Section({children, title}: SectionProps): JSX.Element {
+//   const isDarkMode = useColorScheme() === 'dark';
+// }
 
 function BarcodeScan(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  // const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  // const backgroundStyle = {
+  //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  // };
 
   const [val, setVal] = useState('');
   const [data, setData] = useState('');
@@ -109,10 +110,15 @@ function BarcodeScan(): JSX.Element {
   return (
     <View style={styles.sectionContainer}>
       <QRCodeScanner onRead={onSuccessScan} reactivate={true} />
-      <Text style={{color: 'black', marginBottom: 20, fontWeight: 'bold'}}>
+      <Text
+        style={{
+          color: 'black',
+          marginBottom: (20 / dim.h) * dim.Height,
+          fontWeight: 'bold',
+        }}>
         {val}
       </Text>
-      <View style={{marginBottom: 20}}>
+      <View style={{marginBottom: (20 / dim.h) * dim.Height}}>
         <Button title="Show Details" onPress={toggleModal} />
       </View>
       <Modal
@@ -137,10 +143,10 @@ function BarcodeScan(): JSX.Element {
             ) : (
               <Image
                 style={{
-                  width: 300,
-                  height: 200,
-                  marginBottom: 30,
-                  marginTop: 10,
+                  width: (300 / dim.w) * dim.Width,
+                  height: (200 / dim.h) * dim.Height,
+                  marginBottom: (30 / dim.h) * dim.Height,
+                  marginTop: (10 / dim.h) * dim.Height,
                   backgroundColor: 'red',
                 }}
                 source={{uri: path}}
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   sectionDescription: {
-    marginTop: 8,
+    marginTop: (8 / dim.h) * dim.Height,
     fontSize: 18,
     fontWeight: '400',
   },
@@ -182,12 +188,12 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#ffffff',
-    paddingTop: 12,
-    paddingHorizontal: 12,
+    paddingTop: (12 / dim.h) * dim.Height,
+    paddingHorizontal: (12 / dim.w) * dim.Width,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    minHeight: 400,
-    paddingBottom: 20,
+    minHeight: (400 / dim.h) * dim.Height,
+    paddingBottom: (20 / dim.h) * dim.Height,
   },
   center: {
     display: 'flex',
@@ -195,19 +201,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   barIcon: {
-    width: 60,
-    height: 5,
+    width: (60 / dim.w) * dim.Width,
+    height: (5 / dim.h) * dim.Height,
     backgroundColor: '#bbb',
     borderRadius: 3,
   },
   text: {
     color: '#bbb',
     fontSize: 24,
-    marginTop: 100,
+    marginTop: (100 / dim.h) * dim.Height,
   },
   resultText: {
     fontSize: 16,
-    marginTop: 10,
+    marginTop: (10 / dim.h) * dim.Height,
     color: 'black',
     fontFamily: 'Inter-Medium',
   },

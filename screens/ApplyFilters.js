@@ -10,6 +10,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import RangeSlider from '../components/RangeSlider';
 import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
+import dim from '../util/dim';
 
 export default function ApplyFilters() {
   const MIN_DEFAULT = 0;
@@ -20,7 +21,11 @@ export default function ApplyFilters() {
   return (
     <View style={styles.container}>
       <View
-        style={{alignItems: 'center', padding: 20, justifyContent: 'center'}}>
+        style={{
+          alignItems: 'center',
+          padding: (20 / dim.h) * dim.Height,
+          justifyContent: 'center',
+        }}>
         <Text style={styles.heading}>Category</Text>
 
         <View style={styles.flex1}>
@@ -86,9 +91,9 @@ export default function ApplyFilters() {
         </View>
 
         <Text style={styles.heading}>Calories</Text>
-        <GestureHandlerRootView style={{marginTop: 20}}>
+        <GestureHandlerRootView style={{marginTop: (20 / dim.h) * dim.Height}}>
           <RangeSlider
-            sliderWidth={340}
+            sliderWidth={(340 / dim.w) * dim.Width}
             min={MIN_DEFAULT}
             max={MAX_DEFAULT}
             step={20}
@@ -111,7 +116,7 @@ export default function ApplyFilters() {
 
         <View style={styles.textinputc}>
           <TextInput
-            style={[styles.txtinput, {width: 320}]}
+            style={[styles.txtinput, {width: (320 / dim.w) * dim.Width}]}
             placeholder="Type and add your ingredients"
             placeholderTextColor="#C5C6CC"
           />
@@ -127,13 +132,21 @@ export default function ApplyFilters() {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Ing1 width={40} height={39} style={{marginRight: 20}} />
+            <Ing1
+              width={(40 / dim.w) * dim.Width}
+              height={(39 / dim.h) * dim.Height}
+              style={{marginRight: (20 / dim.w) * dim.Width}}
+            />
             <Text style={styles.name}>Sugar</Text>
           </View>
           <TouchableOpacity
             style={[
               styles.cbtn,
-              {marginLeft: 50, elevation: 2, backgroundColor: 'white'},
+              {
+                marginLeft: (50 / dim.w) * dim.Width,
+                elevation: 2,
+                backgroundColor: 'white',
+              },
             ]}>
             <Text style={{fontSize: 20, color: '#91C788', alignSelf: 'center'}}>
               -
@@ -148,13 +161,21 @@ export default function ApplyFilters() {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <Ing2 width={40} height={39} style={{marginRight: 20}} />
+            <Ing2
+              width={40}
+              height={39}
+              style={{marginRight: (20 / dim.w) * dim.Width}}
+            />
             <Text style={styles.name}>Baking Soda</Text>
           </View>
           <TouchableOpacity
             style={[
               styles.cbtn,
-              {marginLeft: 50, elevation: 2, backgroundColor: 'white'},
+              {
+                marginLeft: (50 / dim.w) * dim.Width,
+                elevation: 2,
+                backgroundColor: 'white',
+              },
             ]}>
             <Text style={{fontSize: 20, color: '#91C788', alignSelf: 'center'}}>
               -
@@ -164,15 +185,15 @@ export default function ApplyFilters() {
 
         <TouchableOpacity
           style={{
-            width: 330,
-            height: 48,
+            width: (330 / dim.w) * dim.Width,
+            height: (48 / dim.h) * dim.Height,
             backgroundColor: '#91C788',
             alignSelf: 'center',
             borderRadius: 12,
             alignItems: 'center',
             justifyContent: 'center',
-            marginTop: 40,
-            marginBottom: 20,
+            marginTop: (40 / dim.h) * dim.Height,
+            marginBottom: (20 / dim.h) * dim.Height,
           }}>
           <Text
             style={{
@@ -180,7 +201,7 @@ export default function ApplyFilters() {
               fontSize: 16,
               fontFamily: 'Inter-SemiBold',
             }}>
-            Save Recipe
+            Find Recipe
           </Text>
         </TouchableOpacity>
       </View>
@@ -192,12 +213,12 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingVertical: (5 / dim.h) * dim.Height,
     flex: 1,
   },
   heading: {
-    marginTop: 24,
-    marginLeft: 10,
+    marginTop: (24 / dim.h) * dim.Height,
+    marginLeft: (10 / dim.w) * dim.Width,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'left',
@@ -206,14 +227,14 @@ const styles = StyleSheet.create({
   },
 
   btn1: {
-    paddingHorizontal: 15,
-    paddingVertical: 4,
-    marginTop: 15,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
+    paddingVertical: (4 / dim.h) * dim.Height,
+    marginTop: (15 / dim.h) * dim.Height,
     borderRadius: 20,
     backgroundColor: '#EAEAEA',
     borderColor: '#EAEAEA',
     borderWidth: 1,
-    marginLeft: 10,
+    marginLeft: (10 / dim.w) * dim.Width,
   },
 
   txt: {
@@ -228,14 +249,14 @@ const styles = StyleSheet.create({
 
   contentContainer: {
     width: '90%',
-    height: 300,
+    height: (300 / dim.h) * dim.Height,
     backgroundColor: 'white',
     borderRadius: 25,
   },
 
   content: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: (16 / dim.w) * dim.Width,
+    paddingVertical: (16 / dim.h) * dim.Height,
     flex: 1,
     justifyContent: 'space-between',
   },
@@ -250,8 +271,8 @@ const styles = StyleSheet.create({
   table: {
     borderColor: '#EBECF2',
     borderWidth: 1,
-    padding: 10,
-    marginTop: 5,
+    padding: (10 / dim.h) * dim.Height,
+    marginTop: (5 / dim.h) * dim.Height,
     borderRadius: 5,
   },
 
@@ -265,60 +286,59 @@ const styles = StyleSheet.create({
 
   labelc: {
     flexDirection: 'row',
-    width: 350,
+    width: (350 / dim.w) * dim.Width,
     justifyContent: 'space-between',
     alignItems: 'center',
-
-    marginTop: 10,
+    marginTop: (10 / dim.h) * dim.Height,
   },
 
   txtinput: {
     borderColor: '#E1E3E8',
     borderWidth: 1,
-    height: 48,
-    width: 350,
-    paddingHorizontal: 15,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 10,
     fontFamily: 'Inter-Regular',
     color: 'black',
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 
   textinputc: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    width: 350,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (10 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
   },
 
   box3: {
-    height: 55,
-    width: 360,
+    height: (55 / dim.h) * dim.Height,
+    width: (360 / dim.w) * dim.Width,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVertical: (10 / dim.h) * dim.Height,
   },
 
   cbtn: {
-    width: 30,
-    height: 30,
+    width: (30 / dim.w) * dim.Width,
+    height: (30 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
+    marginLeft: (10 / dim.w) * dim.Width,
   },
 
   name: {
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-Medium',
-    marginTop: 5,
-    width: 180,
+    marginTop: (5 / dim.h) * dim.Height,
+    width: (180 / dim.w) * dim.Width,
   },
 });

@@ -19,6 +19,8 @@ import {
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import dim from '../util/dim';
+
 const Stack = createNativeStackNavigator();
 const UserAllergies = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
@@ -87,7 +89,10 @@ const UserAllergies = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar width={350} style={{marginBottom: 20}} />
+      <ProgressBar
+        width={(350 / dim.w) * dim.Width}
+        style={{marginBottom: (20 / dim.h) * dim.Height}}
+      />
       <Text style={styles.Heading}>
         Which restrictions/allergies do you have?
       </Text>
@@ -148,43 +153,43 @@ const UserAllergies = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
     justifyContent: 'center',
   },
   Heading: {
-    marginTop: 20,
+    marginTop: (20 / dim.h) * dim.Height,
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: 20,
     fontFamily: 'Inter-SemiBold',
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listItem: {
-    height: 72,
-    width: 350,
+    height: (72 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listText: {
     color: '#1F2024',
     fontSize: 17,
     fontFamily: 'Inter-Regular',
-    lineHeight: 30,
-    marginLeft: 8,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginLeft: (8 / dim.w) * dim.Width,
   },
   btn: {
-    width: 330,
-    height: 48,
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     alignSelf: 'center',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 180,
-    marginBottom: 20,
+    marginTop: (180 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
 
   btnText: {

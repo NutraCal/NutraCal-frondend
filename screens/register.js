@@ -11,9 +11,11 @@ import {
 import type {Node} from 'react';
 import Login from './Login';
 import {endpoint} from '../util/config';
+import dim from '../util/dim';
 const Register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -140,6 +142,7 @@ const Register = ({route, navigation}) => {
             onChangeText={text => setEmail(text)}
             style={styles.txtinput}
           />
+
           <Text
             style={{
               color: email != '' ? '#ffffff' : '#FF0000',
@@ -199,8 +202,8 @@ const Register = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
     justifyContent: 'center',
   },
 
@@ -212,20 +215,20 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: 'Inter-SemiBold',
     textAlign: 'left',
-    marginBottom: 10,
+    marginBottom: (10 / dim.h) * dim.Height,
     color: 'black',
   },
 
   h3: {
     color: 'grey',
-    marginBottom: 30,
+    marginBottom: (30 / dim.h) * dim.Height,
     fontSize: 17,
     fontFamily: 'Inter-Regular',
   },
 
   label1: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (10 / dim.h) * dim.Height,
     fontSize: 17,
     fontFamily: 'Inter-Medium',
     textAlign: 'left',
@@ -235,7 +238,7 @@ const styles = StyleSheet.create({
 
   Text: {
     color: 'grey',
-    marginVertical: 30,
+    marginVertical: (30 / dim.h) * dim.Height,
     fontSize: 18,
     textAlign: 'center',
     fontFamily: 'Inter-Regular',
@@ -248,15 +251,15 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    width: 330,
-    height: 48,
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     alignSelf: 'center',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: (20 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
 
   btnText: {
@@ -268,14 +271,14 @@ const styles = StyleSheet.create({
   txtinput: {
     borderColor: '#E1E3E8',
     borderWidth: 1,
-    height: 48,
-    width: 350,
-    paddingHorizontal: 15,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 10,
     fontFamily: 'Inter-Regular',
     color: 'black',
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 });
 export default Register;

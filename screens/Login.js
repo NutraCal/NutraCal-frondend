@@ -9,7 +9,6 @@ import {
   TextInput,
 } from 'react-native';
 import Register from './Register';
-import Home from './homeDummy';
 import UserGwh from './UserGwh';
 import UserFitnessGoal from './UserFitnessGoal';
 import Facebook from '../assets/Facebook.svg';
@@ -19,6 +18,7 @@ import TabStack from './TabStack';
 import DrawerNav from './DrawerNav';
 import {endpoint} from '../util/config';
 import axios from 'axios';
+import dim from '../util/dim';
 import {
   GoogleSignin,
   statusCodes,
@@ -202,7 +202,7 @@ export default function Login({route, navigation}) {
         <View style={styles.row}>
           <Text
             style={{
-              marginBottom: 10,
+              marginBottom: (10 / dim.h) * dim.Height,
               color: 'black',
               fontFamily: 'Inter-Regular',
             }}>
@@ -225,8 +225,8 @@ export default function Login({route, navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
     justifyContent: 'center',
   },
 
@@ -238,20 +238,20 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: 'Inter-SemiBold',
     textAlign: 'left',
-    marginBottom: 10,
+    marginBottom: (10 / dim.h) * dim.Height,
     color: 'black',
   },
 
   h3: {
     color: 'grey',
-    marginBottom: 30,
+    marginBottom: (30 / dim.h) * dim.Height,
     fontSize: 17,
     fontFamily: 'Inter-Regular',
   },
 
   label1: {
-    marginTop: 24,
-    marginBottom: 10,
+    marginTop: (24 / dim.h) * dim.Height,
+    marginBottom: (10 / dim.h) * dim.Height,
     fontSize: 17,
     fontFamily: 'Inter-Medium',
     textAlign: 'left',
@@ -260,20 +260,20 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    marginHorizontal: 10,
+    marginHorizontal: (10 / dim.w) * dim.Width,
     color: '#90C888',
-    marginTop: 20,
+    marginTop: (20 / dim.h) * dim.Height,
     fontFamily: 'Inter-Medium',
   },
   input: {
-    height: 50,
-    width: 300,
+    height: (50 / dim.h) * dim.Height,
+    width: (300 / dim.w) * dim.Width,
   },
 
   btn: {
-    marginTop: 20,
-    width: 300,
-    marginBottom: 40,
+    marginTop: (20 / dim.h) * dim.Height,
+    width: (300 / dim.w) * dim.Width,
+    marginBottom: (40 / dim.h) * dim.Height,
     fontFamily: 'Inter-SemiBold',
   },
 
@@ -282,39 +282,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     alignItems: 'center',
-    width: 150,
-    height: 35,
+    width: (150 / dim.w) * dim.Width,
+    height: (35 / dim.h) * dim.Height,
     borderRadius: 10,
     borderColor: '#90C888',
-    margin: 8,
+    margin: (8 / dim.h) * dim.Height,
   },
 
   icon: {
-    height: 25,
-    width: 25,
-    marginRight: 6,
+    height: (25 / dim.h) * dim.Height,
+    width: (25 / dim.w) * dim.Width,
+    marginRight: (6 / dim.w) * dim.Width,
   },
 
   hcontainer: {
-    marginTop: 20,
+    marginTop: (20 / dim.h) * dim.Height,
     justifyContent: 'center',
     flexDirection: 'row',
-    marginBottom: 30,
+    marginBottom: (30 / dim.h) * dim.Height,
   },
   row: {
     flexDirection: 'row',
   },
 
   btn: {
-    width: 330,
-    height: 48,
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     alignSelf: 'center',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: (20 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
 
   btnText: {
@@ -326,13 +326,13 @@ const styles = StyleSheet.create({
   txtinput: {
     borderColor: '#E1E3E8',
     borderWidth: 1,
-    height: 48,
-    width: 350,
-    paddingHorizontal: 15,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 10,
     fontFamily: 'Inter-Regular',
     color: 'black',
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 });
