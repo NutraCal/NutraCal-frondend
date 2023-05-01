@@ -19,6 +19,9 @@ import {LogBox} from 'react-native';
 
 import Welcome from './screens/Welcome';
 import Intro from './screens/Intro';
+import SelectRole from './screens/SelectRole';
+import NutritionistRegister from './screens/NutritionistRegister';
+
 import UserFitnessGoal from './screens/UserFitnessGoal';
 import UserGwh from './screens/UserGwh';
 import UserAllergies from './screens/UserAllergies';
@@ -26,7 +29,6 @@ import UserDiet from './screens/UserDiet';
 import UserIng from './screens/UserIng';
 import Register from './screens/Register';
 import Login from './screens/Login';
-
 import SearchRecipe from './screens/SearchRecipe';
 import ApplyFilters from './screens/ApplyFilters';
 import ViewRecipe from './screens/ViewRecipe';
@@ -100,6 +102,11 @@ export default function MainNavigator() {
         )}
 
         <Stack.Screen name="Intro" component={Intro} />
+        <Stack.Screen name="SelectRole" component={SelectRole} />
+        <Stack.Screen
+          name="NutritionistRegister"
+          component={NutritionistRegister}
+        />
         <Stack.Screen name="UserFitnessGoal" component={UserFitnessGoal} />
         <Stack.Screen name="UserGwh" component={UserGwh} />
         <Stack.Screen name="UserAllergies" component={UserAllergies} />

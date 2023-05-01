@@ -17,6 +17,7 @@ const DrawerNav = ({route, navigation}) => {
   const user = route?.params;
 
   const email = user?.data?.user?.email;
+
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawer {...props} />}

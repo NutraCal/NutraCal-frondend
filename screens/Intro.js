@@ -87,7 +87,7 @@ const Intro = ({navigation, route}) => {
 
       <TouchableOpacity
         style={styles.btn}
-        onPress={() => navigation.navigate('UserFitnessGoal')}>
+        onPress={() => navigation.navigate('SelectRole')}>
         <Text style={styles.btnText}>Get Started</Text>
       </TouchableOpacity>
 
