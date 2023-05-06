@@ -51,6 +51,26 @@ export default function Login({route, navigation}) {
 
   const credentialsValidation = async () => {
     console.log(endpoint + '/users/login');
+    if (email == '' && password == '') {
+      Alert.alert('Empty field', 'Please enter email and password', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    if (email == '') {
+      Alert.alert('Empty field', 'Please enter email', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    if (password == '') {
+      Alert.alert('Empty field', 'Please enter password', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
     if (
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
@@ -129,14 +149,7 @@ export default function Login({route, navigation}) {
             onChangeText={text => setEmail(text)}
             style={styles.txtinput}
           />
-          <Text
-            style={{
-              color: email != '' ? '#ffffff' : '#FF0000',
-              fontSize: 12,
-              fontFamily: 'Inter-Light',
-            }}>
-            Please fill out the field
-          </Text>
+
           <Text style={styles.label1}>Enter password</Text>
         </View>
         <View>
@@ -147,14 +160,6 @@ export default function Login({route, navigation}) {
             onChangeText={text => setPassword(text)}
             style={styles.txtinput}
             secureTextEntry></TextInput>
-          <Text
-            style={{
-              color: password != '' ? '#ffffff' : '#FF0000',
-              fontSize: 12,
-              fontFamily: 'Inter-Light',
-            }}>
-            Please fill out the field
-          </Text>
         </View>
 
         <TouchableOpacity style={styles.btn} onPress={credentialsValidation}>

@@ -17,7 +17,7 @@ import DatePicker from 'react-native-modern-datepicker';
 import Modal from 'react-native-modal';
 import {width} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
-const NutritionistRegister = () => {
+const NutritionistRegister = ({navigation, route}) => {
   const [startTime, setStartTime] = useState('00:00');
   const [endTime, setEndTime] = useState('00:00');
   const [mod, setMod] = useState('');
@@ -248,7 +248,7 @@ const NutritionistRegister = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 width: (350 / dim.w) * dim.Width,
-                marginBottom: 30,
+                marginBottom: (30 / dim.h) * dim.Height,
               },
             ]}>
             <View style={[styles.fieldContainer, {}]}>
@@ -262,7 +262,7 @@ const NutritionistRegister = () => {
                   fontSize: 16,
                 }}
                 dropDownContainerStyle={{
-                  height: 120,
+                  height: (120 / dim.h) * dim.Height,
                 }}
                 zIndex={1000}
                 zIndexInverse={3000}
@@ -288,7 +288,7 @@ const NutritionistRegister = () => {
                   fontSize: 16,
                 }}
                 dropDownContainerStyle={{
-                  height: 120,
+                  height: (12 / dim.h) * dim.Height,
                 }}
                 zIndex={1000}
                 zIndexInverse={3000}
@@ -353,7 +353,9 @@ const NutritionistRegister = () => {
               />
             </View>
           </Modal>
-          <TouchableOpacity style={styles.nextbtn}>
+          <TouchableOpacity
+            style={styles.nextbtn}
+            onPress={() => navigation.navigate('Register')}>
             <Text
               style={{
                 color: 'white',

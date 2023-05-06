@@ -9,7 +9,9 @@ const SelectRole = ({navigation, route}) => {
   return (
     <View style={styles.MainDiv}>
       <Text style={styles.heading}>Select User Type</Text>
-      <TouchableOpacity style={styles.borderBox}>
+      <TouchableOpacity
+        style={styles.borderBox}
+        onPress={() => navigation.navigate('AdminRegister')}>
         <Admin
           width={(120 / dim.w) * dim.Width}
           height={(120 / dim.w) * dim.Width}

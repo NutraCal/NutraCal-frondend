@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  Modal,
+  Button,
 } from 'react-native';
 import B1 from '../assets/images/breakfast1.svg';
 import L1 from '../assets/images/lunch1.svg';
@@ -13,53 +13,146 @@ import D1 from '../assets/images/dinner1.svg';
 import S1 from '../assets/images/snack1.svg';
 import Forw from '../assets/forwardbtn.svg';
 import dim from '../util/dim';
+import moment from 'moment';
+
+import DatePicker from 'react-native-modern-datepicker';
+import Modal from 'react-native-modal';
 
 export default function DietPlans({route, navigation}) {
   const {email} = route.params;
-  const [open, setOpen] = useState(false); //open and closes model
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [loadData, setLoadData] = useState(true);
 
-  function handleOnPress() {
-    setOpen(!open);
-  }
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format('YYYY-MM-DD'),
+  );
+  const [cDate, setCDate] = useState(moment().format('MMMM YYYY'));
+  const [weekDates, setWeekDates] = useState([]);
+  const [selectedD, setSelectedD] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleDateChange = date => {
+    console.log('here');
+    // setSelectedD(date);
+    // const formattedDate = moment(date, 'YYYY/MM/DD').format('D MMMM YYYY');
+    // setCDate(formattedDate);
+
+    const fDate = moment(date, 'YYYY/MM/DD').format('YYYY-MM-DD');
+    const currentDate = moment(fDate); // set the current date to 27th April, 2023
+
+    // get the starting and ending dates for the current week
+    const startDate = currentDate.clone().startOf('week');
+    const endDate = currentDate.clone().endOf('week');
+
+    // create an array of dates for the current week
+    const weekDates = [];
+    let currentDateIter = startDate.clone();
+    while (currentDateIter <= endDate) {
+      weekDates.push(currentDateIter.format('YYYY-MM-DD'));
+      currentDateIter.add(1, 'days');
+    }
+    // setWeekDates(weekDates);
+
+    console.log(weekDates.toString());
+    setWeekDates(weekDates);
+
+    setModalVisible(false);
+  };
+
+  const handleDatePress = date => {
+    setSelectedDate(date);
+    console.log(date);
+
+    // Load meal log for the selected date
+    // ...
+  };
+
+  useEffect(() => {
+    // Generate an array of dates for the current week
+    console.log(loadData);
+    if (loadData) {
+      console.log('here in useeffect');
+      const weekStart = moment().startOf('week');
+      const weekEnd = moment().endOf('week');
+
+      const dates = [];
+      for (
+        let date = moment(weekStart);
+        date <= weekEnd;
+        date = date.clone().add(1, 'day')
+      ) {
+        dates.push(date.format('YYYY-MM-DD'));
+      }
+      console.log(dates.toString());
+      setWeekDates(dates);
+      setLoadData(false);
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
+      <Text style={[styles.heading]} onPress={() => setModalVisible(true)}>
+        {cDate}
+      </Text>
+
+      <Modal isVisible={isModalVisible}>
+        <View>
+          <DatePicker
+            mode="date"
+            cancelBtnText="Cancel"
+            onSelectedChange={handleDateChange}
+            options={{
+              textHeaderColor: '#333333',
+              textDefaultColor: '#333333',
+              mainColor: '#91C788',
+              textSecondaryColor: '#91C788',
+            }}
+            style={{borderRadius: 0}}
+          />
+          {/* <Button title="Submit" onPress={() => setModalVisible(false)} /> */}
+        </View>
+      </Modal>
+
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal={true}
-        style={{marginBottom: (20 / dim.h) * dim.Height}}>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.name1}>MO</Text>
-          <Text style={styles.name2}>5</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.box, {backgroundColor: '#91C788'}]}>
-          <Text style={[styles.name1, {color: 'white'}]}>TU</Text>
-          <Text style={[styles.name2, {color: 'white'}]}>6</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.name1}>WE</Text>
-          <Text style={styles.name2}>7</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.name1}>TH</Text>
-          <Text style={styles.name2}>8</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.name1}>FR</Text>
-          <Text style={styles.name2}>9</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.name1}>SA</Text>
-          <Text style={styles.name2}>10</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.name1}>SU</Text>
-          <Text style={styles.name2}>11</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.box}>
-          <Text style={styles.name1}>MO</Text>
-          <Text style={styles.name2}>12</Text>
-        </TouchableOpacity>
+        style={{marginBottom: (10 / dim.h) * dim.Height}}>
+        {weekDates.map(date => (
+          <View key={date}>
+            <TouchableOpacity
+              style={[
+                styles.box,
+                {
+                  backgroundColor:
+                    selectedDate === date ? '#91C788' : '#ffffff',
+                },
+              ]}
+              onPress={() => handleDatePress(date)}>
+              <Text
+                style={[
+                  styles.name1,
+                  {
+                    margin: (10 / dim.h) * dim.Height,
+                    fontWeight: selectedDate === date ? 'bold' : 'normal',
+                    color: selectedDate === date ? '#ffffff' : '#7B6F72',
+                  },
+                ]}>
+                {moment(date).format('dd')}
+              </Text>
+              <Text
+                style={[
+                  styles.name2,
+                  {
+                    margin: (10 / dim.h) * dim.Height,
+                    fontWeight: selectedDate === date ? 'bold' : 'normal',
+                    color: selectedDate === date ? '#ffffff' : '#7B6F72',
+                  },
+                ]}>
+                {moment(date).format('D MMM')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
 
       <ScrollView showsVerticalScrollIndicator={false} style={{}}>
@@ -184,13 +277,15 @@ const styles = StyleSheet.create({
   },
 
   box: {
-    height: (71 / dim.h) * dim.Height,
-    width: (45 / dim.w) * dim.Width,
+    height: (100 / dim.h) * dim.Height,
+    width: (70 / dim.w) * dim.Width,
     borderRadius: 12,
     marginHorizontal: (5 / dim.w) * dim.Width,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 0.5,
+    borderColor: '#91C788',
   },
 
   name1: {

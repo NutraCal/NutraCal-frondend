@@ -21,6 +21,7 @@ import Welcome from './screens/Welcome';
 import Intro from './screens/Intro';
 import SelectRole from './screens/SelectRole';
 import NutritionistRegister from './screens/NutritionistRegister';
+import AdminRegister from './screens/AdminRegister';
 
 import UserFitnessGoal from './screens/UserFitnessGoal';
 import UserGwh from './screens/UserGwh';
@@ -106,6 +107,7 @@ export default function MainNavigator() {
         <Stack.Screen
           name="NutritionistRegister"
           component={NutritionistRegister}
+          options={{headerShown: true}}
         />
         <Stack.Screen name="UserFitnessGoal" component={UserFitnessGoal} />
         <Stack.Screen name="UserGwh" component={UserGwh} />
@@ -116,6 +118,11 @@ export default function MainNavigator() {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="AdminRegister"
+          component={AdminRegister}
           options={{headerShown: true}}
         />
         <Stack.Screen

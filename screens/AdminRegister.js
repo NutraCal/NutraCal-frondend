@@ -12,78 +12,26 @@ import type {Node} from 'react';
 import Login from './Login';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
-const Register = ({route, navigation}) => {
+const AdminRegister = ({route, navigation}) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const [goal, setGoal] = useState('');
-  const [gender, setGender] = useState('');
-  const [age, setAge] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [heightUnit, setHeightUnit] = useState('');
-  const [weight, setWeight] = useState(0);
-  const [weightUnit, setWeightUnit] = useState('');
-  const [allergies, setAllergies] = useState('');
-  const [diet, setDiet] = useState('');
-  const [ings, setIngs] = useState('');
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
   const [pressed, setPressed] = useState(false);
 
-  React.useEffect(() => {
-    if (
-      route.params?.fitnessGoal &&
-      route.params?.gender &&
-      route.params?.age &&
-      route.params?.height &&
-      route.params?.heightUnit &&
-      route.params?.weight &&
-      route.params?.weightUnit &&
-      route.params?.allergies &&
-      route.params?.diet &&
-      route.params?.ingredients
-    ) {
-      const fitnessGoal = route.params?.fitnessGoal;
-      const gender = route.params?.gender;
-      const age = route.params?.age;
-      const height = route.params?.height;
-      const heightUnit = route.params?.heightUnit;
-      const weight = route.params?.weight;
-      const weightUnit = route.params?.weightUnit;
-      const allergies = route.params?.allergies;
-      const diet = route.params?.diet;
-      const ingredients = route.params?.ingredients;
-      setGoal(fitnessGoal);
-      setGender(gender);
-      setAge(age);
-      setHeight(height);
-      setHeightUnit(heightUnit);
-      setWeight(weight);
-      setWeightUnit(weightUnit);
-      setAllergies(allergies);
-      setDiet(diet);
-      setIngs(ings);
-    }
-  }, [
-    route.params?.fitnessGoal,
-    route.params?.gender,
-    route.params?.age,
-    route.params?.height,
-    route.params?.heightUnit,
-    route.params?.weight,
-    route.params?.weightUnit,
-    route.params?.allergies,
-    route.params?.diet,
-    route.params?.ingredients,
-  ]);
-
   const credentialsValidation = () => {
     setPressed(true);
-    console.log('trying');
-    console.log('email');
 
-    if (email == '' && password == '') {
-      Alert.alert('Empty field', 'Please enter email and password', [
+    if (email == '' && password == '' && name == '') {
+      Alert.alert('Empty field', 'Please fill the fields', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    if (name == '') {
+      Alert.alert('Empty field', 'Please enter name', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]);
       return;
@@ -115,24 +63,15 @@ const Register = ({route, navigation}) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: name,
           email: email,
           password: password,
-          fitnessGoal: goal,
-          gender: gender,
-          age: age,
-          height: height,
-          heightUnit: heightUnit,
-          weight: weight,
-          weightUnit: weightUnit,
-          allergies: allergies,
-          diet: diet,
-          ingredients: 'abc',
         }),
       }).then(response => {
         if (response.status == 200) {
           navigation.navigate('Login');
         } else {
-          Alert.alert('User already exists', 'Create Account with new Email', [
+          Alert.alert('Uh oh', 'Admin already exists', [
             {text: 'OK', onPress: () => console.log('OK Pressed')},
           ]);
         }
@@ -152,13 +91,24 @@ const Register = ({route, navigation}) => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.h1}>Create Account{ings}</Text>
-      <Text style={styles.h3}>Connect with your Friends Today!</Text>
+      <Text style={styles.h1}>Create Account</Text>
+      <Text style={styles.h3}>Admin!</Text>
 
       <View style={styles.midcontainer}>
         <View>
-          <Text style={styles.label1}>Email</Text>
+          <Text style={styles.label1}>Name</Text>
+          <TextInput
+            style={styles.txtinput}
+            placeholder="Enter your name"
+            value={name}
+            placeholderTextColor="#C5C6CC"
+            onChangeText={text => setName(text)}
+            style={styles.txtinput}
+          />
+        </View>
 
+        <View>
+          <Text style={styles.label1}>Email</Text>
           <TextInput
             style={styles.txtinput}
             placeholder="Enter your email"
@@ -288,4 +238,4 @@ const styles = StyleSheet.create({
     marginBottom: (5 / dim.h) * dim.Height,
   },
 });
-export default Register;
+export default AdminRegister;
