@@ -10,6 +10,7 @@ import RecipeBook from './SearchRecipe';
 import DietPlans from './DietPlans';
 import Shopping from './Shopping';
 import Blogs from './SearchBlog';
+import DiscussionThread from './DiscussionThread';
 import AddMealScan from './AddMealScan';
 import AddMeal from './AddMeal';
 
@@ -76,6 +77,20 @@ const TabStack = ({route, navigation}) => {
               />
             );
           } else if (route.name === 'Shopping') {
+            return focused ? (
+              <Icon
+                name="ios-checkmark-done-circle"
+                size={(25 / dim.w) * dim.Width}
+                color="#91C788"
+              />
+            ) : (
+              <Icon
+                name="ios-checkmark-done-circle-outline"
+                size={(25 / dim.w) * dim.Width}
+                color="black"
+              />
+            );
+          } else if (route.name === 'DiscussionThread') {
             return focused ? (
               <Icon
                 name="ios-checkmark-done-circle"
@@ -205,6 +220,37 @@ const TabStack = ({route, navigation}) => {
         name="Shopping"
         initialParams={{email: email}}
         component={Shopping}
+        options={({navigation}) => ({
+          headerShown: true,
+          headerStyle: {
+            borderBottomWidth: 1,
+            elevation: 5,
+          },
+          headerTitleStyle: {
+            marginLeft: (20 / dim.w) * dim.Width,
+          },
+
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('BarcodeScan')}
+              styles={{backgroundColor: '#91C788'}}>
+              <Text
+                style={{
+                  color: '#91C788',
+                  fontSize: 16,
+                  marginRight: (30 / dim.w) * dim.Width,
+                  fontWeight: 'bold',
+                }}>
+                Scan
+              </Text>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+
+      <Tab.Screen
+        name="DiscussionThread"
+        component={DiscussionThread}
         options={({navigation}) => ({
           headerShown: true,
           headerStyle: {

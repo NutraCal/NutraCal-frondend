@@ -54,6 +54,9 @@ import Bmi from './screens/Bmi';
 import Calories from './screens/Calories';
 import StepCount from './screens/StepCount';
 import DietPlans from './screens/DietPlans';
+
+import ViewThread from './screens/ViewThread';
+
 import dim from './util/dim';
 
 LogBox.ignoreAllLogs();
@@ -269,6 +272,11 @@ export default function MainNavigator() {
         <Stack.Screen
           name="StepCount"
           component={StepCount}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="ViewThread"
+          component={ViewThread}
           options={{headerShown: true}}
         />
       </Stack.Navigator>
