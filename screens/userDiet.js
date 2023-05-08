@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import userGwh from './userGwh';
-import userIng from './userIng';
-import ProgressBar from './ProgressBar';
+import UserGwh from './UserGwh';
+import UserIng from './UserIng';
+import ProgressBar from '../assets/progressbar4';
 import {
   SafeAreaView,
   Platform,
@@ -22,8 +22,9 @@ import Dp1 from '../assets/dp1.svg';
 import Dp2 from '../assets/dp2.svg';
 import Dp3 from '../assets/dp3.svg';
 import Dp4 from '../assets/dp4.svg';
+import dim from '../util/dim';
 const Stack = createNativeStackNavigator();
-const userDiet = ({navigation, route}) => {
+const UserDiet = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -76,7 +77,7 @@ const userDiet = ({navigation, route}) => {
   };
   const inputValidation = () => {
     if (diet != '') {
-      navigation.navigate('userIng', {
+      navigation.navigate('UserIng', {
         fitnessGoal: goal,
         gender: gender,
         age: age,
@@ -95,7 +96,10 @@ const userDiet = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar />
+      <ProgressBar
+        width={(350 / dim.w) * dim.Width}
+        style={{marginBottom: (20 / dim.h) * dim.Height}}
+      />
       <Text style={styles.Heading}>
         Do you follow any of the{'\n'}following diets?
       </Text>
@@ -106,7 +110,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'None' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'None' ? 'rgba(145, 199, 136, 0.2)' : '##ffffff',
           },
         }}>
         <Dp1 style={styles.vector} />
@@ -118,7 +122,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'Vegetarian' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Vegetarian' ? 'rgba(145, 199, 136, 0.2)' : '##ffffff',
           },
         }}>
         <Dp2 style={styles.vector} />
@@ -130,7 +134,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'Low-Carb' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Low-Carb' ? 'rgba(145, 199, 136, 0.2)' : '##ffffff',
           },
         }}>
         <Dp3 style={styles.vector} />
@@ -142,7 +146,7 @@ const userDiet = ({navigation, route}) => {
           ...styles.listItem,
           ...{
             backgroundColor:
-              diet == 'Keto' ? 'rgba(145, 199, 136, 0.2)' : '#f3f3f3',
+              diet == 'Keto' ? 'rgba(145, 199, 136, 0.2)' : '#ffffff',
           },
         }}>
         <Dp4 style={styles.vector} />
@@ -156,52 +160,55 @@ const userDiet = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
     justifyContent: 'center',
   },
   Heading: {
-    marginTop: 20,
+    marginTop: (20 / dim.h) * dim.Height,
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: 20,
     fontFamily: 'Inter-SemiBold',
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listItem: {
-    height: 80,
-    width: 370,
+    height: (80 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
     flexDirection: 'row',
   },
   listText: {
     color: '#1F2024',
     fontSize: 17,
     fontFamily: 'Inter-Regular',
-    lineHeight: 30,
-    marginLeft: 8,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginLeft: (8 / dim.w) * dim.Width,
   },
   btn: {
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
-    height: 50,
-    width: 370,
-    borderRadius: 18,
-    marginTop: 190,
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
     justifyContent: 'center',
+    marginTop: (140 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
+
   btnText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
     fontFamily: 'Inter-SemiBold',
   },
   vector: {
-    height: 50,
-    width: 50,
-    margin: 15,
+    height: (50 / dim.h) * dim.Height,
+    width: (50 / dim.w) * dim.Width,
+    margin: (15 / dim.h) * dim.Height,
   },
 });
-export default userDiet;
+export default UserDiet;

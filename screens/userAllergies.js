@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import userGwh from './userGwh';
-import userDiet from './userDiet';
-import userIng from './userIng';
-import ProgressBar from './ProgressBar';
+import UserGwh from './UserGwh';
+import UserDiet from './UserDiet';
+import UserIng from './UserIng';
+import ProgressBar from '../assets/progressbar3';
 import {
   SafeAreaView,
   Platform,
@@ -19,8 +19,10 @@ import {
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import dim from '../util/dim';
+
 const Stack = createNativeStackNavigator();
-const userAllergies = ({navigation, route}) => {
+const UserAllergies = ({navigation, route}) => {
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -69,7 +71,7 @@ const userAllergies = ({navigation, route}) => {
   };
   const inputValidation = () => {
     if (allergies != '') {
-      navigation.navigate('userDiet', {
+      navigation.navigate('UserDiet', {
         fitnessGoal: goal,
         gender: gender,
         age: age,
@@ -87,7 +89,10 @@ const userAllergies = ({navigation, route}) => {
   };
   return (
     <View style={styles.container}>
-      <ProgressBar />
+      <ProgressBar
+        width={(350 / dim.w) * dim.Width}
+        style={{marginBottom: (20 / dim.h) * dim.Height}}
+      />
       <Text style={styles.Heading}>
         Which restrictions/allergies do you have?
       </Text>
@@ -148,46 +153,49 @@ const userAllergies = ({navigation, route}) => {
 };
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    marginHorizontal: 20,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
     justifyContent: 'center',
   },
   Heading: {
-    marginTop: 20,
+    marginTop: (20 / dim.h) * dim.Height,
     color: 'rgba(0, 0, 0, 0.85)',
     fontSize: 20,
     fontFamily: 'Inter-SemiBold',
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listItem: {
-    height: 72,
-    width: 370,
+    height: (72 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'thistle',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
   listText: {
     color: '#1F2024',
     fontSize: 17,
     fontFamily: 'Inter-Regular',
-    lineHeight: 30,
-    marginLeft: 8,
+    lineHeight: (30 / dim.h) * dim.Height,
+    marginLeft: (8 / dim.w) * dim.Width,
   },
   btn: {
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
-    height: 50,
-    width: 370,
-    borderRadius: 18,
-    marginTop: 220,
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
     justifyContent: 'center',
+    marginTop: (180 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
+
   btnText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
     fontFamily: 'Inter-SemiBold',
   },
 });
-export default userAllergies;
+export default UserAllergies;

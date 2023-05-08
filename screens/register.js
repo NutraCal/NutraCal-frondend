@@ -6,13 +6,16 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  TextInput,
 } from 'react-native';
 import type {Node} from 'react';
-import {Button, TextInput} from 'react-native-paper';
 import Login from './Login';
-const register = ({route, navigation}) => {
+import {endpoint} from '../util/config';
+import dim from '../util/dim';
+const Register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -25,6 +28,8 @@ const register = ({route, navigation}) => {
   const [ings, setIngs] = useState('');
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
+  const [pressed, setPressed] = useState(false);
+
   React.useEffect(() => {
     if (
       route.params?.fitnessGoal &&
@@ -71,12 +76,38 @@ const register = ({route, navigation}) => {
     route.params?.diet,
     route.params?.ingredients,
   ]);
+
   const credentialsValidation = () => {
+    setPressed(true);
+    console.log('trying');
+    console.log('email');
+
+    if (email == '' && password == '') {
+      Alert.alert('Empty field', 'Please enter email and password', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    if (email == '') {
+      Alert.alert('Empty field', 'Please enter email', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    if (password == '') {
+      Alert.alert('Empty field', 'Please enter password', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
     if (
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
       /^(?=.*\d).{8,12}$/.test(password)
     ) {
-      fetch('http://10.113.12.243:3000/users/createUser', {
+      fetch(endpoint + '/users/createUser', {
         method: 'POST',
 
         headers: {
@@ -126,56 +157,37 @@ const register = ({route, navigation}) => {
 
       <View style={styles.midcontainer}>
         <View>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label1}>Email</Text>
+
           <TextInput
+            style={styles.txtinput}
             placeholder="Enter your email"
             value={email}
-            mode="outlined"
+            placeholderTextColor="#C5C6CC"
             onChangeText={text => setEmail(text)}
-            style={styles.input}></TextInput>
-          <Text
-            style={{
-              color: email != '' ? '#f3f3f3' : '#FF0000',
-              fontSize: 12,
-              marginBottom: 10,
-              fontFamily: 'Inter-Light',
-            }}>
-            Please fill out the field
-          </Text>
+            style={styles.txtinput}
+          />
         </View>
+
         <View>
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label1}>Password</Text>
           <TextInput
+            style={styles.txtinput}
             placeholder="Enter your password"
             value={password.value}
-            mode="outlined"
+            placeholderTextColor="#C5C6CC"
             onChangeText={text => setPassword(text)}
-            style={styles.input}
-            secureTextEntry></TextInput>
-          <Text
-            style={{
-              color: email != '' ? '#f3f3f3' : '#FF0000',
-              fontSize: 12,
-              marginBottom: 10,
-              fontFamily: 'Inter-Light',
-            }}>
-            Please fill out the field
-          </Text>
+            secureTextEntry
+          />
         </View>
-        <Text style={styles.Text}>I agree to the terms and conditions,</Text>
-        <Button
-          style={styles.btn}
-          onPress={credentialsValidation}
-          color="#90C888"
-          labelStyle={{color: 'white'}}
-          mode="contained">
-          Sign Up
-        </Button>
+
+        <TouchableOpacity style={styles.btn} onPress={credentialsValidation}>
+          <Text style={styles.btnText}>Sign Up</Text>
+        </TouchableOpacity>
 
         <View style={styles.row}>
           <Text
             style={{
-              marginBottom: 10,
               color: 'black',
               fontFamily: 'Inter-Regular',
             }}>
@@ -197,82 +209,83 @@ const register = ({route, navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 60,
-    padding: 20,
-    marginTop: 50,
+    marginTop: (50 / dim.h) * dim.Height,
+    marginHorizontal: (20 / dim.w) * dim.Width,
+    justifyContent: 'center',
   },
 
   midcontainer: {
     justifyContent: 'center',
-    alignItems: 'center',
   },
+
   h1: {
     fontSize: 25,
     fontFamily: 'Inter-SemiBold',
     textAlign: 'left',
-    marginBottom: 10,
+    marginBottom: (10 / dim.h) * dim.Height,
     color: 'black',
   },
 
   h3: {
     color: 'grey',
-    marginBottom: 30,
+    marginBottom: (30 / dim.h) * dim.Height,
     fontSize: 17,
     fontFamily: 'Inter-Regular',
   },
+
+  label1: {
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (10 / dim.h) * dim.Height,
+    fontSize: 17,
+    fontFamily: 'Inter-Medium',
+    textAlign: 'left',
+    color: 'black',
+    alignSelf: 'flex-start',
+  },
+
   Text: {
     color: 'grey',
-    marginVertical: 30,
+    marginVertical: (30 / dim.h) * dim.Height,
     fontSize: 18,
     textAlign: 'center',
     fontFamily: 'Inter-Regular',
   },
 
-  label: {
-    fontSize: 16,
-    marginHorizontal: 10,
-    color: 'black',
-    fontFamily: 'Inter-Regular',
-  },
-
-  input: {
-    height: 50,
-    marginBottom: 10,
-    width: 300,
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   btn: {
-    marginTop: 20,
-    width: 300,
-    marginBottom: 40,
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: (20 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
+  },
+
+  btnText: {
+    color: 'white',
+    fontSize: 16,
     fontFamily: 'Inter-SemiBold',
   },
 
-  touchable: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  txtinput: {
+    borderColor: '#E1E3E8',
     borderWidth: 1,
-    alignItems: 'center',
-    width: 150,
-    height: 35,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
     borderRadius: 10,
-    borderColor: '#90C888',
-  },
-
-  icon: {
-    height: 25,
-    width: 25,
-    marginRight: 6,
-  },
-
-  hcontainer: {
-    marginTop: 20,
-    justifyContent: 'center',
-    marginBottom: 30,
-  },
-  row: {
-    flexDirection: 'row',
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 });
-export default register;
+export default Register;
