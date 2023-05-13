@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -12,94 +12,37 @@ import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import {AuthContext} from '../context/AuthContext';
 import dim from '../util/dim';
 
 export default function Shopping({route, navigation}) {
-  const {email} = route.params;
+  // const {email} = route.params;
 
-  const [loadId, setLoadId] = useState(true);
+  const {user} = useContext(AuthContext);
+
+  const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
+
+  // const [loadId, setLoadId] = useState(true);
   const [loadData, setLoadData] = useState(false);
-  const [userId, setUserId] = useState('');
+  // const [userId, setUserId] = useState('');
   const [json, setJson] = useState('');
-
   const [getlist, setList] = useState([]);
-
   const [item, setItem] = useState('');
   const [editItem, setEditItem] = useState(0);
 
-  const updateList = () => {
-    setList(list =>
-      getlist.map(element =>
-        element.key === editItem ? {key: element.key, data: item} : element,
-      ),
-    );
-    setItem('');
-    setEditItem(0);
-  };
-
-  const updateItems = item => {
-    setItem(item.data);
-    setEditItem(item.key);
-  };
-
-  const additems = () => {
-    console.log('in add item function');
-    // setList([...getlist, {key: Math.random().toString(), data: item}]);
-    setList([...getlist, item]);
-    // console.log('list' + getlist);
-
-    setItem('');
-    console.log(getlist);
-    // addItem();
-    // setLoadData(!loadData);
-  };
-
-  const deleteItem = key => {
-    console.log(key);
-
-    // setList(list => getlist.filter(element => element.key != key));
-    const list = getlist.filter(ele => key != getlist.indexOf(ele));
-    console.log('list', list);
-    setList(list);
-
-    console.log(getlist);
-  };
-
-  const getUserId = async res => {
-    console.log('inside');
-    try {
-      const response = await axios({
-        method: 'get',
-        url: endpoint + '/users/getUserId/' + email,
-        headers: {},
-      });
-
-      // console.log(JSON.stringify(response.data));
-      setUserId(response.data);
-      setLoadData(!loadData);
-      // return json;
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
   const getShoppingList = async res => {
     console.log('getting list');
-    console.log(userId);
     try {
       const response = await axios({
         method: 'get',
         url: endpoint + '/shoppingList/viewList/' + userId,
         headers: {},
       });
-
-      // console.log(JSON.stringify(response.data[0].list));
-      console.log('res', response.data);
-      const slist = response.data[0].list;
-      console.log(...slist);
-      setList([...slist]);
+      setList(response.data);
+      setLoadData(false);
     } catch (error) {
-      console.log('error');
+      console.log('error hehehehheheh');
       console.log(error.response.data);
     }
   };
@@ -107,32 +50,10 @@ export default function Shopping({route, navigation}) {
   const addItem = async res => {
     var data = JSON.stringify({
       userId: userId,
-      list: getlist,
+      list: ['Butter'],
     });
 
     console.log('data' + data);
-    // try {
-    //   const response = await axios({
-    //     method: 'post',
-    //     url: endpoint + '/shoppingList/addList',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     data: data,
-    //   });
-    //   console.log(JSON.stringify(response.data));
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
-  };
-
-  const delItem = async res => {
-    var data = JSON.stringify({
-      userId: userId,
-      list: ['Sugar', 'Butter', 'Rice', 'Corn', 'Milk'],
-    });
-
-    console.log(data);
     try {
       const response = await axios({
         method: 'put',
@@ -143,17 +64,38 @@ export default function Shopping({route, navigation}) {
         data: data,
       });
       console.log(JSON.stringify(response.data));
+      setLoadData(true);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  useEffect(() => {
-    getUserId();
-  }, []);
+  const delItem = async res => {
+    var data = JSON.stringify({
+      userId: userId,
+      list: ['Butter'],
+    });
+
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/shoppingList/removeItem',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+    } catch (error) {
+      console.log(error.message);
+    }
+    setLoadData(true);
+  };
 
   useEffect(() => {
     console.log(userId);
+    console.log(email);
     getShoppingList();
   }, [loadData]);
 
@@ -168,7 +110,7 @@ export default function Shopping({route, navigation}) {
             value={item}
             onChangeText={text => setItem(text)}
           />
-          <TouchableOpacity style={styles.cbtn} onPress={additems}>
+          <TouchableOpacity style={styles.cbtn} onPress={() => addItem()}>
             <Text style={{fontSize: 20, color: 'white'}}>+</Text>
           </TouchableOpacity>
         </View>
@@ -193,7 +135,7 @@ export default function Shopping({route, navigation}) {
                     <Text style={styles.name}>{item}</Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => deleteItem(index)}
+                    onPress={() => delItem()}
                     style={[
                       styles.cbtn,
                       {

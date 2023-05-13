@@ -18,46 +18,19 @@ import moment from 'moment';
 import DatePicker from 'react-native-modern-datepicker';
 import Modal from 'react-native-modal';
 
+import {useFocusEffect} from '@react-navigation/native';
+
 export default function DietPlans({route, navigation}) {
   const {email} = route.params;
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [loadData, setLoadData] = useState(true);
-
   const [selectedDate, setSelectedDate] = useState(
     moment().format('YYYY-MM-DD'),
   );
-  const [cDate, setCDate] = useState(moment().format('MMMM YYYY'));
+  const [cDate, setCDate] = useState(moment().format('D MMMM YYYY'));
   const [weekDates, setWeekDates] = useState([]);
-  const [selectedD, setSelectedD] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const handleDateChange = date => {
-    console.log('here');
-    // setSelectedD(date);
-    // const formattedDate = moment(date, 'YYYY/MM/DD').format('D MMMM YYYY');
-    // setCDate(formattedDate);
-
-    const fDate = moment(date, 'YYYY/MM/DD').format('YYYY-MM-DD');
-    const currentDate = moment(fDate); // set the current date to 27th April, 2023
-
-    // get the starting and ending dates for the current week
-    const startDate = currentDate.clone().startOf('week');
-    const endDate = currentDate.clone().endOf('week');
-
-    // create an array of dates for the current week
-    const weekDates = [];
-    let currentDateIter = startDate.clone();
-    while (currentDateIter <= endDate) {
-      weekDates.push(currentDateIter.format('YYYY-MM-DD'));
-      currentDateIter.add(1, 'days');
-    }
-    // setWeekDates(weekDates);
-
-    console.log(weekDates.toString());
-    setWeekDates(weekDates);
-
-    setModalVisible(false);
-  };
+  const [date, setDate] = useState(null);
 
   const handleDatePress = date => {
     setSelectedDate(date);
@@ -67,27 +40,64 @@ export default function DietPlans({route, navigation}) {
     // ...
   };
 
-  useEffect(() => {
+  const getWeekDates = date => {
     // Generate an array of dates for the current week
-    console.log(loadData);
-    if (loadData) {
-      console.log('here in useeffect');
-      const weekStart = moment().startOf('week');
-      const weekEnd = moment().endOf('week');
-
-      const dates = [];
-      for (
-        let date = moment(weekStart);
-        date <= weekEnd;
-        date = date.clone().add(1, 'day')
-      ) {
-        dates.push(date.format('YYYY-MM-DD'));
-      }
-      console.log(dates.toString());
-      setWeekDates(dates);
-      setLoadData(false);
+    console.log(date);
+    console.log('here in function');
+    const weekStart = moment(date).startOf('week');
+    const weekEnd = moment(date).endOf('week');
+    const dates = [];
+    for (
+      let date = moment(weekStart);
+      date <= weekEnd;
+      date = date.clone().add(1, 'day')
+    ) {
+      dates.push(date.format('YYYY-MM-DD'));
     }
-  }, []);
+    console.log(dates.toString());
+    setWeekDates(dates);
+  };
+
+  const handleDateChange = date => {
+    const formattedDate = moment(date, 'YYYY/MM/DD').format('D MMMM YYYY');
+    setCDate(formattedDate);
+    const fDate = moment(date, 'YYYY/MM/DD').format('YYYY-MM-DD');
+    console.log(fDate);
+    const currentDate = moment(fDate).toDate(); // set the current date to user selected date
+    console.log(currentDate);
+    setDate(currentDate);
+    setTimeout(() => {
+      setModalVisible(false);
+    }, 1000);
+  };
+
+  // useEffect(() => {
+  //   const currentDate = moment().toDate();
+  //   getWeekDates(currentDate);
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Fetch the latest data or update the state here
+      const currentDate = moment().toDate();
+      const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
+        'D MMMM YYYY',
+      );
+      setCDate(formattedDate);
+      getWeekDates(currentDate);
+
+      // Return a cleanup function if needed
+      return () => {
+        // Clean up any subscriptions or resources if necessary
+      };
+    }, []),
+  );
+
+  useEffect(() => {
+    if (date !== null) {
+      getWeekDates(date);
+    }
+  }, [date]);
 
   return (
     <View style={styles.container}>
@@ -98,9 +108,10 @@ export default function DietPlans({route, navigation}) {
       <Modal isVisible={isModalVisible}>
         <View>
           <DatePicker
-            mode="date"
-            cancelBtnText="Cancel"
-            onSelectedChange={handleDateChange}
+            mode="calendar"
+            onDateChange={date => {
+              handleDateChange(date);
+            }}
             options={{
               textHeaderColor: '#333333',
               textDefaultColor: '#333333',
@@ -109,7 +120,6 @@ export default function DietPlans({route, navigation}) {
             }}
             style={{borderRadius: 0}}
           />
-          {/* <Button title="Submit" onPress={() => setModalVisible(false)} /> */}
         </View>
       </Modal>
 

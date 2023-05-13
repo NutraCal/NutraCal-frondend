@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  Image,
 } from 'react-native';
 import {Avatar, Title} from 'react-native-paper';
 import Recipe1 from '../assets/images/recipe1.svg';
@@ -19,9 +20,7 @@ import Icon2 from '../assets/images/icon2.svg';
 import Icon3 from '../assets/images/icon3.svg';
 import Icon4 from '../assets/images/icon4.svg';
 import Star from '../assets/images/star.svg';
-import Dp1 from '../assets/images/dp1.svg';
-import Dp2 from '../assets/images/dp2.svg';
-import Dp3 from '../assets/images/dp3.svg';
+
 import Reply from '../assets/images/reply.svg';
 import Like from '../assets/images/like.svg';
 import axios from 'axios';
@@ -232,12 +231,15 @@ export default function ViewRecipe({navigation}) {
               marginTop: (10 / dim.h) * dim.Height,
               flexDirection: 'row',
             }}>
-            <Dp1
-              width={(50 / dim.w) * dim.Width}
-              height={(50 / dim.w) * dim.Width}
+            <Image
+              source={require('../assets/images/homedp.png')}
+              style={{
+                width: (50 / dim.w) * dim.Width,
+                height: (50 / dim.w) * dim.Width,
+              }}
             />
             <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
-              <Text style={styles.name}>Bessie Cooper</Text>
+              <Text style={styles.name}>Bessie hehe hhehehCooper</Text>
               <Text style={[styles.tag, {width: (300 / dim.w) * dim.Width}]}>
                 I think you can tell a lot about a person by whether they use a
                 shape
@@ -266,9 +268,12 @@ export default function ViewRecipe({navigation}) {
               marginTop: (10 / dim.h) * dim.Height,
               flexDirection: 'row',
             }}>
-            <Dp1
-              width={(50 / dim.w) * dim.Width}
-              height={(50 / dim.w) * dim.Width}
+            <Image
+              source={require('../assets/images/homedp.png')}
+              style={{
+                width: (50 / dim.w) * dim.Width,
+                height: (50 / dim.w) * dim.Width,
+              }}
             />
             <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
               <Text style={styles.name}>Bessie Cooper</Text>
@@ -296,9 +301,12 @@ export default function ViewRecipe({navigation}) {
               marginTop: (10 / dim.h) * dim.Height,
               flexDirection: 'row',
             }}>
-            <Dp1
-              width={(50 / dim.w) * dim.Width}
-              height={(50 / dim.h) * dim.Height}
+            <Image
+              source={require('../assets/images/homedp.png')}
+              style={{
+                width: (50 / dim.w) * dim.Width,
+                height: (50 / dim.w) * dim.Width,
+              }}
             />
             <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
               <Text style={styles.name}>Bessie Cooper</Text>

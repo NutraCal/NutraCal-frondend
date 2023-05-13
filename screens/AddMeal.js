@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  Image,
 } from 'react-native';
 // import {ScrollView} from 'react-native-gesture-handler';
-import Cover from '../assets/images/recipecover.svg';
+
 import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -118,9 +119,12 @@ export default function AddMeal({route, navigation}) {
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container2}>
-          <Cover
-            width={(90 / dim.w) * dim.Width}
-            height={(150 / dim.w) * dim.Width}
+          <Image
+            source={require('../assets/images/recipecover.png')}
+            style={{
+              width: (90 / dim.w) * dim.Width,
+              height: (150 / dim.w) * dim.Width,
+            }}
           />
 
           <View

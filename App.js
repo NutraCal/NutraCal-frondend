@@ -1,4 +1,12 @@
 import {useContext} from 'react';
+
+// import {LogBox} from 'react-native';
+// // Ignore log notification by message:
+// LogBox.ignoreLogs(['Warning: ...']);
+// // Ignore all log notifications:
+// LogBox.ignoreAllLogs();
+
+import './components/ignoreWarnings';
 import {StyleSheet} from 'react-native';
 
 import {AuthProvider} from './context/AuthContext';

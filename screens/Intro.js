@@ -17,7 +17,6 @@ import Mobile from '../assets/mobile.svg';
 import Ob1 from '../assets/Ob1.svg';
 import Ob2 from '../assets/Ob2.svg';
 import Ob3 from '../assets/Ob3.svg';
-
 import Login from './Login';
 import UserFitnessGoal from './UserFitnessGoal';
 import axios from 'axios';

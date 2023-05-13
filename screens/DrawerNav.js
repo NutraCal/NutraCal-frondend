@@ -23,6 +23,7 @@ const DrawerNav = ({route, navigation}) => {
       drawerContent={props => <CustomDrawer {...props} />}
       screenOptions={{
         headerShown: false,
+        swipeEnabled: false,
         drawerActiveBackgroundColor: '#91C788',
         drawerActiveTintColor: '#fff',
         drawerInactiveTintColor: '#333',

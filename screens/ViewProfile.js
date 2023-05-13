@@ -17,6 +17,7 @@ const ViewProfile = ({route, navigation}) => {
   const {user} = useContext(AuthContext);
 
   const email = user?.data?.user?.email;
+  
   const {editable} = route.params;
   const [editProfile, IsEditableProfile] = useState(editable);
   const [edit, IsEditable] = useState(false);

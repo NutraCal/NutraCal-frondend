@@ -12,6 +12,7 @@ import type {Node} from 'react';
 import Login from './Login';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
+
 const Register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -115,6 +116,7 @@ const Register = ({route, navigation}) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: 'sonia',
           email: email,
           password: password,
           fitnessGoal: goal,
@@ -127,6 +129,7 @@ const Register = ({route, navigation}) => {
           allergies: allergies,
           diet: diet,
           ingredients: 'abc',
+          role: 'User',
         }),
       }).then(response => {
         if (response.status == 200) {

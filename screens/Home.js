@@ -5,8 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   BackHandler,
+  Image,
 } from 'react-native';
-import Dp from '../assets/images/homedp.svg';
+
 import Calories from '../assets/icons/calories.svg';
 import Weight from '../assets/icons/weight.svg';
 import Water from '../assets/icons/water.svg';
@@ -17,13 +18,6 @@ import dim from '../util/dim';
 
 export default function Home({route, navigation}) {
   const {email} = route.params;
-
-  // useEffect(() => {
-  //   const hehe = (156 / 872.72) * dim.Height;
-  //   console.log('width ' + dim.Width);
-  //   console.log('height ' + dim.Height);
-  //   console.log('height ' + hehe);
-  // }, []);
 
   return (
     <View style={styles.container}>
@@ -48,10 +42,20 @@ export default function Home({route, navigation}) {
 
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Dp
+            {/* <Dp
               width={(70 / dim.w) * dim.Width}
               height={(70 / dim.w) * dim.Width}
               style={{
+                marginLeft: (8 / dim.w) * dim.Width,
+                marginBottom: (5 / dim.w) * dim.Width,
+              }}
+            /> */}
+
+            <Image
+              source={require('../assets/images/homedp.png')}
+              style={{
+                width: (70 / dim.w) * dim.Width,
+                height: (70 / dim.w) * dim.Width,
                 marginLeft: (8 / dim.w) * dim.Width,
                 marginBottom: (5 / dim.w) * dim.Width,
               }}

@@ -341,7 +341,7 @@ const NutritionistRegister = ({navigation, route}) => {
           <Modal isVisible={isModalVisible}>
             <View>
               <DatePicker
-                mode="time"
+                mode="datepicker"
                 onTimeChange={handleTimeChange}
                 options={{
                   textHeaderColor: '#333333',
