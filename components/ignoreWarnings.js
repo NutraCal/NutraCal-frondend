@@ -4,7 +4,7 @@ if (__DEV__) {
   const ignoreWarns = [
     'Require cycle:',
     'Found screens with the same name nested inside one another',
-    'VirtualizedLists should never be nested',
+    ' VirtualizedLists should never be nested',
   ];
 
   const warn = console.warn;

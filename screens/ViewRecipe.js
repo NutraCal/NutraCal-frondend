@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -20,6 +20,7 @@ import Step from '../assets/icons/step.svg';
 
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import {AuthContext} from '../context/AuthContext';
 import dim from '../util/dim';
 
 export default function ViewRecipe({route, navigation}) {
@@ -35,6 +36,10 @@ export default function ViewRecipe({route, navigation}) {
   const [quantity, setQuantity] = useState([]);
   const [item, setItem] = useState('');
   const [getlist, setList] = useState([]);
+
+  const {user} = useContext(AuthContext);
+
+  const userId = user?.data?.user?._id;
 
   const searchRecipeByName = async res => {
     console.log('here');
@@ -71,6 +76,29 @@ export default function ViewRecipe({route, navigation}) {
     }
   };
 
+  const updateShoppingList = async res => {
+    console.log(title);
+    console.log('going to update shopping list');
+    var data = JSON.stringify({
+      userId: userId,
+      list: getlist,
+    });
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/shoppingList/updateList',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      alert('added');
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
   useEffect(() => {
     searchRecipeByName();
   }, []);
@@ -186,17 +214,26 @@ export default function ViewRecipe({route, navigation}) {
                 </View>
 
                 <View>
-                  <Text
-                    style={[
-                      styles.name,
-                      {width: 80, textAlign: 'center', marginBottom: 10},
-                    ]}>
+                  <Text style={[styles.name, {width: 80, textAlign: 'center'}]}>
                     {item}
                   </Text>
                 </View>
               </View>
             )}
           />
+
+          <TouchableOpacity
+            style={styles.btnn}
+            onPress={() => updateShoppingList()}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 16,
+                fontFamily: 'Inter-SemiBold',
+              }}>
+              Add to Shopping List
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
@@ -290,5 +327,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'center',
+  },
+
+  btnn: {
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: (30 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
   },
 });

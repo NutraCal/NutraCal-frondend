@@ -28,6 +28,8 @@ import {endpoint} from '../util/config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import {useFocusEffect} from '@react-navigation/native';
+
 import {LogBox} from 'react-native';
 
 export default function SearchRecipe({route, navigation}) {
@@ -37,7 +39,6 @@ export default function SearchRecipe({route, navigation}) {
   const [recipes, setRecipes] = useState([]);
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
-  const onChangeSearch = query => setSearchQuery(query);
 
   const searchCategory = async res => {
     setLoading(true);
@@ -62,6 +63,38 @@ export default function SearchRecipe({route, navigation}) {
     }
   };
 
+  const fetchRecipe = async res => {
+    console.log(searchQuery);
+    if (searchQuery != '') {
+      setLoading(true);
+      var data = JSON.stringify({
+        title: 'Broccoli Salad',
+      });
+      try {
+        const response = await axios({
+          method: 'post',
+          url: endpoint + '/recipes/viewRecipeByName',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: data,
+        });
+
+        console.log(JSON.stringify(response.data));
+        setRecipes(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error.response);
+      }
+    } else {
+      console.log('empty query');
+    }
+  };
+
+  const onChangeSearch = query => {
+    setSearchQuery(query);
+  };
+
   const sortByTitle = () => {
     const sortedData = [...recipes].sort((a, b) =>
       a.Title.localeCompare(b.Title),
@@ -76,9 +109,14 @@ export default function SearchRecipe({route, navigation}) {
   }, [category]);
 
   useEffect(() => {
-    console.log('here in useeee');
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    LogBox.ignoreLogs([' VirtualizedLists should never be nested']);
   }, []);
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  //   }, []),
+  // );
 
   return (
     <View style={styles.container}>
@@ -88,6 +126,7 @@ export default function SearchRecipe({route, navigation}) {
         <Searchbar
           placeholder="Recipes"
           onChangeText={onChangeSearch}
+          onIconPress={fetchRecipe}
           value={searchQuery}
           style={styles.searchbar}
         />

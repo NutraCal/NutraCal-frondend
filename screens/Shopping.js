@@ -7,6 +7,7 @@ import {
   TextInput,
   ScrollView,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
@@ -29,9 +30,22 @@ export default function Shopping({route, navigation}) {
   const [json, setJson] = useState('');
   const [getlist, setList] = useState([]);
   const [item, setItem] = useState('');
+  const [sitem, setSitem] = useState('');
   const [editItem, setEditItem] = useState(0);
 
+  const [loading, setLoading] = useState(false);
+
+  // const convertToSentenceCase = array => {
+  //   const newArray = array.map(item => {
+  //     const firstLetter = item.charAt(0).toUpperCase();
+  //     const restOfString = item.slice(1).toLowerCase();
+  //     return firstLetter + restOfString;
+  //   });
+  //   return newArray;
+  // };
+
   const getShoppingList = async res => {
+    setLoading(true);
     console.log('getting list');
     try {
       const response = await axios({
@@ -39,14 +53,17 @@ export default function Shopping({route, navigation}) {
         url: endpoint + '/shoppingList/viewList/' + userId,
         headers: {},
       });
+      // const convertedArray = convertToSentenceCase(response.data);
       setList(response.data);
       setLoadData(false);
+      setLoading(false);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
   const addItem = async res => {
+    setLoading(true);
     var data = JSON.stringify({
       userId: userId,
       list: ['Butter'],
@@ -63,16 +80,21 @@ export default function Shopping({route, navigation}) {
         data: data,
       });
       console.log(JSON.stringify(response.data));
-      setLoadData(true);
+      setLoadData(false);
+      setLoading(false);
     } catch (error) {
       console.log(error.message);
     }
   };
 
   const delItem = async res => {
+    // setLoading(true);
+    setLoadData(true);
+    console.log('hehehehhehehh');
+    console.log(sitem);
     var data = JSON.stringify({
       userId: userId,
-      list: ['Butter'],
+      list: [sitem],
     });
 
     console.log(data);
@@ -86,10 +108,10 @@ export default function Shopping({route, navigation}) {
         data: data,
       });
       console.log(JSON.stringify(response.data));
+      setLoadData(true);
     } catch (error) {
       console.log(error.message);
     }
-    setLoadData(true);
   };
 
   useEffect(() => {
@@ -100,7 +122,9 @@ export default function Shopping({route, navigation}) {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}>
         <View style={styles.textinputc}>
           <TextInput
             style={[styles.txtinput, {width: (300 / dim.w) * dim.Width}]}
@@ -114,49 +138,57 @@ export default function Shopping({route, navigation}) {
           </TouchableOpacity>
         </View>
 
-        <View style={{width: (350 / dim.w) * dim.Width}}>
-          <FlatList
-            data={getlist}
-            renderItem={({index, item}) => (
-              <View key={index}>
-                <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Ing1
-                      width={(40 / dim.w) * dim.Width}
-                      height={(39 / dim.w) * dim.Width}
-                      style={{marginRight: (20 / dim.w) * dim.Width}}
-                    />
-                    <Text style={styles.name}>{item}</Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => delItem()}
-                    style={[
-                      styles.cbtn,
-                      {
-                        marginLeft: (50 / dim.w) * dim.Width,
-                        elevation: 2,
-                        backgroundColor: 'white',
-                      },
-                    ]}>
-                    <Text
+        {loading ? (
+          <ActivityIndicator></ActivityIndicator>
+        ) : (
+          <View style={{width: (350 / dim.w) * dim.Width}}>
+            <FlatList
+              data={getlist}
+              renderItem={({index, item}) => (
+                <View key={index}>
+                  <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
+                    <View
                       style={{
-                        fontSize: 20,
-                        color: '#91C788',
-                        alignSelf: 'center',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}>
-                      -
-                    </Text>
-                  </TouchableOpacity>
+                      <Ing1
+                        width={(40 / dim.w) * dim.Width}
+                        height={(39 / dim.w) * dim.Width}
+                        style={{marginRight: (20 / dim.w) * dim.Width}}
+                      />
+                      <Text style={styles.name}>{item}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSitem(item);
+                        console.log('going tooooooooooooooooooo');
+                        delItem();
+                      }}
+                      style={[
+                        styles.cbtn,
+                        {
+                          marginLeft: (50 / dim.w) * dim.Width,
+                          elevation: 2,
+                          backgroundColor: 'white',
+                        },
+                      ]}>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          color: '#91C788',
+                          alignSelf: 'center',
+                        }}>
+                        -
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            )}
-          />
-        </View>
+              )}
+            />
+          </View>
+        )}
       </ScrollView>
     </View>
   );
