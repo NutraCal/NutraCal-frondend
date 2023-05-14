@@ -56,6 +56,7 @@ import StepCount from './screens/StepCount';
 import DietPlans from './screens/DietPlans';
 
 import ViewThread from './screens/ViewThread';
+import ViewBlog from './screens/ViewBlog';
 
 import dim from './util/dim';
 
@@ -136,7 +137,7 @@ export default function MainNavigator() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{headerShown: true}}
+          options={{headerShown: false}}
         />
 
         <Stack.Screen
@@ -278,6 +279,12 @@ export default function MainNavigator() {
           name="ViewThread"
           component={ViewThread}
           options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="View"
+          component={ViewBlog}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

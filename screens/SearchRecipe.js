@@ -1,11 +1,13 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
   StyleSheet,
   Image,
-  ScrollView,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import {Searchbar, Button, Avatar} from 'react-native-paper';
 import Sortic from '../assets/sorticon.svg';
@@ -21,15 +23,68 @@ import Pop1 from '../assets/images/pop1.svg';
 import Forw from '../assets/forwardbtn.svg';
 import HomeHeader from './HomeHeader';
 import dim from '../util/dim';
+import axios from 'axios';
+import {endpoint} from '../util/config';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import {LogBox} from 'react-native';
 
 export default function SearchRecipe({route, navigation}) {
   const {email} = route.params;
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [category, setCategory] = useState('');
+  const [recipes, setRecipes] = useState([]);
+  const [title, setTitle] = useState('');
+  const [loading, setLoading] = useState(false);
   const onChangeSearch = query => setSearchQuery(query);
+
+  const searchCategory = async res => {
+    setLoading(true);
+    var data = JSON.stringify({
+      category: category,
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/recipes/filterRecipe',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      setRecipes(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const sortByTitle = () => {
+    const sortedData = [...recipes].sort((a, b) =>
+      a.Title.localeCompare(b.Title),
+    );
+    setRecipes(sortedData);
+  };
+
+  useEffect(() => {
+    if (category !== '') {
+      searchCategory();
+    }
+  }, [category]);
+
+  useEffect(() => {
+    console.log('here in useeee');
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled={true}>
         <Searchbar
           placeholder="Recipes"
           onChangeText={onChangeSearch}
@@ -37,78 +92,110 @@ export default function SearchRecipe({route, navigation}) {
           style={styles.searchbar}
         />
         <View style={styles.cont}>
-          <View style={styles.btn}>
-            <Sortic
-              width={(20 / dim.w) * dim.Width}
-              height={(20 / dim.w) * dim.Width}
-            />
+          <TouchableOpacity style={styles.btn} onPress={sortByTitle}>
+            <Icon name="sort" size={20} />
             <Text style={styles.label}>Sort</Text>
-            <Arrowdown
-              width={(20 / dim.w) * dim.Width}
-              height={(20 / dim.w) * dim.Width}
-            />
-          </View>
+            {/* <Button title="Sort by Title" onPress={sortByTitle} /> */}
+          </TouchableOpacity>
 
           <View style={styles.btn}>
-            <Filter
-              width={(20 / dim.w) * dim.Width}
-              height={(20 / dim.w) * dim.Width}
-            />
+            <Ionicons name="filter" size={20} />
             <Text
               style={styles.label}
               onPress={() => navigation.navigate('ApplyFilters')}>
               Filter
             </Text>
-            <Arrowdown
-              width={(20 / dim.w) * dim.Width}
-              height={(20 / dim.w) * dim.Width}
-            />
           </View>
         </View>
         <Text style={styles.heading}>Category</Text>
-
         <ScrollView
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           style={styles.scroll}>
-          <TouchableOpacity style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
+          <TouchableOpacity
+            style={[styles.box, {backgroundColor: '#EBF2FF'}]}
+            onPress={() => {
+              setCategory('Pasta and Salads');
+            }}>
             <Pic1
               width={(60 / dim.w) * dim.Width}
               height={(61 / dim.w) * dim.Width}
               style={{marginBottom: (8 / dim.h) * dim.Height}}
             />
-            <Text style={styles.name1}>Salad</Text>
+            <Text style={styles.name1}>Pastas and Salad</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.box, {backgroundColor: '#F9EBF8'}]}>
+          <TouchableOpacity
+            style={[styles.box, {backgroundColor: '#F9EBF8'}]}
+            onPress={() => {
+              setCategory('Eggs and Meat');
+            }}>
             <Pic2
               width={(60 / dim.w) * dim.Width}
               height={(61 / dim.w) * dim.Width}
               style={{marginBottom: (10 / dim.h) * dim.Height}}
             />
-            <Text style={styles.name1}>Cake</Text>
+            <Text style={styles.name1}>Eggs and Meat</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.box, {backgroundColor: '#EBF2FF'}]}>
+          <TouchableOpacity
+            style={[styles.box, {backgroundColor: '#EBF2FF'}]}
+            onPress={() => {
+              setCategory('Vegetables, Rice and Tacos');
+            }}>
             <Pic3
               width={(60 / dim.w) * dim.Width}
               height={(61 / dim.w) * dim.Width}
               style={{marginBottom: (10 / dim.h) * dim.Height}}
             />
-            <Text style={styles.name1}>Pie</Text>
+            <Text style={styles.name1}>Veg, Rice and Tacos</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.box, {backgroundColor: '#F9EBF8'}]}>
+          <TouchableOpacity
+            style={[styles.box, {backgroundColor: '#F9EBF8'}]}
+            onPress={() => {
+              setCategory('Cakes and Pies');
+            }}>
             <Pic4
               width={(60 / dim.w) * dim.Width}
               height={(61 / dim.w) * dim.Width}
               style={{marginBottom: (10 / dim.h) * dim.Height}}
             />
-            <Text style={styles.name1}>Smoothie</Text>
+            <Text style={styles.name1}>Cakes and Pies</Text>
           </TouchableOpacity>
         </ScrollView>
-        <Text style={styles.heading}>Diet Recommendations</Text>
+        {/* ----------------------------------------------------------------------------------- */}
 
+        {loading ? (
+          <ActivityIndicator></ActivityIndicator>
+        ) : (
+          <FlatList
+            data={recipes}
+            scrollEnabled={false}
+            renderItem={({index, item}) => (
+              <View key={index}>
+                <TouchableOpacity
+                  style={[styles.box3, {backgroundColor: '#EBF2FF'}]}
+                  onPress={() => {
+                    console.log(item.Title);
+                    //setTitle(item.title);
+                    navigation.navigate('ViewRecipe', {title: item.Title});
+                  }}>
+                  <Image
+                    // source={{uri: item.thumbnail}}
+                    source={require('../assets/images/recipecover.png')}
+                    style={styles.thumbnail}
+                  />
+                  <Text style={[styles.name, {width: 250}]}>{item.Title}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        )}
+
+        {/* ----------------------------------------------------------------------------------- */}
+
+        <Text style={styles.heading}>Diet Recommendations</Text>
         <ScrollView
           showsHorizontalScrollIndicator={false}
           horizontal={true}
@@ -158,7 +245,6 @@ export default function SearchRecipe({route, navigation}) {
           </View>
         </ScrollView>
         <Text style={styles.heading}>Popular</Text>
-
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
             <Pop1
@@ -221,7 +307,7 @@ const styles = StyleSheet.create({
   btn: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: (120 / dim.w) * dim.Width,
+    width: (80 / dim.w) * dim.Width,
     alignItems: 'center',
     borderWidth: 1,
     paddingHorizontal: (2 / dim.w) * dim.Width,
@@ -254,7 +340,7 @@ const styles = StyleSheet.create({
   },
 
   box: {
-    height: (120 / dim.h) * dim.Height,
+    height: (130 / dim.h) * dim.Height,
     width: (100 / dim.w) * dim.Width,
     borderRadius: 12,
     margin: (8 / dim.w) * dim.Width,
@@ -307,5 +393,11 @@ const styles = StyleSheet.create({
     color: '#7B6F72',
     fontFamily: 'Inter-Light',
     marginTop: (5 / dim.h) * dim.Height,
+  },
+  thumbnail: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+    borderRadius: 25,
   },
 });

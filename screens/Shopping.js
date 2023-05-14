@@ -42,7 +42,6 @@ export default function Shopping({route, navigation}) {
       setList(response.data);
       setLoadData(false);
     } catch (error) {
-      console.log('error hehehehheheh');
       console.log(error.response.data);
     }
   };

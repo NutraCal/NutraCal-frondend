@@ -10,6 +10,7 @@ import RecipeBook from './SearchRecipe';
 import DietPlans from './DietPlans';
 import Shopping from './Shopping';
 import Blogs from './SearchBlog';
+import ViewBlog from './ViewBlog';
 import DiscussionThread from './DiscussionThread';
 import AddMealScan from './AddMealScan';
 import AddMeal from './AddMeal';
@@ -156,20 +157,21 @@ const TabStack = ({route, navigation}) => {
         initialParams={{email: email}}
         component={Home}
         options={{
+          headerShown: false,
           headerBackTitleVisible: false,
           headerTitleAlign: 'center',
           title: 'Home',
-          headerStyle: {
-            borderBottomWidth: 1,
-            elevation: 5,
-            backgroundColor: '#91C788',
-          },
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            color: 'white',
-            fontFamily: 'Inter-Medium',
-            fontSize: 20,
-          },
+          // headerStyle: {
+          //   borderBottomWidth: 1,
+          //   elevation: 5,
+          //   backgroundColor: '#91C788',
+          // },
+          // headerTitleStyle: {
+          //   fontWeight: 'bold',
+          //   color: 'white',
+          //   fontFamily: 'Inter-Medium',
+          //   fontSize: 20,
+          // },
         }}
       />
       <Tab.Screen
@@ -281,7 +283,7 @@ const TabStack = ({route, navigation}) => {
 
       <Tab.Screen
         name="Blogs"
-        component={Blogs}
+        component={ViewBlog}
         options={({navigation}) => ({
           title: 'Community',
           headerShown: true,
