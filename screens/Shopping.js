@@ -5,16 +5,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ScrollView,
   FlatList,
   ActivityIndicator,
 } from 'react-native';
+
 import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import {AuthContext} from '../context/AuthContext';
 import dim from '../util/dim';
+
+import {useFocusEffect} from '@react-navigation/native';
+
+import {ScrollView} from 'react-native-virtualized-view';
 
 export default function Shopping({route, navigation}) {
   // const {email} = route.params;
@@ -29,8 +33,10 @@ export default function Shopping({route, navigation}) {
   // const [userId, setUserId] = useState('');
   const [json, setJson] = useState('');
   const [getlist, setList] = useState([]);
+
+  const [ditem, setDitem] = useState('');
   const [item, setItem] = useState('');
-  const [sitem, setSitem] = useState('');
+  const [aitem, setAitem] = useState('');
   const [editItem, setEditItem] = useState(0);
 
   const [loading, setLoading] = useState(false);
@@ -66,7 +72,7 @@ export default function Shopping({route, navigation}) {
     setLoading(true);
     var data = JSON.stringify({
       userId: userId,
-      list: ['Butter'],
+      list: [aitem],
     });
 
     console.log('data' + data);
@@ -80,21 +86,22 @@ export default function Shopping({route, navigation}) {
         data: data,
       });
       console.log(JSON.stringify(response.data));
-      setLoadData(false);
+      setLoadData(true);
       setLoading(false);
+      setAitem('');
+      setItem('');
     } catch (error) {
       console.log(error.message);
     }
   };
 
   const delItem = async res => {
-    // setLoading(true);
-    setLoadData(true);
-    console.log('hehehehhehehh');
-    console.log(sitem);
+    setLoading(true);
+    console.log('removing item name');
+    console.log(ditem);
     var data = JSON.stringify({
       userId: userId,
-      list: [sitem],
+      list: [ditem],
     });
 
     console.log(data);
@@ -109,6 +116,7 @@ export default function Shopping({route, navigation}) {
       });
       console.log(JSON.stringify(response.data));
       setLoadData(true);
+      setLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -120,26 +128,57 @@ export default function Shopping({route, navigation}) {
     getShoppingList();
   }, [loadData]);
 
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     // console.log(userId);
+  //     // console.log(email);
+  //     getShoppingList();
+  //   }, [loadData]),
+  // );
+
+  useEffect(() => {
+    if (ditem !== '') {
+      // Call delItem() or perform any other action here with the updated value of sitem
+      console.log(ditem);
+      delItem();
+    }
+  }, [ditem]);
+
+  useEffect(() => {
+    if (aitem !== '') {
+      // Call delItem() or perform any other action here with the updated value of sitem
+      console.log(aitem);
+      addItem();
+    }
+  }, [aitem]);
+
   return (
     <View style={styles.container}>
+      <View style={styles.textinputc}>
+        <TextInput
+          style={[styles.txtinput, {width: (300 / dim.w) * dim.Width}]}
+          placeholder="Type and add your ingredients"
+          placeholderTextColor="#C5C6CC"
+          value={item}
+          onChangeText={text => setItem(text)}
+        />
+        <TouchableOpacity
+          style={styles.cbtn}
+          onPress={() => {
+            setAitem(item);
+            // console.log(aitem);
+            // addItem();
+          }}>
+          <Text style={{fontSize: 20, color: 'white'}}>+</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <View style={styles.textinputc}>
-          <TextInput
-            style={[styles.txtinput, {width: (300 / dim.w) * dim.Width}]}
-            placeholder="Type and add your ingredients"
-            placeholderTextColor="#C5C6CC"
-            value={item}
-            onChangeText={text => setItem(text)}
-          />
-          <TouchableOpacity style={styles.cbtn} onPress={() => addItem()}>
-            <Text style={{fontSize: 20, color: 'white'}}>+</Text>
-          </TouchableOpacity>
-        </View>
-
         {loading ? (
-          <ActivityIndicator></ActivityIndicator>
+          <View style={{flex: 1}}>
+            <ActivityIndicator size="large" color="#91C788"></ActivityIndicator>
+          </View>
         ) : (
           <View style={{width: (350 / dim.w) * dim.Width}}>
             <FlatList
@@ -162,9 +201,7 @@ export default function Shopping({route, navigation}) {
                     </View>
                     <TouchableOpacity
                       onPress={() => {
-                        setSitem(item);
-                        console.log('going tooooooooooooooooooo');
-                        delItem();
+                        setDitem(item);
                       }}
                       style={[
                         styles.cbtn,
@@ -197,8 +234,11 @@ export default function Shopping({route, navigation}) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    padding: (8 / dim.h) * dim.Height,
+    paddingHorizontal: (8 / dim.h) * dim.Height,
     alignItems: 'center',
+    paddingBottom: 0,
+
+    height: '100%',
   },
 
   txtinput: {
@@ -211,7 +251,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     color: 'black',
     fontSize: 16,
-    marginBottom: (5 / dim.h) * dim.Height,
+    marginVertical: (5 / dim.h) * dim.Height,
   },
 
   textinputc: {
@@ -219,7 +259,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: (10 / dim.h) * dim.Height,
-    marginBottom: (10 / dim.h) * dim.Height,
+
     width: (350 / dim.w) * dim.Width,
   },
 
