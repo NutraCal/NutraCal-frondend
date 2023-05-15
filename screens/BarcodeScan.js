@@ -10,6 +10,7 @@ import {
   View,
   Button,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 //import {RNCamera} from 'react-native-camera';
@@ -26,21 +27,7 @@ import {
 import axios from 'axios';
 import dim from '../util/dim';
 
-// type SectionProps = PropsWithChildren<{
-//   title: string,
-// }>;
-
-// function Section({children, title}: SectionProps): JSX.Element {
-//   const isDarkMode = useColorScheme() === 'dark';
-// }
-
 function BarcodeScan(): JSX.Element {
-  // const isDarkMode = useColorScheme() === 'dark';
-
-  // const backgroundStyle = {
-  //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  // };
-
   const [val, setVal] = useState('');
   const [data, setData] = useState('');
   const [calories, setCalories] = useState('');
@@ -48,7 +35,7 @@ function BarcodeScan(): JSX.Element {
   const [proteins, setProteins] = useState('');
   const [carbs, setCarbs] = useState('');
   const [path, setPath] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const onSuccessScan = e => {
     console.log(e.data);
@@ -82,13 +69,18 @@ function BarcodeScan(): JSX.Element {
         response.data.data[0].nutrients.carbohydrates.per_portion,
       );
 
-      const u = JSON.stringify(response.data.data[0].images[1].large);
+      const u = response.data.data[0].images[1].large;
+      console.log('printibg----------------------');
+      console.log(response.data.data[0].images[1].large);
+      console.log('printibg----------------------');
+      console.log(u);
+
       setCalories(cal);
       setFats(f);
       setProteins(p);
       setCarbs(carb);
       setPath(u);
-      console.log('path:', path);
+      setLoading(false);
     } catch (error) {
       console.log(error.response);
     }
@@ -99,13 +91,6 @@ function BarcodeScan(): JSX.Element {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-  useEffect(() => {
-    console.log('path:', path);
-    if (path) {
-      setLoading(false);
-    }
-  }, [path]);
 
   return (
     <View style={styles.sectionContainer}>
@@ -147,7 +132,6 @@ function BarcodeScan(): JSX.Element {
                   height: (200 / dim.h) * dim.Height,
                   marginBottom: (30 / dim.h) * dim.Height,
                   marginTop: (10 / dim.h) * dim.Height,
-                  backgroundColor: 'red',
                 }}
                 source={{uri: path}}
               />
