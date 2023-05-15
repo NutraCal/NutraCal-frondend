@@ -41,14 +41,14 @@ export default function Shopping({route, navigation}) {
 
   const [loading, setLoading] = useState(false);
 
-  // const convertToSentenceCase = array => {
-  //   const newArray = array.map(item => {
-  //     const firstLetter = item.charAt(0).toUpperCase();
-  //     const restOfString = item.slice(1).toLowerCase();
-  //     return firstLetter + restOfString;
-  //   });
-  //   return newArray;
-  // };
+  const convertToSentenceCase = array => {
+    const newArray = array.map(item => {
+      const firstLetter = item.charAt(0).toUpperCase();
+      const restOfString = item.slice(1).toLowerCase();
+      return firstLetter + restOfString;
+    });
+    return newArray;
+  };
 
   const getShoppingList = async res => {
     setLoading(true);
@@ -59,8 +59,8 @@ export default function Shopping({route, navigation}) {
         url: endpoint + '/shoppingList/viewList/' + userId,
         headers: {},
       });
-      // const convertedArray = convertToSentenceCase(response.data);
-      setList(response.data);
+      const convertedArray = convertToSentenceCase(response.data);
+      setList(convertedArray);
       setLoadData(false);
       setLoading(false);
     } catch (error) {
@@ -69,7 +69,6 @@ export default function Shopping({route, navigation}) {
   };
 
   const addItem = async res => {
-    setLoading(true);
     var data = JSON.stringify({
       userId: userId,
       list: [aitem],
@@ -96,9 +95,6 @@ export default function Shopping({route, navigation}) {
   };
 
   const delItem = async res => {
-    setLoading(true);
-    console.log('removing item name');
-    console.log(ditem);
     var data = JSON.stringify({
       userId: userId,
       list: [ditem],
@@ -176,9 +172,10 @@ export default function Shopping({route, navigation}) {
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
         {loading ? (
-          <View style={{flex: 1}}>
-            <ActivityIndicator size="large" color="#91C788"></ActivityIndicator>
-          </View>
+          <ActivityIndicator
+            size="large"
+            color="#91C788"
+            style={{marginTop: (250 / dim.h) * dim.Height}}></ActivityIndicator>
         ) : (
           <View style={{width: (350 / dim.w) * dim.Width}}>
             <FlatList
@@ -290,4 +287,23 @@ const styles = StyleSheet.create({
     marginTop: (5 / dim.h) * dim.Height,
     width: (180 / dim.w) * dim.Width,
   },
+
+  ac: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // activityIndicator: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   bottom: 0,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
 });
