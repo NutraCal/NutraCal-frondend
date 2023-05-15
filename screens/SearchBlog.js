@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -11,10 +11,53 @@ import N1 from '../assets/images/nutritionist1.svg';
 import N2 from '../assets/images/nutritionist2.svg';
 import N3 from '../assets/images/nutritionist3.svg';
 import dim from '../util/dim';
+import DuoToggleSwitch from 'react-native-duo-toggle-switch';
 
-export default function AddRecipe() {
+export default function SearchBlog({route, navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [activeView, setActiveView] = useState('nutritionist');
   const onChangeSearch = query => setSearchQuery(query);
+
+  const handleToggle = value => {
+    setActiveView(value);
+  };
+
+  const NutritionistView = () => (
+    <View>
+      <TouchableOpacity style={styles.box3}>
+        <N1 width={70} height={50} style={{marginRight: 20}} />
+        <View style={{width: 220}}>
+          <Text style={styles.name}>Anamwp</Text>
+          <Text style={styles.desc}>Nutritionist</Text>
+        </View>
+        <Text style={styles.rating}>4.8</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.box3}>
+        <N2 width={70} height={50} style={{marginRight: 20}} />
+        <View style={{width: 220}}>
+          <Text style={styles.name}>Guy Hawkins</Text>
+          <Text style={styles.desc}>Nutritionist</Text>
+        </View>
+        <Text style={styles.rating}>4.8</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.box3}>
+        <N3 width={70} height={50} style={{marginRight: 20}} />
+        <View style={{width: 220}}>
+          <Text style={styles.name}>Lexie Alexandar</Text>
+          <Text style={styles.desc}>Nutritionist</Text>
+        </View>
+        <Text style={styles.rating}>4.8</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const BlogView = () => (
+    <View>
+      <Text>Heheheeeeeeeeeee blogs</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -26,59 +69,25 @@ export default function AddRecipe() {
             value={searchQuery}
             style={styles.searchbar}
           />
-          <TouchableOpacity style={styles.box3}>
-            <N1 width={70} height={50} style={{marginRight: 20}} />
-            <View style={{width: 220}}>
-              <Text style={styles.name}>Anamwp</Text>
-              <Text style={styles.desc}>Nutritionist</Text>
-            </View>
-            <Text style={styles.rating}>4.8</Text>
-          </TouchableOpacity>
+          <DuoToggleSwitch
+            primaryText="Nutritionist"
+            secondaryText="Blogs"
+            onPrimaryPress={() => {
+              handleToggle('nutritionist');
+            }}
+            onSecondaryPress={() => {
+              handleToggle('blog');
+            }}
+            activeColor="green"
+            inactiveColor="blue"
+            activeTextColor="yellow"
+            inactiveTextColor="white"
+            primaryButtonStyle={{width: 150}}
+            secondaryButtonStyle={{width: 150}}
+            style={{width: 300}}
+          />
 
-          <TouchableOpacity style={styles.box3}>
-            <N2 width={70} height={50} style={{marginRight: 20}} />
-            <View style={{width: 220}}>
-              <Text style={styles.name}>Guy Hawkins</Text>
-              <Text style={styles.desc}>Nutritionist</Text>
-            </View>
-            <Text style={styles.rating}>4.8</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.box3}>
-            <N3 width={70} height={50} style={{marginRight: 20}} />
-            <View style={{width: 220}}>
-              <Text style={styles.name}>Lexie Alexandar</Text>
-              <Text style={styles.desc}>Nutritionist</Text>
-            </View>
-            <Text style={styles.rating}>4.8</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.box3}>
-            <N1 width={70} height={50} style={{marginRight: 20}} />
-            <View style={{width: 220}}>
-              <Text style={styles.name}>Anamwp</Text>
-              <Text style={styles.desc}>Nutritionist</Text>
-            </View>
-            <Text style={styles.rating}>4.8</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.box3}>
-            <N2 width={70} height={50} style={{marginRight: 20}} />
-            <View style={{width: 220}}>
-              <Text style={styles.name}>Guy Hawkins</Text>
-              <Text style={styles.desc}>Nutritionist</Text>
-            </View>
-            <Text style={styles.rating}>4.8</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.box3}>
-            <N3 width={70} height={50} style={{marginRight: 20}} />
-            <View style={{width: 220}}>
-              <Text style={styles.name}>Lexie Alexandar</Text>
-              <Text style={styles.desc}>Nutritionist</Text>
-            </View>
-            <Text style={styles.rating}>4.8</Text>
-          </TouchableOpacity>
+          {activeView === 'nutritionist' ? <NutritionistView /> : <BlogView />}
         </View>
       </ScrollView>
     </View>

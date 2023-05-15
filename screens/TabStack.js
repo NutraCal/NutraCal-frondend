@@ -9,8 +9,8 @@ import Home from './Home';
 import RecipeBook from './SearchRecipe';
 import DietPlans from './DietPlans';
 import Shopping from './Shopping';
-import Blogs from './SearchBlog';
 import ViewBlog from './ViewBlog';
+import Blogs from './SearchBlog';
 import DiscussionThread from './DiscussionThread';
 import AddMealScan from './AddMealScan';
 import AddMeal from './AddMeal';
@@ -283,7 +283,7 @@ const TabStack = ({route, navigation}) => {
 
       <Tab.Screen
         name="Blogs"
-        component={ViewBlog}
+        component={Blogs}
         options={({navigation}) => ({
           title: 'Community',
           headerShown: true,
