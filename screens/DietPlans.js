@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -6,44 +6,186 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
+  ActivityIndicator,
+  FlatList,
+  Image,
 } from 'react-native';
 import B1 from '../assets/images/breakfast1.svg';
 import L1 from '../assets/images/lunch1.svg';
 import D1 from '../assets/images/dinner1.svg';
 import S1 from '../assets/images/snack1.svg';
 import Forw from '../assets/forwardbtn.svg';
-import dim from '../util/dim';
 import moment from 'moment';
-
 import DatePicker from 'react-native-modern-datepicker';
 import Modal from 'react-native-modal';
 
 import {useFocusEffect} from '@react-navigation/native';
 
+import axios from 'axios';
+import {endpoint} from '../util/config';
+import {AuthContext} from '../context/AuthContext';
+import dim from '../util/dim';
+import {Searchbar, Checkbox} from 'react-native-paper';
+
+import Ionicon from 'react-native-vector-icons/Ionicons';
+
 export default function DietPlans({route, navigation}) {
-  const {email} = route.params;
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const goal = user?.data?.user?.fitnessGoal;
+
+  const [weekDates, setWeekDates] = useState([]);
+
   const [selectedDate, setSelectedDate] = useState(
     moment().format('YYYY-MM-DD'),
   );
-  const [cDate, setCDate] = useState(moment().format('D MMMM YYYY'));
-  const [weekDates, setWeekDates] = useState([]);
-  const [isModalVisible, setModalVisible] = useState(false);
+
+  const [cDate, setCDate] = useState(moment().format('YYYY-MM-DD'));
 
   const [date, setDate] = useState(null);
 
-  const handleDatePress = date => {
-    setSelectedDate(date);
-    console.log(date);
+  const [isModalVisible, setModalVisible] = useState(false);
 
+  const [day, setDay] = useState(0);
+
+  const [bname, setBname] = useState('');
+  const [lname, setLname] = useState('');
+  const [dname, setDname] = useState('');
+
+  const [bcal, setBcal] = useState('');
+  const [lcal, setLcal] = useState('');
+  const [dcal, setDcal] = useState('');
+
+  const [val, setVal] = useState('');
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [category, setCategory] = useState('');
+  const [recipes, setRecipes] = useState([]);
+  const [title, setTitle] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const [checked, setChecked] = useState(false);
+
+  const [refresh, setRefresh] = useState(false);
+
+  const onChangeSearch = query => {
+    setSearchQuery(query);
+  };
+
+  const fetchRecipe = async res => {
+    console.log(searchQuery);
+    if (searchQuery != '') {
+      setLoading(true);
+      var data = JSON.stringify({
+        title: 'Broccoli Salad',
+      });
+      try {
+        const response = await axios({
+          method: 'post',
+          url: endpoint + '/recipes/viewRecipeByName',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: data,
+        });
+
+        console.log(JSON.stringify(response.data));
+        setRecipes(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error.response);
+      }
+    } else {
+      console.log('empty query');
+    }
+  };
+
+  const generateDietPlan = async res => {
+    var data = JSON.stringify({
+      email: email,
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/diet/dietPlan',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const getCalories = async res => {
+    var data = JSON.stringify({
+      titles: [bname, lname, dname],
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/recipes/findCalories',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+
+      const [b, l, d] = response.data; // Destructure the array values
+
+      // Update the state variables with the values
+      setBcal(b.toString());
+      setLcal(l.toString());
+      setDcal(d.toString());
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const handleDatePress = async date => {
+    //COMMENT THIS LINE IF YOU DONT WANNA REFRESH ON FOCUS ALWAYS
+    setSelectedDate(date);
+
+    var dayNumber = moment(date).format('d');
+    dayNumber = parseInt(dayNumber) + 1;
+    console.log(dayNumber);
     // Load meal log for the selected date
-    // ...
+
+    var data = JSON.stringify({
+      email: email,
+      day: dayNumber.toString(),
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/diet/getPlanOfDay',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      setBname(response.data[0]);
+      setLname(response.data[1]);
+      setDname(response.data[2]);
+
+      setRefresh(prevState => !prevState);
+
+      // getCalories();
+
+      // setSelectedDate(date);
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   const getWeekDates = date => {
-    // Generate an array of dates for the current week
-    console.log(date);
-    console.log('here in function');
     const weekStart = moment(date).startOf('week');
     const weekEnd = moment(date).endOf('week');
     const dates = [];
@@ -58,222 +200,296 @@ export default function DietPlans({route, navigation}) {
     setWeekDates(dates);
   };
 
-  const handleDateChange = date => {
-    const formattedDate = moment(date, 'YYYY/MM/DD').format('D MMMM YYYY');
-    setCDate(formattedDate);
-    const fDate = moment(date, 'YYYY/MM/DD').format('YYYY-MM-DD');
-    console.log(fDate);
-    const currentDate = moment(fDate).toDate(); // set the current date to user selected date
-    console.log(currentDate);
-    setDate(currentDate);
-    setTimeout(() => {
-      setModalVisible(false);
-    }, 1000);
-  };
-
-  // useEffect(() => {
-  //   const currentDate = moment().toDate();
-  //   getWeekDates(currentDate);
-  // }, []);
-
   useFocusEffect(
     React.useCallback(() => {
-      // Fetch the latest data or update the state here
       const currentDate = moment().toDate();
-      const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
-        'D MMMM YYYY',
-      );
-      setCDate(formattedDate);
+      setDate(currentDate);
       getWeekDates(currentDate);
-
-      // Return a cleanup function if needed
-      return () => {
-        // Clean up any subscriptions or resources if necessary
-      };
+      const fdate = moment(currentDate).format('YYYY-MM-DD');
+      handleDatePress(fdate);
     }, []),
   );
 
   useEffect(() => {
-    if (date !== null) {
-      getWeekDates(date);
+    // Call getCalories whenever the refresh state changes
+    getCalories();
+  }, [refresh]);
+
+  // useEffect(() => {
+  //   if (date !== null) {
+  //     getWeekDates(date);
+  //     console.log(
+  //       'here in date useffecteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+  //     );
+  //   }
+  // }, [date]);
+
+  useEffect(() => {
+    if (val !== '') {
     }
-  }, [date]);
+  }, [val]);
+
+  // useEffect(() => {
+  //   // This effect will be triggered whenever `bcal` changes
+  //   // and will update the screen immediately
+  //   setBcal(bcal);
+  // }, [bcal]);
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.heading]} onPress={() => setModalVisible(true)}>
-        {cDate}
-      </Text>
-
-      <Modal isVisible={isModalVisible}>
-        <View>
-          <DatePicker
-            mode="calendar"
-            onDateChange={date => {
-              handleDateChange(date);
-            }}
-            options={{
-              textHeaderColor: '#333333',
-              textDefaultColor: '#333333',
-              mainColor: '#91C788',
-              textSecondaryColor: '#91C788',
-            }}
-            style={{borderRadius: 0}}
-          />
-        </View>
-      </Modal>
-
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal={true}
-        style={{marginBottom: (10 / dim.h) * dim.Height}}>
-        {weekDates.map(date => (
-          <View key={date}>
-            <TouchableOpacity
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            alignSelf: 'flex-start',
+            paddingLeft: (8 / dim.w) * dim.Width,
+            marginBottom: (10 / dim.h) * dim.Height,
+            alignSelf: 'flex-start',
+            marginTop: (10 / dim.h) * dim.Height,
+          }}>
+          <View>
+            <Text style={styles.desc}>Fitness Goal</Text>
+            <Text
               style={[
-                styles.box,
-                {
-                  backgroundColor:
-                    selectedDate === date ? '#91C788' : '#ffffff',
-                },
-              ]}
-              onPress={() => handleDatePress(date)}>
-              <Text
+                styles.name1,
+                {fontSize: 18, marginBottom: (5 / dim.h) * dim.Height},
+              ]}>
+              {goal}
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.desc}>Meals per day</Text>
+            <Text
+              style={[
+                styles.name1,
+                {fontSize: 18, marginBottom: (5 / dim.h) * dim.Height},
+              ]}>
+              3 meals
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.desc}>Length</Text>
+            <Text style={[styles.name1, {fontSize: 18}]}>1 week</Text>
+          </View>
+        </View>
+
+        <Modal isVisible={isModalVisible} style={{backgroundColor: 'white'}}>
+          <View>
+            <Text>Recipe Suggestions</Text>
+            <Searchbar
+              placeholder="Recipes"
+              onChangeText={onChangeSearch}
+              onIconPress={fetchRecipe}
+              value={searchQuery}
+              style={styles.searchbar}
+            />
+            <Text>hehe</Text>
+
+            {loading ? (
+              <ActivityIndicator></ActivityIndicator>
+            ) : (
+              <FlatList
+                data={recipes}
+                scrollEnabled={false}
+                renderItem={({index, item}) => (
+                  <View key={index}>
+                    <TouchableOpacity
+                      style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
+                      <Image
+                        // source={{uri: item.thumbnail}}
+                        source={require('../assets/images/recipecover.png')}
+                        style={styles.thumbnail}
+                      />
+                      <Text
+                        style={[
+                          styles.name,
+                          {width: (200 / dim.w) * dim.Width},
+                        ]}>
+                        {item.Title}
+                      </Text>
+                      <Checkbox
+                        status={checked ? 'checked' : 'unchecked'}
+                        color="#91C788"
+                        onPress={() => {
+                          setChecked(!checked);
+                          setTimeout(() => {
+                            setModalVisible(false);
+                          }, 1000);
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            )}
+
+            {/* {checked && (
+              <View>
+                <Text>hehe</Text>
+              </View>
+            )} */}
+          </View>
+        </Modal>
+
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+          style={{
+            marginBottom: (10 / dim.h) * dim.Height,
+            height: (110 / dim.h) * dim.Height,
+          }}>
+          {weekDates.map(date => (
+            <View key={date}>
+              <TouchableOpacity
                 style={[
-                  styles.name1,
+                  styles.box,
                   {
-                    margin: (10 / dim.h) * dim.Height,
-                    fontWeight: selectedDate === date ? 'bold' : 'normal',
-                    color: selectedDate === date ? '#ffffff' : '#7B6F72',
+                    backgroundColor:
+                      selectedDate === date ? '#91C788' : '#ffffff',
                   },
-                ]}>
-                {moment(date).format('dd')}
-              </Text>
-              <Text
-                style={[
-                  styles.name2,
-                  {
-                    margin: (10 / dim.h) * dim.Height,
-                    fontWeight: selectedDate === date ? 'bold' : 'normal',
-                    color: selectedDate === date ? '#ffffff' : '#7B6F72',
-                  },
-                ]}>
-                {moment(date).format('D MMM')}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
-
-      <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Breakfast</Text>
-            <Text style={styles.desc}>230 calories</Text>
-          </View>
-          <View
-            style={[styles.subsection, {marginTop: (10 / dim.h) * dim.Height}]}>
-            <B1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Honey Pancake</Text>
-              <Text style={styles.desc}>7:00 am</Text>
+                ]}
+                onPress={() => handleDatePress(date)}>
+                <Text
+                  style={[
+                    styles.dayname,
+                    {
+                      margin: (10 / dim.h) * dim.Height,
+                      fontWeight: selectedDate === date ? 'bold' : 'normal',
+                      color: selectedDate === date ? '#ffffff' : '#7B6F72',
+                    },
+                  ]}>
+                  {moment(date).format('dd')}
+                </Text>
+                <Text
+                  style={[
+                    styles.name2,
+                    {
+                      margin: (10 / dim.h) * dim.Height,
+                      fontWeight: selectedDate === date ? 'bold' : 'normal',
+                      color: selectedDate === date ? '#ffffff' : '#7B6F72',
+                    },
+                  ]}>
+                  {moment(date).format('D MMM')}
+                </Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+          ))}
+        </ScrollView>
 
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Lunch</Text>
-            <Text style={styles.desc}>500 calories</Text>
-          </View>
-          <View
-            style={[styles.subsection, {marginTop: (10 / dim.h) * dim.Height}]}>
-            <L1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Chicken Steak</Text>
-              <Text style={styles.desc}>1:00 pm</Text>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{alignSelf: 'center'}}>
+          <View style={styles.section}>
+            <View style={styles.subsection}>
+              <View style={styles.ic}>
+                <Text style={styles.heading}>Breakfast</Text>
+                <Ionicon
+                  name="swap-horizontal"
+                  size={22}
+                  style={{marginLeft: (10 / dim.w) * dim.Width}}
+                />
+              </View>
+
+              <Text style={styles.desc}>{bcal} calories</Text>
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
+            <View style={styles.subsectiondesc}>
+              <B1
+                width={(60 / dim.w) * dim.Width}
+                height={(60 / dim.w) * dim.Width}
               />
-            </TouchableOpacity>
-          </View>
-        </View>
 
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Snacks</Text>
-            <Text style={styles.desc}>50 calories</Text>
-          </View>
-          <View style={[styles.subsection, {marginTop: 10}]}>
-            <S1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Orange</Text>
-              <Text style={styles.desc}>5:00 pm</Text>
+              <Text style={styles.name1}>{bname}</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ViewRecipe', {title: bname});
+                }}>
+                <Forw
+                  width={(24 / dim.w) * dim.Width}
+                  height={(24 / dim.w) * dim.Width}
+                  style={{marginLeft: (20 / dim.w) * dim.Width}}
+                />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
-              />
-            </TouchableOpacity>
           </View>
-        </View>
 
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Dinner</Text>
-            <Text style={styles.desc}>120 calories</Text>
-          </View>
-          <View
-            style={[styles.subsection, {marginTop: (10 / dim.h) * dim.Height}]}>
-            <D1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Salad</Text>
-              <Text style={styles.desc}>7:10 pm</Text>
+          <View style={styles.section}>
+            <View style={styles.subsection}>
+              <View style={styles.ic}>
+                <Text style={styles.heading}>Lunch</Text>
+                <Ionicon
+                  name="swap-horizontal"
+                  size={22}
+                  style={{marginLeft: (10 / dim.w) * dim.Width}}
+                />
+              </View>
+              <Text style={styles.desc}>{lcal} calories</Text>
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
+            <View style={styles.subsectiondesc}>
+              <L1
+                width={(60 / dim.w) * dim.Width}
+                height={(60 / dim.w) * dim.Width}
               />
-            </TouchableOpacity>
-          </View>
-        </View>
 
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() =>
-            navigation.navigate('AddMeal', {
-              email: email,
-            })
-          }>
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
+              <Text style={styles.name1}>{lname}</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ViewRecipe', {title: lname});
+                }}>
+                <Forw
+                  width={(24 / dim.w) * dim.Width}
+                  height={(24 / dim.w) * dim.Width}
+                  style={{marginLeft: (20 / dim.w) * dim.Width}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={[styles.section, {marginBottom: 20}]}>
+            <View style={styles.subsection}>
+              <View style={styles.ic}>
+                <Text style={styles.heading}>Dinner</Text>
+                <Ionicon
+                  name="swap-horizontal"
+                  size={22}
+                  style={{marginLeft: (10 / dim.w) * dim.Width}}
+                  onPress={() => setModalVisible(true)}
+                />
+              </View>
+              <Text style={styles.desc}>{dcal} calories</Text>
+            </View>
+            <View style={styles.subsectiondesc}>
+              <D1
+                width={(60 / dim.w) * dim.Width}
+                height={(60 / dim.w) * dim.Width}
+              />
+
+              <Text style={styles.name1}>{dname}</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ViewRecipe', {title: dname});
+                }}>
+                <Forw
+                  width={(24 / dim.w) * dim.Width}
+                  height={(24 / dim.w) * dim.Width}
+                  style={{marginLeft: (20 / dim.w) * dim.Width}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <TouchableOpacity style={styles.btnn}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 16,
+                fontFamily: 'Inter-SemiBold',
+              }}>
+              Generate new plan
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </ScrollView>
     </View>
   );
@@ -283,7 +499,9 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: (8 / dim.h) * dim.Height,
+    paddingHorizontal: (8 / dim.h) * dim.Height,
+    // paddingTop: (10 / dim.h) * dim.Height,
+    paddingBottom: 0,
   },
 
   box: {
@@ -298,11 +516,19 @@ const styles = StyleSheet.create({
     borderColor: '#91C788',
   },
 
-  name1: {
+  dayname: {
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-Medium',
     marginTop: (5 / dim.h) * dim.Height,
+    // width: 200,
+  },
+
+  name1: {
+    fontSize: 16,
+    color: 'black',
+    fontFamily: 'Inter-Medium',
+    width: (200 / dim.w) * dim.Width,
   },
 
   name2: {
@@ -328,29 +554,66 @@ const styles = StyleSheet.create({
 
   section: {
     width: (350 / dim.w) * dim.Width,
-    marginBottom: (20 / dim.h) * dim.Height,
+    marginBottom: (10 / dim.h) * dim.Height,
   },
   subsection: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  addButton: {
+
+  subsectiondesc: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: (10 / dim.h) * dim.Height,
+  },
+  btnn: {
+    width: (330 / dim.w) * dim.Width,
+    height: (48 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
-    borderRadius: 50,
-    width: (50 / dim.w) * dim.Width,
-    height: (50 / dim.w) * dim.Width,
-    position: 'absolute',
-    marginTop: (40 / dim.h) * dim.Height,
-    bottom: (10 / dim.h) * dim.Height,
-    right: (20 / dim.w) * dim.Width,
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
+  },
+
+  ic: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  buttonText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
+  searchbar: {
+    borderRadius: 20,
+    margin: (15 / dim.w) * dim.Width,
+    elevation: 0,
+    backgroundColor: '#F8F9FE',
+  },
+
+  name: {
+    fontSize: 16,
+    color: 'black',
+    fontFamily: 'Inter-SemiBold',
+    marginTop: (5 / dim.h) * dim.Height,
+  },
+
+  thumbnail: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+    borderRadius: 25,
+  },
+
+  box3: {
+    height: (80 / dim.h) * dim.Height,
+    width: (330 / dim.w) * dim.Width,
+    borderRadius: 12,
+    margin: (10 / dim.w) * dim.Width,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
