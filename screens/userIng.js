@@ -83,9 +83,11 @@ const UserIng = ({navigation, route}) => {
   const setIngredient = value => {
     setIngs(value);
   };
+
   const inputValidation = () => {
     if (ings != '') {
       navigation.navigate('Register', {
+        role: 'User',
         fitnessGoal: goal,
         gender: gender,
         age: age,

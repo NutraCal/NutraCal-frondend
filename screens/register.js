@@ -12,11 +12,17 @@ import type {Node} from 'react';
 import Login from './Login';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
+import ImagePicker from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
+import FormData from 'form-data';
+import axios from 'axios';
 
 const Register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('');
   const [goal, setGoal] = useState('');
   const [gender, setGender] = useState('');
   const [age, setAge] = useState(0);
@@ -30,42 +36,89 @@ const Register = ({route, navigation}) => {
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
   const [pressed, setPressed] = useState(false);
+  const [image, setImage] = useState(null);
+  const [qualification, setQualification] = useState('');
+  const [expertise, setExpertise] = useState('');
+  const [startDay, setStartDay] = useState('');
+  const [endDay, setEndDay] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
   React.useEffect(() => {
-    if (
-      route.params?.fitnessGoal &&
-      route.params?.gender &&
-      route.params?.age &&
-      route.params?.height &&
-      route.params?.heightUnit &&
-      route.params?.weight &&
-      route.params?.weightUnit &&
-      route.params?.allergies &&
-      route.params?.diet &&
-      route.params?.ingredients
-    ) {
-      const fitnessGoal = route.params?.fitnessGoal;
-      const gender = route.params?.gender;
-      const age = route.params?.age;
-      const height = route.params?.height;
-      const heightUnit = route.params?.heightUnit;
-      const weight = route.params?.weight;
-      const weightUnit = route.params?.weightUnit;
-      const allergies = route.params?.allergies;
-      const diet = route.params?.diet;
-      const ingredients = route.params?.ingredients;
-      setGoal(fitnessGoal);
-      setGender(gender);
-      setAge(age);
-      setHeight(height);
-      setHeightUnit(heightUnit);
-      setWeight(weight);
-      setWeightUnit(weightUnit);
-      setAllergies(allergies);
-      setDiet(diet);
-      setIngs(ings);
+    if (route.params?.role) {
+      const role = route.params?.role;
+
+      if (
+        role === 'User' &&
+        route.params?.fitnessGoal &&
+        route.params?.gender &&
+        route.params?.age &&
+        route.params?.height &&
+        route.params?.heightUnit &&
+        route.params?.weight &&
+        route.params?.weightUnit &&
+        route.params?.allergies &&
+        route.params?.diet &&
+        route.params?.ingredients
+      ) {
+        // const role = route.params?.role;
+        const fitnessGoal = route.params?.fitnessGoal;
+        const gender = route.params?.gender;
+        const age = route.params?.age;
+        const height = route.params?.height;
+        const heightUnit = route.params?.heightUnit;
+        const weight = route.params?.weight;
+        const weightUnit = route.params?.weightUnit;
+        const allergies = route.params?.allergies;
+        const diet = route.params?.diet;
+        const ingredients = route.params?.ingredients;
+        setRole(role);
+        setGoal(fitnessGoal);
+        setGender(gender);
+        setAge(age);
+        setHeight(height);
+        setHeightUnit(heightUnit);
+        setWeight(weight);
+        setWeightUnit(weightUnit);
+        setAllergies(allergies);
+        setDiet(diet);
+        setIngs(ings);
+
+        console.log('here in user');
+        // console.log(qualification);
+        // console.log(allergies);
+        // console.log(role);
+      } else if (
+        role === 'Nutritionist' &&
+        route.params?.qualification &&
+        route.params?.expertise &&
+        route.params?.startDay &&
+        route.params?.endDay &&
+        route.params?.startTime &&
+        route.params?.endTime
+      ) {
+        const qualification = route.params?.qualification;
+        const expertise = route.params?.expertise;
+        const startDay = route.params?.startDay;
+        const endDay = route.params?.endDay;
+        const startTime = route.params?.startTime;
+        const endTime = route.params?.endTime;
+
+        console.log('hehe in nutritionist');
+        // console.log(qualification);
+        // console.log(expertise);
+        // console.log(role);
+        setRole(role);
+        setQualification(qualification);
+        setExpertise(expertise);
+        setStartDay(startDay);
+        setEndDay(endDay);
+        setStartTime(startTime);
+        setEndTime(endTime);
+      }
     }
   }, [
+    route.params?.role,
     route.params?.fitnessGoal,
     route.params?.gender,
     route.params?.age,
@@ -76,15 +129,151 @@ const Register = ({route, navigation}) => {
     route.params?.allergies,
     route.params?.diet,
     route.params?.ingredients,
+    route.params?.qualification,
+    route.params?.expertise,
+    route.params?.startDay,
+    route.params?.endDay,
+    route.params?.startTime,
+    route.params?.endTime,
   ]);
+
+  const handleChoosePhoto = async () => {
+    try {
+      const response = await launchImageLibrary({mediaType: 'photo'});
+      if (!response.didCancel) {
+        setImage(response);
+      } else {
+        console.log('Image selection cancelled.');
+      }
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  const createUser = async res => {
+    const data = new FormData();
+    if (role == 'User') {
+      data.append('name', name);
+      data.append('email', email);
+      data.append('password', password);
+      data.append('fitnessGoal', goal);
+      data.append('gender', gender);
+      data.append('age', age);
+      data.append('height', height);
+      data.append('heightUnit', heightUnit);
+      data.append('weight', weight);
+      data.append('weightUnit', weightUnit);
+      data.append('allergies', allergies);
+      data.append('diet', diet);
+      data.append('ingredients', 'abc');
+      data.append('role', role);
+      const photo = await RNFS.readFile(image.assets[0].uri, 'base64');
+      data.append('photo', {
+        uri: image.assets[0].uri,
+        name: 'photo.jpg',
+        type: 'image/jpeg', // You can set the type here if you know the specific file type
+      });
+    } else {
+      data.append('name', name);
+      data.append('email', email);
+      data.append('password', password);
+      data.append('qualification', qualification);
+      data.append('areaOfExpertise', expertise);
+      data.append('startDay', startDay);
+      data.append('endDay', endDay);
+      data.append('startTime', startTime);
+      data.append('endTime', endTime);
+      data.append('role', role);
+      const photo = await RNFS.readFile(image.assets[0].uri, 'base64');
+      data.append('photo', {
+        uri: image.assets[0].uri,
+        name: 'photo.jpg',
+        type: 'image/jpeg', // You can set the type here if you know the specific file type
+      });
+      // data.append('photo', photo, {type: 'image/jpeg'});
+      // data.append('photo', photo);
+      // data.append('photo', photo, 'file.jpg');
+      // const photoBlob = new Blob([photo], {type: 'image/jpeg'});
+
+      // // Append the image file to the FormData object
+      // data.append('photo', photoBlob, 'girl2.jpg');
+
+      // data.append('photo', {
+      //   uri: image.assets[0].uri,
+      //   name: 'photo.jpg',
+      //   type: 'image/jpeg', // You can set the type here if you know the specific file type
+      // });
+    }
+
+    try {
+      if (
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
+        /^(?=.*\d).{8,12}$/.test(password)
+      ) {
+        // console.log(data)
+        console.log(name);
+        console.log(email);
+        console.log(password);
+        console.log(role);
+        console.log(qualification);
+        console.log(expertise);
+        console.log(data);
+        // console.log(image.assets[0].uri);
+
+        try {
+          console.log('about to send request');
+          const response = await axios({
+            method: 'post',
+            maxContentLength: Infinity,
+            url: endpoint + '/users/createUser',
+            headers: {
+              // 'Content-Type': 'application/json',
+              'Content-Type': 'multipart/form-data',
+            },
+            data: data,
+          });
+
+          console.log(JSON.stringify(response.data));
+        } catch (error) {
+          console.log('you are poop');
+          console.log(error.response);
+        }
+
+        // if (response.status === 200) {
+        //   navigation.navigate('Login');
+        // } else {
+        //   Alert.alert('User already exists', 'Create Account with new Email', [
+        //     {text: 'OK', onPress: () => console.log('OK Pressed')},
+        //   ]);
+        // }
+        console.log('hehe in if dumbooooo');
+      } else {
+        console.log('hehe in else');
+        // setIsEmailValid('false');
+        // setIsPasswordValid('false');
+        // Alert.alert('Invalid Input', 'Please check your email and password', [
+        //   {text: 'OK', onPress: () => console.log('OK Pressed')},
+        // ]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const credentialsValidation = () => {
     setPressed(true);
     console.log('trying');
     console.log('email');
 
-    if (email == '' && password == '') {
-      Alert.alert('Empty field', 'Please enter email and password', [
+    if (email == '' && password == '' && name == '') {
+      Alert.alert('Empty field', 'Please fill all fields first', [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]);
+      return;
+    }
+
+    if (name == '') {
+      Alert.alert('Empty field', 'Please enter name', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]);
       return;
@@ -104,61 +293,86 @@ const Register = ({route, navigation}) => {
       return;
     }
 
-    if (
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
-      /^(?=.*\d).{8,12}$/.test(password)
-    ) {
-      fetch(endpoint + '/users/createUser', {
-        method: 'POST',
+    createUser();
 
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: 'sonia',
-          email: email,
-          password: password,
-          fitnessGoal: goal,
-          gender: gender,
-          age: age,
-          height: height,
-          heightUnit: heightUnit,
-          weight: weight,
-          weightUnit: weightUnit,
-          allergies: allergies,
-          diet: diet,
-          ingredients: 'abc',
-          role: 'User',
-        }),
-      }).then(response => {
-        if (response.status == 200) {
-          navigation.navigate('Login');
-        } else {
-          Alert.alert('User already exists', 'Create Account with new Email', [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ]);
-        }
-        console.log(response.status); // returns 200
-      });
-      setEmail('');
-      setPassword('');
-      setIsEmailValid('true');
-      setIsPasswordValid('true');
-    } else {
-      setIsEmailValid('false');
-      setIsPasswordValid('false');
-      Alert.alert('Invalid Input', 'Please check your email and password', [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ]);
-    }
+    // if (
+    //   /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
+    //   /^(?=.*\d).{8,12}$/.test(password)
+    // ) {
+    //   fetch(endpoint + '/users/createUser', {
+    //     method: 'POST',
+
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       name: name,
+    //       email: email,
+    //       password: password,
+    //       fitnessGoal: goal,
+    //       gender: gender,
+    //       age: age,
+    //       height: height,
+    //       heightUnit: heightUnit,
+    //       weight: weight,
+    //       weightUnit: weightUnit,
+    //       allergies: allergies,
+    //       diet: diet,
+    //       ingredients: 'abc',
+    //       role: role,
+    //     }),
+    //   }).then(response => {
+    //     if (response.status == 200) {
+    //       navigation.navigate('Login');
+    //     } else {
+    //       Alert.alert('User already exists', 'Create Account with new Email', [
+    //         {text: 'OK', onPress: () => console.log('OK Pressed')},
+    //       ]);
+    //     }
+    //     console.log(response.status); // returns 200
+    //   });
+    //   setEmail('');
+    //   setPassword('');
+    //   setIsEmailValid('true');
+    //   setIsPasswordValid('true');
+    // } else {
+    //   setIsEmailValid('false');
+    //   setIsPasswordValid('false');
+    //   Alert.alert('Invalid Input', 'Please check your email and password', [
+    //     {text: 'OK', onPress: () => console.log('OK Pressed')},
+    //   ]);
+    // }
   };
   return (
     <View style={styles.container}>
       <Text style={styles.h1}>Create Account{ings}</Text>
       <Text style={styles.h3}>Connect with your Friends Today!</Text>
+      <TouchableOpacity
+        onPress={handleChoosePhoto}
+        style={{alignSelf: 'center'}}>
+        {image ? (
+          <Image source={{uri: image.assets[0].uri}} style={styles.img} />
+        ) : (
+          <View style={styles.imgView}>
+            <Text style={{color: '#FFFFFF', fontSize: 40}}>+</Text>
+          </View>
+        )}
+      </TouchableOpacity>
 
       <View style={styles.midcontainer}>
+        <View>
+          <Text style={styles.label1}>Name</Text>
+
+          <TextInput
+            style={styles.txtinput}
+            placeholder="Enter your name"
+            value={name}
+            placeholderTextColor="#C5C6CC"
+            onChangeText={text => setName(text)}
+            style={styles.txtinput}
+          />
+        </View>
         <View>
           <Text style={styles.label1}>Email</Text>
 
@@ -289,6 +503,19 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     marginBottom: (5 / dim.h) * dim.Height,
+  },
+  img: {
+    width: (120 / dim.w) * dim.Width,
+    height: (120 / dim.h) * dim.Height,
+    borderRadius: 100,
+  },
+  imgView: {
+    width: (120 / dim.w) * dim.Width,
+    height: (120 / dim.h) * dim.Height,
+    borderRadius: 100,
+    backgroundColor: '#CCCCCC',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 export default Register;
