@@ -7,6 +7,8 @@ import {
   BackHandler,
   Image,
   ScrollView,
+  StatusBar,
+  SafeAreaView,
 } from 'react-native';
 
 import Calories from '../assets/icons/calories.svg';
@@ -16,6 +18,8 @@ import Steps from '../assets/icons/steps.svg';
 import Forw from '../assets/forwardbtn.svg';
 import Login from './Login';
 import dim from '../util/dim';
+
+import ColorfulCard from 'react-native-colorful-card';
 
 import {
   LineChart,
@@ -126,6 +130,103 @@ export default function Home({route, navigation}) {
         </View>
 
         <Text style={styles.heading}>Your Insights</Text>
+
+        <SafeAreaView
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 20,
+          }}>
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}>
+            <ColorfulCard
+              title="Heart Rate"
+              value="126"
+              valuePostfix="bpm"
+              footerTitle="80-120"
+              footerValue="Healthy"
+              iconImageSource={require('../assets/icons/pulse.png')}
+              onPress={() => {}}
+            />
+            <ColorfulCard
+              title="Sleep"
+              value="8"
+              valuePostfix="h 42 m"
+              footerTitle="Deep Sleep"
+              footerValue="3h 13m"
+              iconImageSource={require('../assets/icons/sleep.png')}
+              style={{backgroundColor: '#7954ff'}}
+              onPress={() => {}}
+            />
+          </View>
+
+          <View
+            style={{
+              marginTop: 16,
+              width: '100%',
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}>
+            <ColorfulCard
+              title="Energy Burn"
+              value="583"
+              valuePostfix="kcal"
+              footerTitle="Daily Goal"
+              footerValue="900 kcal"
+              iconImageStyle={{tintColor: '#fff'}}
+              iconImageSource={require('../assets/icons/hot-or-burn-interface-symbol.png')}
+              style={{backgroundColor: '#fe8f62'}}
+              onPress={() => {}}
+            />
+            <ColorfulCard
+              title="Steps"
+              value="16,741"
+              valuePostfix=""
+              footerTitle="Daily Goal"
+              footerValue="10,000 steps"
+              iconImageSource={require('../assets/icons/steps.png')}
+              style={{backgroundColor: '#2bc3ff'}}
+              onPress={() => {}}
+            />
+          </View>
+
+          <View
+            style={{
+              marginTop: 16,
+              width: '100%',
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+            }}>
+            <ColorfulCard
+              title="Running"
+              value="5,3"
+              valuePostfix="km"
+              footerTitle="Daily Goal"
+              footerValue="10 km"
+              iconImageSource={require('../assets/icons/running.png')}
+              style={{backgroundColor: '#5a65ff'}}
+              onPress={() => {}}
+            />
+            <ColorfulCard
+              title="Cycling"
+              value="12,5"
+              valuePostfix="km"
+              footerTitle="Daily Goal"
+              footerValue="20 km"
+              iconImageSource={require('../assets/icons/bicycle.png')}
+              style={{backgroundColor: '#96da45'}}
+              onPress={() => {}}
+            />
+          </View>
+        </SafeAreaView>
 
         <View
           style={{

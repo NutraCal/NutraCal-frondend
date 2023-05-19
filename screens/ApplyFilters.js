@@ -26,71 +26,7 @@ export default function ApplyFilters() {
           padding: (20 / dim.h) * dim.Height,
           justifyContent: 'center',
         }}>
-        <Text style={styles.heading}>Category</Text>
-
-        <View style={styles.flex1}>
-          <TouchableOpacity
-            style={[
-              styles.btn1,
-              {
-                backgroundColor: '#91C788',
-                borderColor: '#91C788',
-                borderWidth: 1,
-              },
-            ]}>
-            <Text style={[styles.txt, {color: 'white'}]}>Breakfast</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Lunch</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Dinner</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.heading}>Cuisine</Text>
-        <View style={styles.flex1}>
-          <TouchableOpacity
-            style={[
-              styles.btn1,
-              {
-                backgroundColor: '#91C788',
-                borderColor: '#91C788',
-                borderWidth: 1,
-              },
-            ]}>
-            <Text style={[styles.txt, {color: 'white'}]}>Asian</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Western</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Dessert</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Salad</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.flex1}>
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Chinese</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Burgers</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btn1}>
-            <Text style={styles.txt}>Vegetarian</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={styles.heading}>Calories</Text>
+        <Text style={styles.heading1}>Calories</Text>
         <GestureHandlerRootView style={{marginTop: (20 / dim.h) * dim.Height}}>
           <RangeSlider
             sliderWidth={(340 / dim.w) * dim.Width}
@@ -112,7 +48,7 @@ export default function ApplyFilters() {
           <Text style={styles.label}>2500</Text>
         </View>
 
-        <Text style={styles.heading}>Ingredients</Text>
+        <Text style={styles.heading1}>Ingredients</Text>
 
         <View style={styles.textinputc}>
           <TextInput
@@ -125,7 +61,7 @@ export default function ApplyFilters() {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
+        <View style={[styles.box4, {backgroundColor: '#EBF2FF'}]}>
           <View
             style={{
               flexDirection: 'row',
@@ -137,7 +73,7 @@ export default function ApplyFilters() {
               height={(39 / dim.h) * dim.Height}
               style={{marginRight: (20 / dim.w) * dim.Width}}
             />
-            <Text style={styles.name}>Sugar</Text>
+            <Text style={styles.name2}>Sugar</Text>
           </View>
           <TouchableOpacity
             style={[
@@ -154,7 +90,7 @@ export default function ApplyFilters() {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.box3, {backgroundColor: '#F9EBF8'}]}>
+        <View style={[styles.box4, {backgroundColor: '#F9EBF8'}]}>
           <View
             style={{
               flexDirection: 'row',
@@ -166,7 +102,7 @@ export default function ApplyFilters() {
               height={39}
               style={{marginRight: (20 / dim.w) * dim.Width}}
             />
-            <Text style={styles.name}>Baking Soda</Text>
+            <Text style={styles.name2}>Baking Soda</Text>
           </View>
           <TouchableOpacity
             style={[
@@ -216,7 +152,7 @@ const styles = StyleSheet.create({
     paddingVertical: (5 / dim.h) * dim.Height,
     flex: 1,
   },
-  heading: {
+  heading1: {
     marginTop: (24 / dim.h) * dim.Height,
     marginLeft: (10 / dim.w) * dim.Width,
     fontSize: 18,
@@ -226,57 +162,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
 
-  btn1: {
-    paddingHorizontal: (15 / dim.w) * dim.Width,
-    paddingVertical: (4 / dim.h) * dim.Height,
-    marginTop: (15 / dim.h) * dim.Height,
-    borderRadius: 20,
-    backgroundColor: '#EAEAEA',
-    borderColor: '#EAEAEA',
-    borderWidth: 1,
-    marginLeft: (10 / dim.w) * dim.Width,
-  },
-
-  txt: {
-    color: 'black',
-    fontFamily: 'Inter-Medium',
-    fontSize: 16,
-  },
-  flex1: {
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
-  },
-
-  contentContainer: {
-    width: '90%',
-    height: (300 / dim.h) * dim.Height,
-    backgroundColor: 'white',
-    borderRadius: 25,
-  },
-
-  content: {
-    paddingHorizontal: (16 / dim.w) * dim.Width,
-    paddingVertical: (16 / dim.h) * dim.Height,
-    flex: 1,
-    justifyContent: 'space-between',
-  },
   text: {
     color: 'black',
     fontSize: 20,
   },
-  tableContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  table: {
-    borderColor: '#EBECF2',
-    borderWidth: 1,
-    padding: (10 / dim.h) * dim.Height,
-    marginTop: (5 / dim.h) * dim.Height,
-    borderRadius: 5,
-  },
-
-  box: {flexDirection: 'column'},
 
   label: {
     color: '#999999',
@@ -314,7 +203,7 @@ const styles = StyleSheet.create({
     width: (350 / dim.w) * dim.Width,
   },
 
-  box3: {
+  box4: {
     height: (55 / dim.h) * dim.Height,
     width: (360 / dim.w) * dim.Width,
     borderRadius: 12,
@@ -334,7 +223,7 @@ const styles = StyleSheet.create({
     marginLeft: (10 / dim.w) * dim.Width,
   },
 
-  name: {
+  name2: {
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-Medium',

@@ -118,19 +118,17 @@ export default function Shopping({route, navigation}) {
     }
   };
 
-  useEffect(() => {
-    console.log(userId);
-    console.log(email);
-    getShoppingList();
-  }, [loadData]);
+  // useEffect(() => {
+  //   console.log(userId);
+  //   console.log(email);
+  //   getShoppingList();
+  // }, [loadData]);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     // console.log(userId);
-  //     // console.log(email);
-  //     getShoppingList();
-  //   }, [loadData]),
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      getShoppingList();
+    }, [loadData]),
+  );
 
   useEffect(() => {
     if (ditem !== '') {
@@ -168,74 +166,79 @@ export default function Shopping({route, navigation}) {
           <Text style={{fontSize: 20, color: 'white'}}>+</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView
+
+      {/* //remove scrollview */}
+      {/* <ScrollView
         showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={true}>
-        {loading ? (
-          <ActivityIndicator
-            size="large"
-            color="#91C788"
-            style={{marginTop: (250 / dim.h) * dim.Height}}></ActivityIndicator>
-        ) : (
-          <View style={{width: (350 / dim.w) * dim.Width}}>
-            <FlatList
-              data={getlist}
-              renderItem={({index, item}) => (
-                <View key={index}>
-                  <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      <Ing1
-                        width={(40 / dim.w) * dim.Width}
-                        height={(39 / dim.w) * dim.Width}
-                        style={{marginRight: (20 / dim.w) * dim.Width}}
-                      />
-                      <Text style={styles.name}>{item}</Text>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setDitem(item);
-                      }}
-                      style={[
-                        styles.cbtn,
-                        {
-                          marginLeft: (50 / dim.w) * dim.Width,
-                          elevation: 2,
-                          backgroundColor: 'white',
-                        },
-                      ]}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          color: '#91C788',
-                          alignSelf: 'center',
-                        }}>
-                        -
-                      </Text>
-                    </TouchableOpacity>
+        nestedScrollEnabled={true}> */}
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#91C788"
+          style={{marginTop: (250 / dim.h) * dim.Height}}></ActivityIndicator>
+      ) : (
+        <View style={{width: (350 / dim.w) * dim.Width, marginBottom: 70}}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={getlist}
+            renderItem={({index, item}) => (
+              <View key={index}>
+                <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Ing1
+                      width={(40 / dim.w) * dim.Width}
+                      height={(39 / dim.w) * dim.Width}
+                      style={{marginRight: (20 / dim.w) * dim.Width}}
+                    />
+                    <Text style={styles.name}>{item}</Text>
                   </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDitem(item);
+                    }}
+                    style={[
+                      styles.cbtn,
+                      {
+                        marginLeft: (50 / dim.w) * dim.Width,
+                        elevation: 2,
+                        backgroundColor: 'white',
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: '#91C788',
+                        alignSelf: 'center',
+                      }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              )}
-            />
-          </View>
-        )}
-      </ScrollView>
+              </View>
+            )}
+          />
+        </View>
+      )}
+      {/* </ScrollView> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    // justifyContent: 'center',
+    flex: 1,
     paddingHorizontal: (8 / dim.h) * dim.Height,
     alignItems: 'center',
     paddingBottom: 0,
-
-    height: '100%',
+    // height: '100%',
+    // backgroundColor: 'red',
+    height: dim.Height,
   },
 
   txtinput: {
