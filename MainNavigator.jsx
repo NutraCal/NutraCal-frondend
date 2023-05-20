@@ -36,6 +36,7 @@ import ViewRecipe from './screens/ViewRecipe';
 import AddRecipe from './screens/AddRecipe';
 import MyRecipes from './screens/MyRecipes';
 import SuggestRecipe from './screens/SuggestRecipe';
+import SuggestedRecipeResults from './screens/SuggestedRecipeResults';
 import TabStack from './screens/TabStack';
 import DrawerNav from './screens/DrawerNav';
 import AddRecipeScan from './screens/AddRecipeScan';
@@ -216,8 +217,14 @@ export default function MainNavigator() {
         <Stack.Screen
           name="SuggestRecipe"
           component={SuggestRecipe}
-          options={{headerShown: true}}
+          options={{headerShown: true, headerTitle: 'Suggest Recipe'}}
         />
+        <Stack.Screen
+          name="SuggestedRecipeResults"
+          component={SuggestedRecipeResults}
+          options={{headerShown: true, headerTitle: 'Recipes'}}
+        />
+
         <Stack.Screen
           name="DietPlans"
           component={DietPlans}

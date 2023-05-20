@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Text,
   View,
@@ -8,8 +8,9 @@ import {
   FlatList,
   ActivityIndicator,
   TextInput,
+  Button,
 } from 'react-native';
-import {Searchbar, Button, Avatar} from 'react-native-paper';
+import {Searchbar, Avatar} from 'react-native-paper';
 import Sortic from '../assets/sorticon.svg';
 import Arrowdown from '../assets/arrowdownicon.svg';
 import Filter from '../assets/filtericon.svg';
@@ -21,27 +22,23 @@ import Diet1 from '../assets/images/dietpic1.svg';
 import Diet2 from '../assets/images/dietpic2.svg';
 import Pop1 from '../assets/images/pop1.svg';
 import Forw from '../assets/forwardbtn.svg';
-import HomeHeader from './HomeHeader';
 import dim from '../util/dim';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import {useFocusEffect} from '@react-navigation/native';
-
 import {LogBox} from 'react-native';
-
 import {ScrollView} from 'react-native-virtualized-view';
 import Modal from 'react-native-modal';
-// import {GestureHandlerRootView} from 'react-native-gesture-handler';
-// import RangeSlider from '../components/RangeSlider';
-import RangeSlider from 'rn-range-slider';
 import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+
+const initialMin = 0;
+const initialMax = 2500;
 
 export default function SearchRecipe({route, navigation}) {
-  const {email} = route.params;
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
   const [recipes, setRecipes] = useState([]);
@@ -50,17 +47,83 @@ export default function SearchRecipe({route, navigation}) {
   const [isModalVisible, setModalVisible] = useState(false);
   // const [visible, setVisible] = useState(false);
 
-  const MIN_DEFAULT = 0;
-  const MAX_DEFAULT = 2500;
-  const [minValue, setMinValue] = useState(MIN_DEFAULT);
-  const [maxValue, setMaxValue] = useState(MAX_DEFAULT);
+  // const MIN_DEFAULT = 0;
+  // const MAX_DEFAULT = 2500;
+  // const [minValue, setMinValue] = useState(MIN_DEFAULT);
+  // const [maxValue, setMaxValue] = useState(MAX_DEFAULT);
   const [textInputValue, setTextInputValue] = useState('');
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+
+  const minRef = useRef(0);
+  const maxRef = useRef(2500);
+
+  const handleSliderValuesChange = values => {
+    // Update the min and max values
+    minRef.current = values[0];
+    maxRef.current = values[1];
+  };
+
+  const [idata, setIData] = useState([]); // Separate state for the data array
+
+  const [ing, setIng] = useState('');
+
+  const inputRef = useRef();
+
+  const addIngredient = () => {
+    let ing = inputRef.text;
+    console.log(ing);
+
+    //Add a new ingredient to the data array
+    if (ing.trim() === '') {
+      return; // Skip if the ingredient is empty or whitespace
+    }
+    const newIngredient = {id: idata.length + 1, name: ing};
+    setIData(prevData => [...prevData, newIngredient]);
+    // setIng(''); // Clear the input after adding the ingredient
+  };
+
+  const removeIngredient = id => {
+    // Remove an ingredient from the data array
+    setIData(prevData => prevData.filter(item => item.id !== id));
+  };
 
   const searchCategory = async res => {
+    console.log('insearchcategory');
     setLoading(true);
     var data = JSON.stringify({
       category: category,
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/recipes/filterRecipe',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      setRecipes(response.data);
+      // setCategory('');
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const filterRecipe = async res => {
+    // setLoading(true);
+    console.log(minRef.current);
+    console.log(maxRef.current);
+    console.log(idata);
+    const ingredientNames = idata.map(item => item.name);
+
+    console.log(ingredientNames);
+
+    var data = JSON.stringify({
+      ingredients: ingredientNames,
+      calories_min: minRef.current,
+      calories_max: maxRef.current,
     });
     try {
       const response = await axios({
@@ -83,9 +146,10 @@ export default function SearchRecipe({route, navigation}) {
   const fetchRecipe = async res => {
     console.log(searchQuery);
     if (searchQuery != '') {
+      console.log('in fetch recipe');
       setLoading(true);
       var data = JSON.stringify({
-        title: 'Broccoli Salad',
+        title: searchQuery,
       });
       try {
         const response = await axios({
@@ -119,21 +183,32 @@ export default function SearchRecipe({route, navigation}) {
     setRecipes(sortedData);
   };
 
+  const CustomMarker = ({currentValue}) => (
+    <View style={styles.markerStyle}></View>
+  );
+
+  const renderCustomLabel = ({value}) => (
+    <View>
+      <Text style={styles.lbl}>{value}</Text>
+    </View>
+  );
+
+  const sliderLineStyles = {
+    trackStyle: {
+      height: 5, // Adjust the height to make the line wider
+      backgroundColor: '#EBEBEB',
+      // alignSelf: 'center',
+    },
+    selectedStyle: {
+      backgroundColor: '#91C788', // Change the foreground color here
+    },
+  };
+
   useEffect(() => {
     if (category !== '') {
       searchCategory();
     }
   }, [category]);
-
-  useEffect(() => {
-    LogBox.ignoreLogs([' VirtualizedLists should never be nested']);
-  }, []);
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  //   }, []),
-  // );
 
   const data = [
     {
@@ -191,16 +266,16 @@ export default function SearchRecipe({route, navigation}) {
 
   return (
     <View style={styles.container}>
+      <Searchbar
+        placeholder="Recipes"
+        onChangeText={onChangeSearch}
+        onIconPress={fetchRecipe}
+        value={searchQuery}
+        style={styles.searchbar}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}>
-        <Searchbar
-          placeholder="Recipes"
-          onChangeText={onChangeSearch}
-          onIconPress={fetchRecipe}
-          value={searchQuery}
-          style={styles.searchbar}
-        />
         <View style={styles.cont}>
           <TouchableOpacity style={styles.btn} onPress={sortByTitle}>
             <Icon name="sort" size={20} />
@@ -258,6 +333,7 @@ export default function SearchRecipe({route, navigation}) {
         {/* ----------------------------------------------------------------------------------- */}
 
         <Modal
+          animationInTiming={500}
           isVisible={isModalVisible}
           onBackdropPress={() => setModalVisible(false)}>
           <View
@@ -266,87 +342,88 @@ export default function SearchRecipe({route, navigation}) {
               padding: (20 / dim.h) * dim.Height,
               justifyContent: 'center',
               backgroundColor: 'white',
+              height: 480,
             }}>
             <Text style={styles.heading1}>Calories</Text>
-            <RangeSlider
-              style={{width: 160, height: 80}}
-              gravity={'center'}
-              min={200}
-              max={1000}
-              step={20}
-              selectionColor="#3df"
-              blankColor="#f618"
-              onValueChanged={(low, high, fromUser) => {
-                this.setState({rangeLow: low, rangeHigh: high});
-              }}
-            />
-            />
-            {/* <GestureHandlerRootView
-              style={{marginTop: (20 / dim.h) * dim.Height}}>
-              <RangeSlider
-                sliderWidth={(300 / dim.w) * dim.Width}
-                min={MIN_DEFAULT}
-                max={MAX_DEFAULT}
-                step={20}
-                onValueChange={range => {
-                  setMinValue(range.min);
-                  setMaxValue(range.max);
-                }}
+            <View style={styles.containerStyle}>
+              <MultiSlider
+                values={[minRef.current, maxRef.current]}
+                min={0}
+                max={2500}
+                onValuesChangeFinish={handleSliderValuesChange}
+                allowOverlap={false}
+                sliderLength={300}
+                enableLabel={true}
+                minMarkerOverlapDistance={20}
+                customMarker={CustomMarker}
+                showSteps={true}
+                showStepLabels={true}
+                {...sliderLineStyles}
               />
-            </GestureHandlerRootView> 
-            <View style={styles.labelc}>
-              <Text style={styles.label}>0</Text>
-              <Text style={styles.label}>500</Text>
-              <Text style={styles.label}>1000</Text>
-              <Text style={styles.label}>1500</Text>
-              <Text style={styles.label}>2000</Text>
-              <Text style={styles.label}>2500</Text>
-            </View> */}
+            </View>
+
             <Text style={styles.heading1}>Ingredients</Text>
             <View style={styles.textinputc}>
               <TextInput
                 style={[styles.txtinput, {width: (270 / dim.w) * dim.Width}]}
                 placeholder="Type and add your ingredients"
                 placeholderTextColor="#C5C6CC"
+                // value={ing}
+                // onChangeText={text => setIng(text)}
+                ref={inputRef}
+                onChangeText={text => (inputRef.text = text)}
               />
-              <TouchableOpacity style={styles.cbtn}>
+              <TouchableOpacity style={styles.cbtn} onPress={addIngredient}>
                 <Text style={{fontSize: 20, color: 'white'}}>+</Text>
               </TouchableOpacity>
             </View>
-            <View style={[styles.box4, {backgroundColor: '#EBF2FF'}]}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Ing1
-                  width={(40 / dim.w) * dim.Width}
-                  height={(39 / dim.h) * dim.Height}
-                  style={{marginRight: (20 / dim.w) * dim.Width}}
-                />
-                <Text style={styles.name2}>Sugar</Text>
-              </View>
-              <TouchableOpacity
-                style={[
-                  styles.cbtn,
-                  {
-                    marginLeft: (50 / dim.w) * dim.Width,
-                    elevation: 2,
-                    backgroundColor: 'white',
-                  },
-                ]}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: '#91C788',
-                    alignSelf: 'center',
-                  }}>
-                  -
-                </Text>
-              </TouchableOpacity>
+
+            <View style={{flex: 1}}>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={idata}
+                keyExtractor={item => item.id.toString()}
+                // renderItem={({item}) => <Text>{item.name}</Text>}
+                renderItem={({item}) => (
+                  <View style={[styles.box4, {backgroundColor: '#EBF2FF'}]}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Ing1
+                        width={(40 / dim.w) * dim.Width}
+                        height={(39 / dim.h) * dim.Height}
+                        style={{marginRight: (20 / dim.w) * dim.Width}}
+                      />
+                      <Text style={styles.name2}>{item.name}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => removeIngredient(item.id)}
+                      style={[
+                        styles.cbtn,
+                        {
+                          marginLeft: (50 / dim.w) * dim.Width,
+                          elevation: 2,
+                          backgroundColor: 'white',
+                        },
+                      ]}>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          color: '#91C788',
+                          alignSelf: 'center',
+                        }}>
+                        -
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
             </View>
-            <View style={[styles.box4, {backgroundColor: '#F9EBF8'}]}>
+
+            {/* <View style={[styles.box4, {backgroundColor: '#F9EBF8'}]}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -378,9 +455,9 @@ export default function SearchRecipe({route, navigation}) {
                   -
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
+
             <TouchableOpacity
-              onPress={() => setModalVisible(false)}
               style={{
                 width: (300 / dim.w) * dim.Width,
                 height: (48 / dim.h) * dim.Height,
@@ -389,8 +466,12 @@ export default function SearchRecipe({route, navigation}) {
                 borderRadius: 12,
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginTop: (40 / dim.h) * dim.Height,
-                marginBottom: (20 / dim.h) * dim.Height,
+                marginTop: (20 / dim.h) * dim.Height,
+                marginBottom: (10 / dim.h) * dim.Height,
+              }}
+              onPress={() => {
+                setModalVisible(false);
+                filterRecipe();
               }}>
               <Text
                 style={{
@@ -411,7 +492,7 @@ export default function SearchRecipe({route, navigation}) {
               id: '1',
               backgroundColor: '#EBF2FF',
               name: 'Egg Soup',
-              description: 'Easy | 30mins | 180kCal',
+              description: '180kCal',
               svgComponent: (
                 <Diet1
                   width={(96 / dim.w) * dim.Width}
@@ -424,7 +505,7 @@ export default function SearchRecipe({route, navigation}) {
               id: '2',
               backgroundColor: '#F9EBF8',
               name: 'Baked Falafel',
-              description: 'Easy | 30mins | 180kCal',
+              description: '180kCal',
               svgComponent: (
                 <Diet2
                   width={(110 / dim.w) * dim.Width}
@@ -565,6 +646,7 @@ const styles = StyleSheet.create({
   scroll: {
     marginTop: (10 / dim.h) * dim.Height,
     flexDirection: 'row',
+    marginBottom: (20 / dim.h) * dim.Height,
   },
 
   name1: {
@@ -588,20 +670,22 @@ const styles = StyleSheet.create({
     marginTop: (5 / dim.h) * dim.Height,
   },
   thumbnail: {
-    width: 50,
-    height: 50,
+    width: (50 / dim.w) * dim.Width,
+    height: (50 / dim.w) * dim.Width,
     marginRight: 10,
     borderRadius: 25,
   },
 
   heading1: {
-    marginTop: (24 / dim.h) * dim.Height,
+    marginTop: (10 / dim.h) * dim.Height,
     marginLeft: (10 / dim.w) * dim.Width,
+    marginBottom: 10,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'left',
     color: 'black',
     alignSelf: 'flex-start',
+    // backgroundColor: 'red',
   },
 
   text: {
@@ -617,7 +701,7 @@ const styles = StyleSheet.create({
 
   labelc: {
     flexDirection: 'row',
-    width: (320 / dim.w) * dim.Width,
+    width: (280 / dim.w) * dim.Width,
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: (10 / dim.h) * dim.Height,
@@ -671,5 +755,33 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Medium',
     marginTop: (5 / dim.h) * dim.Height,
     width: (120 / dim.w) * dim.Width,
+  },
+  markerStyle: {
+    width: 25,
+    height: 25,
+    position: 'absolute',
+    backgroundColor: '#91C788',
+    borderColor: 'white',
+    borderWidth: 5,
+    borderRadius: 15,
+    elevation: 5,
+  },
+  containerStyle: {
+    alignItems: 'center', // Center align the entire component
+    justifyContent: 'center', // Center align the entire component
+
+    // marginTop: 20,
+  },
+  lbl: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+  },
+  modalContent: {
+    padding: 16,
+    backgroundColor: 'red',
+    height: 100,
+    // Add any other styles for your modal content
   },
 });

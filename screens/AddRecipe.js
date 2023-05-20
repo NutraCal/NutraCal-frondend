@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   Text,
   View,
@@ -14,12 +14,16 @@ import Ing1 from '../assets/images/ing1.svg';
 import Ing2 from '../assets/images/ing2.svg';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import axios from 'axios';
-import {endpoint} from '../util/config';
 import dim from '../util/dim';
 
+import axios from 'axios';
+import {endpoint} from '../util/config';
+import {AuthContext} from '../context/AuthContext';
+
 export default function AddRecipe({route, navigation}) {
-  const {email} = route.params;
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
 
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);
@@ -28,18 +32,18 @@ export default function AddRecipe({route, navigation}) {
   const [value4, setValue4] = useState(null);
 
   const [category, setCategory] = useState([
-    {label: 'Cakes And Cookies', value: 'CakesAndCookies'},
-    {label: 'Eggs And Meat', value: 'EggsAndMeat'},
-    {label: 'Pasta And Salads', value: 'PastaAndSalads'},
-    {label: 'Soups And Sandwiches', value: 'SoupsAndSandwiches'},
-    {label: 'Veg Rice and Tacos', value: 'VegRiceAndTacos'},
-    {label: 'None', value: 'None'},
+    {label: 'Cakes and Pies', value: 'Cakes and Pies'},
+    {label: 'Eggs And Meat', value: 'Eggs and Meat'},
+    {label: 'Pasta And Salads', value: 'Pasta and Salads'},
+    {label: 'Soups And Sandwiches', value: 'Soups and Sandwiches'},
+    {label: 'Veg Rice and Tacos', value: 'Vegetables, Rice and Tacos'},
+    {label: 'Other', value: 'Other'},
   ]);
 
   const [allergy, setAllergy] = useState([
-    {label: 'Lactose Intolerance', value: 'LactoseIntolerant'},
-    {label: 'Nut Allergy', value: 'NutAllergy'},
-    {label: 'Egg Allergy', value: 'Egg'},
+    {label: 'Lactose Intolerance', value: 'Lactose Intolerant'},
+    {label: 'Nut Allergy', value: 'Nut Allergy'},
+    {label: 'Egg Allergy', value: 'Egg Allergy'},
     {label: 'None', value: 'None'},
   ]);
 
@@ -54,10 +58,9 @@ export default function AddRecipe({route, navigation}) {
   const [quantity, setQuantity] = useState([]);
   const [item, setItem] = useState('');
   const [getlist, setList] = useState([]);
-
   const [loadId, setLoadId] = useState(true);
   const [loadData, setLoadData] = useState(true);
-  const [userId, setUserId] = useState('');
+
   const [json, setJson] = useState('');
 
   const additems = () => {
@@ -79,26 +82,26 @@ export default function AddRecipe({route, navigation}) {
     console.log(getlist);
   };
 
-  const getUserId = async res => {
-    console.log('inside');
-    try {
-      const response = await axios({
-        method: 'get',
-        url: endpoint + '/users/getUserId/' + email,
-        headers: {},
-      });
+  // const getUserId = async res => {
+  //   console.log('inside');
+  //   try {
+  //     const response = await axios({
+  //       method: 'get',
+  //       url: endpoint + '/users/getUserId/' + email,
+  //       headers: {},
+  //     });
 
-      // console.log(JSON.stringify(response.data));
-      // setJson(response.data);
-      setUserId(response.data);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
+  //     // console.log(JSON.stringify(response.data));
+  //     // setJson(response.data);
+  //     setUserId(response.data);
+  //   } catch (error) {
+  //     console.log(error.response);
+  //   }
+  // };
 
   const saveRecipe = async res => {
-    console.log('here');
-    console.log(userId);
+    // console.log('here');
+    // console.log(userId);
     console.log(ingredients.toString());
 
     var data = JSON.stringify({
@@ -135,9 +138,9 @@ export default function AddRecipe({route, navigation}) {
     }
   };
 
-  useEffect(() => {
-    getUserId();
-  }, []);
+  // useEffect(() => {
+  //   getUserId();
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -275,6 +278,7 @@ export default function AddRecipe({route, navigation}) {
                 textStyle={{
                   fontSize: 16,
                 }}
+                multiple={true}
                 open={open4}
                 value={value4}
                 items={allergy}

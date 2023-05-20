@@ -19,8 +19,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import dim from '../util/dim';
 
-const HomeHeader = ({route, navigation, email}) => {
-  console.log(email);
+const HomeHeader = ({route, navigation}) => {
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -52,9 +51,7 @@ const HomeHeader = ({route, navigation, email}) => {
             }>
             <Menu.Item
               onPress={() => {
-                navigation.navigate('AddRecipe', {
-                  email: email,
-                });
+                navigation.navigate('AddRecipe');
                 closeMenu();
               }}
               title="Add Recipe"
@@ -62,9 +59,7 @@ const HomeHeader = ({route, navigation, email}) => {
             <Divider />
             <Menu.Item
               onPress={() => {
-                navigation.navigate('MyRecipes', {
-                  email: email,
-                });
+                navigation.navigate('MyRecipes');
                 closeMenu();
               }}
               title="My Recipes"
@@ -72,9 +67,7 @@ const HomeHeader = ({route, navigation, email}) => {
             <Divider />
             <Menu.Item
               onPress={() => {
-                navigation.navigate('SuggestRecipe', {
-                  email: email,
-                });
+                navigation.navigate('SuggestRecipe');
                 closeMenu();
               }}
               title="Suggest Recipe"

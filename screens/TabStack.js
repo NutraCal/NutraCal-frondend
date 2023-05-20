@@ -176,13 +176,10 @@ const TabStack = ({route, navigation}) => {
       />
       <Tab.Screen
         name="RecipeBook"
-        initialParams={{email: email}}
         component={RecipeBook}
         options={({navigation}) => {
           return {
-            headerTitle: props => (
-              <HomeHeader navigation={navigation} email={email} />
-            ),
+            headerTitle: props => <HomeHeader navigation={navigation} />,
           };
         }}
       />

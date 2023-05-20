@@ -1,13 +1,18 @@
-import * as React from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Myrec1 from '../assets/images/myrec1.svg';
 import Myrec2 from '../assets/images/myrec2.svg';
 import Hearticon from '../assets/images/heart.svg';
 import dim from '../util/dim';
+import axios from 'axios';
+import {endpoint} from '../util/config';
+import {AuthContext} from '../context/AuthContext';
 
 export default function MyRecipes({route, navigation}) {
-  const {email} = route.params;
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
