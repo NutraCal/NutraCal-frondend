@@ -501,7 +501,7 @@ export default function SearchRecipe({route, navigation}) {
               id: '1',
               backgroundColor: '#EBF2FF',
               name: 'Egg Soup',
-              description: '180kCal',
+              description: '269kCal',
               svgComponent: (
                 <Diet1
                   width={(96 / dim.w) * dim.Width}
@@ -514,7 +514,7 @@ export default function SearchRecipe({route, navigation}) {
               id: '2',
               backgroundColor: '#F9EBF8',
               name: 'Baked Falafel',
-              description: '180kCal',
+              description: '190kCal',
               svgComponent: (
                 <Diet2
                   width={(110 / dim.w) * dim.Width}
