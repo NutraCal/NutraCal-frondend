@@ -247,6 +247,15 @@ export default function SearchRecipe({route, navigation}) {
       },
       PicComponent: Pic4, // Add the corresponding SVG component here
     },
+    {
+      id: '5',
+      backgroundColor: '#EBF2FF',
+      name: 'Soups and Sandwiches',
+      onPress: () => {
+        setCategory('Soups and Sandwiches');
+      },
+      PicComponent: Pic2, // Add the corresponding SVG component here
+    },
   ];
 
   const renderItem = ({item}) => (
