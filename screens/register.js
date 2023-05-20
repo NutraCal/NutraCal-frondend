@@ -294,55 +294,6 @@ const Register = ({route, navigation}) => {
     }
 
     createUser();
-
-    // if (
-    //   /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
-    //   /^(?=.*\d).{8,12}$/.test(password)
-    // ) {
-    //   fetch(endpoint + '/users/createUser', {
-    //     method: 'POST',
-
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       name: name,
-    //       email: email,
-    //       password: password,
-    //       fitnessGoal: goal,
-    //       gender: gender,
-    //       age: age,
-    //       height: height,
-    //       heightUnit: heightUnit,
-    //       weight: weight,
-    //       weightUnit: weightUnit,
-    //       allergies: allergies,
-    //       diet: diet,
-    //       ingredients: 'abc',
-    //       role: role,
-    //     }),
-    //   }).then(response => {
-    //     if (response.status == 200) {
-    //       navigation.navigate('Login');
-    //     } else {
-    //       Alert.alert('User already exists', 'Create Account with new Email', [
-    //         {text: 'OK', onPress: () => console.log('OK Pressed')},
-    //       ]);
-    //     }
-    //     console.log(response.status); // returns 200
-    //   });
-    //   setEmail('');
-    //   setPassword('');
-    //   setIsEmailValid('true');
-    //   setIsPasswordValid('true');
-    // } else {
-    //   setIsEmailValid('false');
-    //   setIsPasswordValid('false');
-    //   Alert.alert('Invalid Input', 'Please check your email and password', [
-    //     {text: 'OK', onPress: () => console.log('OK Pressed')},
-    //   ]);
-    // }
   };
   return (
     <View style={styles.container}>

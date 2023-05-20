@@ -52,14 +52,14 @@ export default function Shopping({route, navigation}) {
 
   const getShoppingList = async res => {
     setLoading(true);
-    console.log('getting list');
+    // console.log('getting list');
     try {
       const response = await axios({
         method: 'get',
         url: endpoint + '/shoppingList/viewList/' + userId,
         headers: {},
       });
-      const convertedArray = convertToSentenceCase(response.data);
+      const convertedArray = convertToSentenceCase(response.data.list);
       setList(convertedArray);
       setLoadData(false);
       setLoading(false);
