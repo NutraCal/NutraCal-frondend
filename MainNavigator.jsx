@@ -275,7 +275,24 @@ export default function MainNavigator() {
         <Stack.Screen
           name="Calories"
           component={Calories}
-          options={{headerShown: true}}
+          options={({navigation}) => ({
+            headerShown: true,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('AddMeal')}
+                styles={{backgroundColor: '#91C788'}}>
+                <Text
+                  style={{
+                    color: '#91C788',
+                    fontSize: 16,
+                    marginRight: (10 / dim.w) * dim.Width,
+                    fontWeight: 'bold',
+                  }}>
+                  Add Meal
+                </Text>
+              </TouchableOpacity>
+            ),
+          })}
         />
         <Stack.Screen
           name="StepCount"

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   Text,
   View,
@@ -19,8 +19,11 @@ import axios from 'axios';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
 
+import {AuthContext} from '../context/AuthContext';
+
 export default function AddMeal({route, navigation}) {
-  const {email} = route.params;
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
 
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);

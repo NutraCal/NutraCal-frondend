@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
+  ActivityIndicator,
 } from 'react-native';
 import B1 from '../assets/images/breakfast1.svg';
 import L1 from '../assets/images/lunch1.svg';
@@ -37,9 +38,108 @@ export default function Calories({route, navigation}) {
 
   const [date, setDate] = useState(null);
 
+  const [bmeals, setBmeals] = useState([]);
+  const [lmeals, setLmeals] = useState([]);
+  const [smeals, setSmeals] = useState([]);
+  const [dmeals, setDmeals] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
+  const fetchMeal = async date => {
+    console.log('in fetch meal');
+    console.log(typeof date);
+    setLoading(true);
+    setBmeals([]);
+    setLmeals([]);
+    setSmeals([]);
+    setDmeals([]);
+    var data = JSON.stringify({
+      email: email,
+      date: date,
+    });
+    try {
+      const res = await axios({
+        method: 'post',
+        url: endpoint + '/meals/dailyLog',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(res.data));
+
+      const response = res.data; // Assuming response.data is your response object
+
+      // Separate the arrays based on category
+      const categoryArrays = {};
+      response.forEach(item => {
+        const category = item.category;
+        if (!categoryArrays[category]) {
+          categoryArrays[category] = [];
+        }
+        categoryArrays[category].push(item);
+      });
+
+      if (categoryArrays['Breakfast']) {
+        setBmeals(categoryArrays['Breakfast']);
+      }
+      if (categoryArrays['Lunch']) {
+        setLmeals(categoryArrays['Lunch']);
+      }
+      if (categoryArrays['Snacks']) {
+        setSmeals(categoryArrays['Snacks']);
+      }
+      if (categoryArrays['Dinner']) {
+        setDmeals(categoryArrays['Dinner']);
+      }
+      console.log(bmeals);
+      console.log(lmeals);
+      console.log(smeals);
+      console.log(dmeals);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  // useEffect(() => {
+  //   // Assuming your response object is obtained and stored in a variable called "response"
+  //   const categoryArrays = {};
+  //   response.forEach(item => {
+  //     const category = item.category;
+  //     if (!categoryArrays[category]) {
+  //       categoryArrays[category] = [];
+  //     }
+  //     categoryArrays[category].push(item);
+  //   });
+
+  //   // Clear the existing hook values
+  //   setDinnerRecipes([]);
+  //   setBreakfastRecipes([]);
+  //   setLunchRecipes([]);
+  //   setSnacksRecipes([]);
+
+  //   // Set new values if the category arrays exist in the response data
+  //   if (categoryArrays['Dinner']) {
+  //     setDinnerRecipes(categoryArrays['Dinner']);
+  //   }
+  //   if (categoryArrays['Breakfast']) {
+  //     setBreakfastRecipes(categoryArrays['Breakfast']);
+  //   }
+  //   if (categoryArrays['Lunch']) {
+  //     setLunchRecipes(categoryArrays['Lunch']);
+  //   }
+  //   if (categoryArrays['Snacks']) {
+  //     setSnacksRecipes(categoryArrays['Snacks']);
+  //   }
+  // }, [response]);
+
   const handleDatePress = date => {
     setSelectedDate(date);
     console.log(date);
+    fetchMeal(date);
 
     // Load meal log for the selected date
     // ...
@@ -47,7 +147,8 @@ export default function Calories({route, navigation}) {
 
   const getWeekDates = date => {
     // Generate an array of dates for the current week
-    console.log(date);
+    // console.log(date);
+
     console.log('here in function');
     const weekStart = moment(date).startOf('week');
     const weekEnd = moment(date).endOf('week');
@@ -59,25 +160,32 @@ export default function Calories({route, navigation}) {
     ) {
       dates.push(date.format('YYYY-MM-DD'));
     }
-    console.log(dates.toString());
+    // console.log(dates.toString());
     setWeekDates(dates);
   };
 
   const handleDateChange = date => {
     const formattedDate = moment(date, 'YYYY/MM/DD').format('D MMMM YYYY');
     setCDate(formattedDate);
+
     const fDate = moment(date, 'YYYY/MM/DD').format('YYYY-MM-DD');
-    console.log(fDate);
+    // console.log(fDate);
     const currentDate = moment(fDate).toDate(); // set the current date to user selected date
-    console.log(currentDate);
+    // console.log(currentDate);
     setDate(currentDate);
+
     setTimeout(() => {
       setModalVisible(false);
     }, 1000);
   };
 
   // useEffect(() => {
+  //   // Fetch the latest data or update the state here
   //   const currentDate = moment().toDate();
+  //   const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
+  //     'D MMMM YYYY',
+  //   );
+  //   setCDate(formattedDate);
   //   getWeekDates(currentDate);
   // }, []);
 
@@ -100,12 +208,17 @@ export default function Calories({route, navigation}) {
 
   useEffect(() => {
     if (date !== null) {
+      console.log('hhehhhhhhhh');
       getWeekDates(date);
+      console.log(date);
+      // handleDateChange(date);
     }
   }, [date]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}>
       <Text style={[styles.heading]} onPress={() => setModalVisible(true)}>
         {cDate}
       </Text>
@@ -170,126 +283,148 @@ export default function Calories({route, navigation}) {
         ))}
       </ScrollView>
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{}}>
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Breakfast</Text>
-            <Text style={styles.desc}>230 calories</Text>
-          </View>
-          <View
-            style={[styles.subsection, {marginTop: (10 / dim.h) * dim.Height}]}>
-            <B1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Honey Pancake</Text>
-              <Text style={styles.desc}>7:00 am</Text>
+      {loading ? (
+        <ActivityIndicator></ActivityIndicator>
+      ) : (
+        <View>
+          {bmeals.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.subsection}>
+                <Text style={styles.heading}>Breakfast</Text>
+                <Text style={styles.desc}>230 calories</Text>
+              </View>
+              {bmeals.map((item, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.subsection,
+                    {marginTop: (10 / dim.h) * dim.Height},
+                  ]}>
+                  <B1
+                    width={(60 / dim.w) * dim.Width}
+                    height={(60 / dim.w) * dim.Width}
+                  />
+                  <View style={{width: (150 / dim.w) * dim.Width}}>
+                    <Text style={styles.name1}>{item.name}</Text>
+                    <Text style={styles.desc}>7:00 am</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <Forw
+                      width={(24 / dim.w) * dim.Width}
+                      height={(24 / dim.w) * dim.Width}
+                      style={{marginLeft: (20 / dim.w) * dim.Width}}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+          )}
+          {lmeals.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.subsection}>
+                <Text style={styles.heading}>Lunch</Text>
+                <Text style={styles.desc}>500 calories</Text>
+              </View>
 
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Lunch</Text>
-            <Text style={styles.desc}>500 calories</Text>
-          </View>
-          <View
-            style={[styles.subsection, {marginTop: (10 / dim.h) * dim.Height}]}>
-            <L1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Chicken Steak</Text>
-              <Text style={styles.desc}>1:00 pm</Text>
+              {lmeals.map((item, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.subsection,
+                    {marginTop: (10 / dim.h) * dim.Height},
+                  ]}>
+                  <L1
+                    width={(60 / dim.w) * dim.Width}
+                    height={(60 / dim.w) * dim.Width}
+                  />
+                  <View style={{width: (150 / dim.w) * dim.Width}}>
+                    <Text style={styles.name1}>{item.name}</Text>
+                    <Text style={styles.desc}>1:00 pm</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <Forw
+                      width={(24 / dim.w) * dim.Width}
+                      height={(24 / dim.w) * dim.Width}
+                      style={{marginLeft: (20 / dim.w) * dim.Width}}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+          )}
 
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Snacks</Text>
-            <Text style={styles.desc}>50 calories</Text>
-          </View>
-          <View style={[styles.subsection, {marginTop: 10}]}>
-            <S1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Orange</Text>
-              <Text style={styles.desc}>5:00 pm</Text>
+          {smeals.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.subsection}>
+                <Text style={styles.heading}>Snacks</Text>
+                <Text style={styles.desc}>50 calories</Text>
+              </View>
+              {smeals.map((item, index) => (
+                <View key={index} style={[styles.subsection, {marginTop: 10}]}>
+                  <S1
+                    width={(60 / dim.w) * dim.Width}
+                    height={(60 / dim.w) * dim.Width}
+                  />
+                  <View style={{width: (150 / dim.w) * dim.Width}}>
+                    <Text style={styles.name1}>{item.name}</Text>
+                    <Text style={styles.desc}>5:00 pm</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <Forw
+                      width={(24 / dim.w) * dim.Width}
+                      height={(24 / dim.w) * dim.Width}
+                      style={{marginLeft: (20 / dim.w) * dim.Width}}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+          )}
 
-        <View style={styles.section}>
-          <View style={styles.subsection}>
-            <Text style={styles.heading}>Dinner</Text>
-            <Text style={styles.desc}>120 calories</Text>
-          </View>
-          <View
-            style={[styles.subsection, {marginTop: (10 / dim.h) * dim.Height}]}>
-            <D1
-              width={(60 / dim.w) * dim.Width}
-              height={(60 / dim.w) * dim.Width}
-            />
-            <View style={{width: (150 / dim.w) * dim.Width}}>
-              <Text style={styles.name1}>Salad</Text>
-              <Text style={styles.desc}>7:10 pm</Text>
+          {dmeals.length > 0 && (
+            <View style={styles.section}>
+              <View style={styles.subsection}>
+                <Text style={styles.heading}>Dinner</Text>
+                <Text style={styles.desc}>120 calories</Text>
+              </View>
+              {dmeals.map((item, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.subsection,
+                    {marginTop: (10 / dim.h) * dim.Height},
+                  ]}>
+                  <D1
+                    width={(60 / dim.w) * dim.Width}
+                    height={(60 / dim.w) * dim.Width}
+                  />
+                  <View style={{width: (150 / dim.w) * dim.Width}}>
+                    <Text style={styles.name1}>{item.name}</Text>
+                    <Text style={styles.desc}>7:10 pm</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <Forw
+                      width={(24 / dim.w) * dim.Width}
+                      height={(24 / dim.w) * dim.Width}
+                      style={{marginLeft: (20 / dim.w) * dim.Width}}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
-            <TouchableOpacity>
-              <Forw
-                width={(24 / dim.w) * dim.Width}
-                height={(24 / dim.w) * dim.Width}
-                style={{marginLeft: (20 / dim.w) * dim.Width}}
-              />
-            </TouchableOpacity>
-          </View>
+          )}
         </View>
-
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() =>
-            navigation.navigate('AddMeal', {
-              email: email,
-            })
-          }>
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+      )}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-
     justifyContent: 'center',
     padding: (8 / dim.h) * dim.Height,
+    paddingBottom: 0,
   },
 
   box: {
@@ -341,22 +476,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  addButton: {
-    backgroundColor: '#91C788',
-    borderRadius: 50,
-    width: (50 / dim.w) * dim.Width,
-    height: (50 / dim.w) * dim.Width,
-    position: 'absolute',
-    marginTop: (40 / dim.h) * dim.Height,
-    bottom: (10 / dim.h) * dim.Height,
-    right: (20 / dim.w) * dim.Width,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  // addButton: {
+  //   backgroundColor: '#91C788',
+  //   borderRadius: 50,
+  //   width: (50 / dim.w) * dim.Width,
+  //   height: (50 / dim.w) * dim.Width,
+  //   position: 'absolute',
+  //   marginTop: (40 / dim.h) * dim.Height,
+  //   bottom: (10 / dim.h) * dim.Height,
+  //   right: (20 / dim.w) * dim.Width,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // },
 
-  buttonText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
+  // buttonText: {
+  //   color: '#fff',
+  //   fontSize: 24,
+  //   fontWeight: 'bold',
+  // },
 });
