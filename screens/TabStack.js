@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -25,10 +25,15 @@ import ShoppingHeader from './ShoppingHeader';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import dim from '../util/dim';
 
+import {AuthContext} from '../context/AuthContext';
+
 const Tab = createBottomTabNavigator();
 
 const TabStack = ({route, navigation}) => {
-  const {email} = route.params;
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
+  const role = user?.data?.user?.role;
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -91,7 +96,7 @@ const TabStack = ({route, navigation}) => {
                 color="black"
               />
             );
-          } else if (route.name === 'DiscussionThread') {
+          } else if (route.name === 'Discussion') {
             return focused ? (
               <Icon
                 name="ios-checkmark-done-circle"
@@ -161,17 +166,6 @@ const TabStack = ({route, navigation}) => {
           headerBackTitleVisible: false,
           headerTitleAlign: 'center',
           title: 'Home',
-          // headerStyle: {
-          //   borderBottomWidth: 1,
-          //   elevation: 5,
-          //   backgroundColor: '#91C788',
-          // },
-          // headerTitleStyle: {
-          //   fontWeight: 'bold',
-          //   color: 'white',
-          //   fontFamily: 'Inter-Medium',
-          //   fontSize: 20,
-          // },
         }}
       />
       <Tab.Screen
@@ -183,38 +177,39 @@ const TabStack = ({route, navigation}) => {
           };
         }}
       />
+      {role != 'Nutritionist' ? (
+        <Tab.Screen
+          name="DietPlans"
+          initialParams={{email: email}}
+          component={DietPlans}
+          options={({navigation}) => ({
+            headerShown: true,
+            headerStyle: {
+              borderBottomWidth: 1,
+              elevation: 5,
+            },
+            headerTitleStyle: {
+              marginLeft: (20 / dim.w) * dim.Width,
+            },
 
-      <Tab.Screen
-        name="DietPlans"
-        initialParams={{email: email}}
-        component={DietPlans}
-        options={({navigation}) => ({
-          headerShown: true,
-          headerStyle: {
-            borderBottomWidth: 1,
-            elevation: 5,
-          },
-          headerTitleStyle: {
-            marginLeft: (20 / dim.w) * dim.Width,
-          },
-
-          // headerRight: () => (
-          //   <TouchableOpacity
-          //     onPress={() => navigation.navigate('AddMealScan')}
-          //     styles={{backgroundColor: '#91C788'}}>
-          //     <Text
-          //       style={{
-          //         color: '#91C788',
-          //         fontSize: 16,
-          //         marginRight: 30,
-          //         fontWeight: 'bold',
-          //       }}>
-          //       Scan
-          //     </Text>
-          //   </TouchableOpacity>
-          // ),
-        })}
-      />
+            // headerRight: () => (
+            //   <TouchableOpacity
+            //     onPress={() => navigation.navigate('AddMealScan')}
+            //     styles={{backgroundColor: '#91C788'}}>
+            //     <Text
+            //       style={{
+            //         color: '#91C788',
+            //         fontSize: 16,
+            //         marginRight: 30,
+            //         fontWeight: 'bold',
+            //       }}>
+            //       Scan
+            //     </Text>
+            //   </TouchableOpacity>
+            // ),
+          })}
+        />
+      ) : null}
       <Tab.Screen
         name="Shopping"
         initialParams={{email: email}}
@@ -246,11 +241,11 @@ const TabStack = ({route, navigation}) => {
           ),
         })}
       />
-
       <Tab.Screen
-        name="DiscussionThread"
+        name="Discussion"
         component={DiscussionThread}
         options={({navigation}) => ({
+          headerTitle: 'Discuss',
           headerShown: true,
           headerStyle: {
             borderBottomWidth: 1,
@@ -277,7 +272,6 @@ const TabStack = ({route, navigation}) => {
           ),
         })}
       />
-
       <Tab.Screen
         name="Blogs"
         component={Blogs}
