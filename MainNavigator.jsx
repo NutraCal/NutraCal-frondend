@@ -309,24 +309,7 @@ export default function MainNavigator() {
         <Stack.Screen
           name="ViewMeal"
           component={ViewMeal}
-          options={({navigation}) => ({
-            headerShown: true,
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('EditMeal')}
-                styles={{backgroundColor: '#91C788'}}>
-                <Text
-                  style={{
-                    color: '#91C788',
-                    fontSize: 16,
-                    marginRight: (10 / dim.w) * dim.Width,
-                    fontWeight: 'bold',
-                  }}>
-                  Update
-                </Text>
-              </TouchableOpacity>
-            ),
-          })}
+          options={{headerShown: true}}
         />
 
         <Stack.Screen

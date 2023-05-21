@@ -18,10 +18,14 @@ import {endpoint} from '../util/config';
 import dim from '../util/dim';
 
 import {AuthContext} from '../context/AuthContext';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import moment from 'moment';
+import FormData from 'form-data';
 
 export default function AddMeal({route, navigation}) {
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
 
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);
@@ -40,46 +44,49 @@ export default function AddMeal({route, navigation}) {
   const [carbs, setCarbs] = useState('');
   const [loadId, setLoadId] = useState(true);
   const [loadData, setLoadData] = useState(true);
-  const [userId, setUserId] = useState('');
-  const [json, setJson] = useState('');
+  const [image, setImage] = useState(null);
+  const [cDate, setCDate] = useState(moment().format('YYYY-MM-DD'));
 
-  const getUserId = async res => {
-    console.log('inside');
+  const handleChoosePhoto = async () => {
     try {
-      const response = await axios({
-        method: 'get',
-        url: endpoint + '/users/getUserId/' + email,
-        headers: {},
-      });
-
-      console.log(JSON.stringify(response.data));
-
-      setJson(response.data);
+      const response = await launchImageLibrary({mediaType: 'photo'});
+      if (!response.didCancel) {
+        setImage(response);
+      } else {
+        console.log('Image selection cancelled.');
+      }
     } catch (error) {
-      console.log(error.response);
+      console.log(error.response.data);
     }
   };
 
   const saveMeal = async res => {
-    console.log('here');
-    console.log(userId);
-
-    var data = JSON.stringify({
-      name: name,
-      category: value3,
-      calories: parseInt(calories),
-      proteins: parseInt(proteins),
-      fats: parseInt(fats),
-      carbohydrates: parseInt(carbs),
+    console.log(cDate);
+    const cTime = moment().format('h:mm A');
+    const data = new FormData();
+    data.append('name', name);
+    data.append('category', value3);
+    data.append('calories', calories);
+    data.append('proteins', proteins);
+    data.append('fats', fats);
+    data.append('carbohydrates', carbs);
+    data.append('date', cDate);
+    data.append('time', cTime);
+    data.append('photo', {
+      uri: image.assets[0].uri,
+      name: 'photo.jpg',
+      type: 'image/jpeg', // You can set the type here if you know the specific file type
     });
 
     console.log(data);
+
     try {
       const response = await axios({
         method: 'post',
+        maxContentLength: Infinity,
         url: endpoint + '/meals/addMeal/' + email,
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
         data: data,
       });
@@ -87,9 +94,7 @@ export default function AddMeal({route, navigation}) {
       if (response.status == 200) {
         updateDailyNutrition();
         alert('meal added successfully');
-        navigation.goBack({
-          email: email,
-        });
+        navigation.goBack();
       }
     } catch (error) {
       console.log(error.message);
@@ -99,6 +104,7 @@ export default function AddMeal({route, navigation}) {
   const updateDailyNutrition = async res => {
     var data = JSON.stringify({
       email: email,
+      date: cDate,
     });
 
     try {
@@ -117,130 +123,124 @@ export default function AddMeal({route, navigation}) {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container2}>
-          <Image
-            source={require('../assets/images/recipecover.png')}
-            style={{
-              width: (90 / dim.w) * dim.Width,
-              height: (150 / dim.w) * dim.Width,
-            }}
+    // <View style={styles.container}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}>
+      <View style={styles.container2}>
+        <TouchableOpacity
+          onPress={handleChoosePhoto}
+          style={{alignSelf: 'center'}}>
+          {image ? (
+            <Image source={{uri: image.assets[0].uri}} style={styles.img} />
+          ) : (
+            <View style={styles.imgView}>
+              <Text style={{color: '#FFFFFF', fontSize: 40}}>+</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+
+        <View
+          style={{
+            alignItems: 'flex-start',
+            padding: (10 / dim.h) * dim.Height,
+            justifyContent: 'center',
+          }}>
+          <Text style={styles.heading}>Meal Name</Text>
+          <TextInput
+            style={styles.txtinput}
+            value={name}
+            onChangeText={text => setName(text)}
+            placeholder="Enter Meal name"
+            placeholderTextColor="#8F9098"
           />
 
-          <View
-            style={{
-              alignItems: 'flex-start',
-              padding: (10 / dim.h) * dim.Height,
-              justifyContent: 'center',
-            }}>
-            <Text style={styles.heading}>Meal Name</Text>
-            <TextInput
-              style={styles.txtinput}
-              value={name}
-              onChangeText={text => setName(text)}
-              placeholder="Enter Meal name"
-              placeholderTextColor="#8F9098"
-            />
-
-            <View style={styles.fieldContainer}>
-              <Text style={styles.heading}>Category:</Text>
-              <DropDownPicker
-                style={{
-                  width: (350 / dim.w) * dim.Width,
-                  borderWidth: 1,
-                  height: (20 / dim.h) * dim.Height,
-                  borderColor: '#E1E3E8',
-                }}
-                containerStyle={{
-                  width: (350 / dim.w) * dim.Width,
-                }}
-                textStyle={{
-                  fontSize: 16,
-                }}
-                open={open3}
-                value={value3}
-                items={category}
-                setOpen={setOpen3}
-                setValue={setValue3}
-                setItems={setCategory}
-                dropDownDirection="BOTTOM"
-                placeholder="Select category"
-              />
-            </View>
-
-            <Text style={styles.heading}>Nutrition</Text>
-            <TextInput
-              value={calories}
-              keyboardType="numeric"
-              onChangeText={text => setCalories(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Calories"
-              placeholderTextColor="#8F9098"
-            />
-            <TextInput
-              value={fats}
-              keyboardType="numeric"
-              onChangeText={text => setFats(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Fats"
-              placeholderTextColor="#8F9098"
-            />
-            <TextInput
-              value={proteins}
-              keyboardType="numeric"
-              onChangeText={text => setProteins(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Proteins"
-              placeholderTextColor="#8F9098"
-            />
-            <TextInput
-              value={carbs}
-              keyboardType="numeric"
-              onChangeText={text => setCarbs(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Carbs"
-              placeholderTextColor="#8F9098"
-            />
-
-            <TouchableOpacity
-              onPress={saveMeal}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.heading}>Category:</Text>
+            <DropDownPicker
               style={{
-                width: (330 / dim.w) * dim.Width,
-                height: (48 / dim.h) * dim.Height,
-                backgroundColor: '#91C788',
-                alignSelf: 'center',
-                borderRadius: 12,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: (20 / dim.h) * dim.Height,
-                marginBottom: (20 / dim.h) * dim.Height,
-              }}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 16,
-                  fontFamily: 'Inter-SemiBold',
-                }}>
-                Add Meal
-              </Text>
-            </TouchableOpacity>
+                width: (350 / dim.w) * dim.Width,
+                borderWidth: 1,
+                height: (20 / dim.h) * dim.Height,
+                borderColor: '#E1E3E8',
+              }}
+              containerStyle={{
+                width: (350 / dim.w) * dim.Width,
+              }}
+              textStyle={{
+                fontSize: 16,
+              }}
+              open={open3}
+              value={value3}
+              items={category}
+              setOpen={setOpen3}
+              setValue={setValue3}
+              setItems={setCategory}
+              dropDownDirection="BOTTOM"
+              placeholder="Select category"
+            />
           </View>
+
+          <Text style={styles.heading}>Nutrition</Text>
+          <TextInput
+            value={calories}
+            keyboardType="numeric"
+            onChangeText={text => setCalories(text)}
+            style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+            placeholder="Calories"
+            placeholderTextColor="#8F9098"
+          />
+          <TextInput
+            value={fats}
+            keyboardType="numeric"
+            onChangeText={text => setFats(text)}
+            style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+            placeholder="Fats"
+            placeholderTextColor="#8F9098"
+          />
+          <TextInput
+            value={proteins}
+            keyboardType="numeric"
+            onChangeText={text => setProteins(text)}
+            style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+            placeholder="Proteins"
+            placeholderTextColor="#8F9098"
+          />
+          <TextInput
+            value={carbs}
+            keyboardType="numeric"
+            onChangeText={text => setCarbs(text)}
+            style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+            placeholder="Carbs"
+            placeholderTextColor="#8F9098"
+          />
+
+          <TouchableOpacity
+            onPress={saveMeal}
+            style={{
+              width: (330 / dim.w) * dim.Width,
+              height: (48 / dim.h) * dim.Height,
+              backgroundColor: '#91C788',
+              alignSelf: 'center',
+              borderRadius: 12,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: (20 / dim.h) * dim.Height,
+              marginBottom: (20 / dim.h) * dim.Height,
+            }}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 16,
+                fontFamily: 'Inter-SemiBold',
+              }}>
+              Add Meal
+            </Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
+    // </View>
   );
 }
 
@@ -322,5 +322,18 @@ const styles = StyleSheet.create({
   fieldContainer: {
     alignItems: 'flex-start',
     marginBottom: (40 / dim.h) * dim.Height,
+  },
+  img: {
+    borderRadius: 10,
+    width: (90 / dim.w) * dim.Width,
+    height: (150 / dim.w) * dim.Width,
+  },
+  imgView: {
+    width: (90 / dim.w) * dim.Width,
+    height: (150 / dim.w) * dim.Width,
+    borderRadius: 10,
+    backgroundColor: '#CCCCCC',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -323,11 +323,14 @@ export default function Calories({route, navigation}) {
                   />
                   <View style={{width: (150 / dim.w) * dim.Width}}>
                     <Text style={styles.name1}>{item.name}</Text>
-                    <Text style={styles.desc}>7:00 am</Text>
+                    <Text style={styles.desc}>{item.time}</Text>
                   </View>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('ViewMeal', {item: item});
+                      navigation.navigate('ViewMeal', {
+                        item: item,
+                        editable: false,
+                      });
                     }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}
@@ -359,7 +362,7 @@ export default function Calories({route, navigation}) {
                   />
                   <View style={{width: (150 / dim.w) * dim.Width}}>
                     <Text style={styles.name1}>{item.name}</Text>
-                    <Text style={styles.desc}>1:00 pm</Text>
+                    <Text style={styles.desc}>{item.time}</Text>
                   </View>
                   <TouchableOpacity
                     onPress={() => {
@@ -390,7 +393,7 @@ export default function Calories({route, navigation}) {
                   />
                   <View style={{width: (150 / dim.w) * dim.Width}}>
                     <Text style={styles.name1}>{item.name}</Text>
-                    <Text style={styles.desc}>5:00 pm</Text>
+                    <Text style={styles.desc}>{item.time}</Text>
                   </View>
                   <TouchableOpacity
                     onPress={() => {
@@ -426,7 +429,7 @@ export default function Calories({route, navigation}) {
                   />
                   <View style={{width: (150 / dim.w) * dim.Width}}>
                     <Text style={styles.name1}>{item.name}</Text>
-                    <Text style={styles.desc}>7:10 pm</Text>
+                    <Text style={styles.desc}>{item.time}</Text>
                   </View>
                   <TouchableOpacity
                     onPress={() => {

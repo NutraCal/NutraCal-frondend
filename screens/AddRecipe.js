@@ -70,7 +70,6 @@ export default function AddRecipe({route, navigation}) {
   const [image, setImage] = useState(null);
   const [ing, setIng] = useState('');
   const [qua, setQua] = useState('');
-
   const [ingredients, setIngredients] = useState([]);
   const [quantities, setQuantities] = useState([]);
   const [idata, setIData] = useState([]);
