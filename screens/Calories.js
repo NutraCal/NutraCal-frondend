@@ -25,6 +25,8 @@ import {endpoint} from '../util/config';
 import {AuthContext} from '../context/AuthContext';
 import dim from '../util/dim';
 
+import Ionicon from 'react-native-vector-icons/AntDesign';
+
 export default function Calories({route, navigation}) {
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
@@ -219,9 +221,24 @@ export default function Calories({route, navigation}) {
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.container}>
-      <Text style={[styles.heading]} onPress={() => setModalVisible(true)}>
-        {cDate}
-      </Text>
+      <TouchableOpacity
+        onPress={() => setModalVisible(true)}
+        style={{
+          alignSelf: 'flex-end',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: 140,
+          marginBottom: 10,
+          marginTop: 5,
+        }}>
+        <Ionicon
+          name="calendar"
+          size={20}
+          style={{marginRight: (5 / dim.w) * dim.Width}}
+        />
+        <Text style={[styles.heading]}>{cDate}</Text>
+      </TouchableOpacity>
 
       <Modal isVisible={isModalVisible}>
         <View>
@@ -453,11 +470,9 @@ const styles = StyleSheet.create({
     marginTop: (5 / dim.h) * dim.Height,
   },
   heading: {
-    fontFamily: 'Inter-Bold',
-    color: 'black',
-    fontSize: 18,
-    marginTop: (10 / dim.h) * dim.Height,
-    marginBottom: (5 / dim.h) * dim.Height,
+    fontFamily: 'Inter-Medium',
+    color: '#7B6F72',
+    fontSize: 16,
   },
 
   desc: {
