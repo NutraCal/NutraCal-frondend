@@ -228,9 +228,9 @@ export default function Calories({route, navigation}) {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          width: 140,
-          marginBottom: 10,
-          marginTop: 5,
+          width: (140 / dim.w) * dim.Width,
+          marginBottom: (10 / dim.h) * dim.Height,
+          marginTop: (5 / dim.h) * dim.Height,
         }}>
         <Ionicon
           name="calendar"
