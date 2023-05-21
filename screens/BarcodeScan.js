@@ -44,6 +44,7 @@ function BarcodeScan(): JSX.Element {
   };
 
   const getData = async res => {
+    setLoading(true);
     try {
       const response = await axios({
         method: 'get',

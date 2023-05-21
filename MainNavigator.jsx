@@ -61,6 +61,8 @@ import ViewBlog from './screens/ViewBlog';
 import ViewMeal from './screens/ViewMeal';
 import EditMeal from './screens/EditMeal';
 
+import ViewNutritionistProfile from './screens/ViewNutritionistProfile';
+
 import dim from './util/dim';
 
 LogBox.ignoreAllLogs();
@@ -261,6 +263,12 @@ export default function MainNavigator() {
         <Stack.Screen
           name="ViewProfile"
           component={ViewProfile}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="ViewNutritionistProfile"
+          component={ViewNutritionistProfile}
           options={{headerShown: true}}
         />
 

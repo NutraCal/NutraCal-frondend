@@ -191,22 +191,6 @@ const TabStack = ({route, navigation}) => {
             headerTitleStyle: {
               marginLeft: (20 / dim.w) * dim.Width,
             },
-
-            // headerRight: () => (
-            //   <TouchableOpacity
-            //     onPress={() => navigation.navigate('AddMealScan')}
-            //     styles={{backgroundColor: '#91C788'}}>
-            //     <Text
-            //       style={{
-            //         color: '#91C788',
-            //         fontSize: 16,
-            //         marginRight: 30,
-            //         fontWeight: 'bold',
-            //       }}>
-            //       Scan
-            //     </Text>
-            //   </TouchableOpacity>
-            // ),
           })}
         />
       ) : null}

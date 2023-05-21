@@ -108,28 +108,36 @@ export default function Login({route, navigation}) {
     }
   };
 
-  const socialLogIn = email => {
+  const socialLogIn = async email => {
     console.log(email);
-    fetch('http://192.168.10.89:8000/users/googleLogIn', {
-      method: 'POST',
 
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-      }),
-    }).then(response => {
+    var data = JSON.stringify({
+      email: email,
+    });
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/users/googleLogIn',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
       if (response.status == 200) {
         navigation.navigate('Login');
+        alert('User added successfully');
       } else {
         Alert.alert('User already exists', 'Create Account with new Email', [
           {text: 'OK', onPress: () => console.log('OK Pressed')},
         ]);
       }
-      console.log(response.status); // returns 200
-    });
+    } catch (error) {
+      console.log(error.response);
+    }
   };
 
   return (
@@ -220,7 +228,7 @@ export default function Login({route, navigation}) {
               color: '#91C888',
               fontFamily: 'Inter-SemiBold',
             }}
-            onPress={() => navigation.navigate('UserFitnessGoal')}>
+            onPress={() => navigation.navigate('SelectRole')}>
             Sign Up
           </Text>
         </View>

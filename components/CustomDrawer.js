@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import {AuthContext} from '../context/AuthContext';
+import dim from '../util/dim';
 
 const CustomDrawer = props => {
   const {logout} = useContext(AuthContext);
@@ -25,40 +26,37 @@ const CustomDrawer = props => {
         {...props}
         contentContainerStyle={{backgroundColor: '#91C788'}}>
         <ImageBackground
-          source={require('../assets/images/menu-bg.jpeg')}
-          style={{padding: 20}}>
+          style={{
+            padding: 20,
+            backgroundColor: '#91C788',
+            height: (150 / dim.h) * dim.Height,
+          }}>
           <Image
-            source={require('../assets/images/homedp.png')}
-            style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
+            source={require('../assets/images/logo.png')}
+            style={{
+              width: (205 / dim.w) * dim.Width,
+              height: (37 / dim.w) * dim.Width,
+              alignSelf: 'baseline',
+              marginTop: 30,
+              // backgroundColor: 'red',
+            }}
           />
-          <Text
+          {/* <Text
             style={{
               color: '#fff',
-              fontSize: 18,
-              fontFamily: 'Roboto-Medium',
+              fontSize: 30,
+              fontFamily: 'Inter-Bold',
               marginBottom: 5,
+              alignSelf: 'baseline',
             }}>
-            Christie Doe
-          </Text>
+            NutraCal
+          </Text> */}
         </ImageBackground>
         <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
       <View style={{padding: 20, borderTopWidth: 1, borderTopColor: '#ccc'}}>
-        <TouchableOpacity onPress={() => {}} style={{paddingVertical: 15}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Ionicons name="share-social-outline" size={22} />
-            <Text
-              style={{
-                fontSize: 15,
-                fontFamily: 'Roboto-Medium',
-                marginLeft: 5,
-              }}>
-              Tell a Friend
-            </Text>
-          </View>
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={async () => {
             await logout();
@@ -72,7 +70,7 @@ const CustomDrawer = props => {
                 fontFamily: 'Roboto-Medium',
                 marginLeft: 5,
               }}>
-              Sign Out
+              Log Out
             </Text>
           </View>
         </TouchableOpacity>

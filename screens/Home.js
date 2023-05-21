@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -18,6 +18,8 @@ import Steps from '../assets/icons/steps.svg';
 import Forw from '../assets/forwardbtn.svg';
 import Login from './Login';
 import dim from '../util/dim';
+import {AuthContext} from '../context/AuthContext';
+import {endpoint} from '../util/config';
 
 import ColorfulCard from 'react-native-colorful-card';
 
@@ -31,7 +33,11 @@ import {
 } from 'react-native-chart-kit';
 
 export default function Home({route, navigation}) {
-  const {email} = route.params;
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
+  const image = user?.data?.user?.Image;
+  const name = user?.data?.user?.name;
 
   const line = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -43,17 +49,14 @@ export default function Home({route, navigation}) {
     ],
   };
 
+  useEffect(() => {
+    console.log(image);
+  }, []);
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            margin: (10 / dim.h) * dim.Height,
-            marginTop: 20,
-            alignItems: 'center',
-          }}>
+        <View style={styles.container2}>
           <View>
             <Text
               style={{fontFamily: 'Inter-Bold', fontSize: 22, color: 'black'}}>
@@ -65,50 +68,27 @@ export default function Home({route, navigation}) {
                 fontSize: 18,
                 color: 'black',
               }}>
-              Christie Doe
+              {name}
             </Text>
           </View>
 
           <View style={{alignItems: 'center'}}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <Image
-                source={require('../assets/images/homedp.png')}
-                style={{
-                  width: (70 / dim.w) * dim.Width,
-                  height: (70 / dim.w) * dim.Width,
-                  marginLeft: (8 / dim.w) * dim.Width,
-                  marginBottom: (5 / dim.w) * dim.Width,
+                source={{
+                  uri: endpoint + '/' + image.filename,
                 }}
+                style={styles.thumbnail}
               />
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* <View style={styles.box3}>
-          <Text
-            style={{
-              color: 'white',
-              fontFamily: 'Inter-SemiBold',
-              fontSize: 18,
-              width: (200 / dim.w) * dim.Width,
-              lineHeight: (25 / dim.h) * dim.Height,
-            }}>
-            Track Your Weekly Progress
-          </Text>
-          <TouchableOpacity>
-            <Forw
-              width={(24 / dim.w) * dim.Width}
-              height={(24 / dim.w) * dim.Width}
-              style={{marginLeft: (20 / dim.w) * dim.Width}}
-            />
-          </TouchableOpacity>
-        </View> */}
-
         <View>
           <LineChart
             data={line}
             width={(350 / dim.w) * dim.Width} // from react-native
-            height={220}
+            height={200}
             yAxisLabel={'$'}
             chartConfig={{
               backgroundColor: '#e26a00',
@@ -293,8 +273,17 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     padding: (8 / dim.h) * dim.Height,
-
     paddingBottom: 0,
+  },
+
+  container2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: (10 / dim.h) * dim.Height,
+    marginTop: 20,
+    alignItems: 'center',
+    width: (350 / dim.w) * dim.Width,
+    alignSelf: 'center',
   },
 
   paragraph: {
@@ -352,5 +341,12 @@ const styles = StyleSheet.create({
     color: '#7B6F72',
     fontFamily: 'Inter-Light',
     marginTop: (5 / dim.h) * dim.Height,
+  },
+  thumbnail: {
+    width: (60 / dim.w) * dim.Width,
+    height: (60 / dim.w) * dim.Width,
+    marginRight: 10,
+    borderRadius: 30,
+    backgroundColor: 'red',
   },
 });
