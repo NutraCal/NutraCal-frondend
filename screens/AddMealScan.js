@@ -26,19 +26,27 @@ export default function AddMealScan({route, navigation}) {
   const [carbs, setCarbs] = useState('');
 
   const sendImage = async res => {
+    setCalories('');
+    setFats('');
+    setProteins('');
+    setCarbs('');
     try {
       setLoading(true);
       const response = await axios({
         method: 'POST',
-        url: 'https://detect.roboflow.com/food-images-2lpjg/1?api_key=UseQF6hQTjckzORCc7BI',
+        url: 'https://detect.roboflow.com/nutracal-food-detection/1?api_key=UseQF6hQTjckzORCc7BI',
         data: res,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
       console.log(response.data);
-      setResult(response.data.predictions[0].class);
-      console.log(result);
+      if (response.data.predictions.length > 0) {
+        setResult(response.data.predictions[0].class);
+        console.log(result);
+      } else {
+        setResult('Meal not recognized');
+      }
       setLoading(false);
     } catch (error) {
       console.log(error.message);
@@ -61,15 +69,33 @@ export default function AddMealScan({route, navigation}) {
 
       console.log(JSON.stringify(response.data));
 
-      const cal = response.data.parsed[0].food.nutrients.ENERC_KCAL;
-      const f = response.data.parsed[0].food.nutrients.FAT;
-      const p = response.data.parsed[0].food.nutrients.PROCNT;
-      const carb = response.data.parsed[0].food.nutrients.CHOCDF;
+      let cal, f, p, carb; // Declare variables outside if-else blocks
 
-      setCalories(cal.toFixed(2));
-      setFats(f.toFixed(2));
-      setProteins(p.toFixed(2));
-      setCarbs(carb.toFixed(2));
+      if (response.data.parsed.length > 0) {
+        cal = response.data.parsed[0].food.nutrients.ENERC_KCAL;
+        f = response.data.parsed[0].food.nutrients.FAT;
+        p = response.data.parsed[0].food.nutrients.PROCNT;
+        carb = response.data.parsed[0].food.nutrients.CHOCDF;
+      } else if (response.data.hints.length > 0) {
+        cal = response.data.hints[0].food.nutrients.ENERC_KCAL;
+        f = response.data.hints[0].food.nutrients.FAT;
+        p = response.data.hints[0].food.nutrients.PROCNT;
+        carb = response.data.hints[0].food.nutrients.CHOCDF;
+        console.log(cal, f, p, carb);
+      }
+      if (
+        cal !== undefined &&
+        f !== undefined &&
+        p !== undefined &&
+        carb !== undefined
+      ) {
+        setCalories(cal.toFixed(2));
+        setFats(f.toFixed(2));
+        setProteins(p.toFixed(2));
+        setCarbs(carb.toFixed(2));
+      } else {
+        alert('meal not recognized, retry or try manual logging instead');
+      }
     } catch (error) {
       console.log(error.response);
     }
@@ -106,35 +132,40 @@ export default function AddMealScan({route, navigation}) {
       {loading ? (
         <ActivityIndicator></ActivityIndicator>
       ) : (
-        <Text style={styles.result}>{result}</Text>
+        <View style={styles.nutrients}>
+          <Text style={styles.result}>{result}</Text>
+          {result != 'Meal not recognized' && result.length > 0 && (
+            <View style={styles.nutrients}>
+              <TouchableOpacity
+                onPress={getNutrition}
+                style={{
+                  width: (330 / dim.w) * dim.Width,
+                  height: (48 / dim.h) * dim.Height,
+                  backgroundColor: '#91C788',
+                  alignSelf: 'center',
+                  borderRadius: 12,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: (20 / dim.h) * dim.Height,
+                  marginBottom: (20 / dim.h) * dim.Height,
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 16,
+                    fontFamily: 'Inter-SemiBold',
+                  }}>
+                  Get Info
+                </Text>
+              </TouchableOpacity>
+              <Text style={styles.resultText}>Calories: {calories}</Text>
+              <Text style={styles.resultText}>Fats: {fats}</Text>
+              <Text style={styles.resultText}>Proteins: {proteins}</Text>
+              <Text style={styles.resultText}>Carbs: {carbs}</Text>
+            </View>
+          )}
+        </View>
       )}
-
-      <TouchableOpacity
-        onPress={getNutrition}
-        style={{
-          width: (330 / dim.w) * dim.Width,
-          height: (48 / dim.h) * dim.Height,
-          backgroundColor: '#91C788',
-          alignSelf: 'center',
-          borderRadius: 12,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: (20 / dim.h) * dim.Height,
-          marginBottom: (20 / dim.h) * dim.Height,
-        }}>
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 16,
-            fontFamily: 'Inter-SemiBold',
-          }}>
-          Get Info
-        </Text>
-      </TouchableOpacity>
-      <Text style={styles.resultText}>Calories: {calories}</Text>
-      <Text style={styles.resultText}>Fats: {fats}</Text>
-      <Text style={styles.resultText}>Proteins: {proteins}</Text>
-      <Text style={styles.resultText}>Carbs: {carbs}</Text>
     </View>
   );
 }
@@ -162,5 +193,9 @@ const styles = StyleSheet.create({
     marginTop: (10 / dim.h) * dim.Height,
     color: 'black',
     fontFamily: 'Inter-Medium',
+  },
+  nutrients: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
