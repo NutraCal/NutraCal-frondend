@@ -58,6 +58,8 @@ import DietPlans from './screens/DietPlans';
 
 import ViewThread from './screens/ViewThread';
 import ViewBlog from './screens/ViewBlog';
+import ViewMeal from './screens/ViewMeal';
+import EditMeal from './screens/EditMeal';
 
 import dim from './util/dim';
 
@@ -304,11 +306,39 @@ export default function MainNavigator() {
           component={ViewThread}
           options={{headerShown: true}}
         />
+        <Stack.Screen
+          name="ViewMeal"
+          component={ViewMeal}
+          options={({navigation}) => ({
+            headerShown: true,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('EditMeal')}
+                styles={{backgroundColor: '#91C788'}}>
+                <Text
+                  style={{
+                    color: '#91C788',
+                    fontSize: 16,
+                    marginRight: (10 / dim.w) * dim.Width,
+                    fontWeight: 'bold',
+                  }}>
+                  Update
+                </Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
 
         <Stack.Screen
           name="View"
           component={ViewBlog}
           options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="EditMeal"
+          component={EditMeal}
+          options={{headerShown: true}}
         />
       </Stack.Navigator>
     </NavigationContainer>

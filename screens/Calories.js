@@ -45,6 +45,11 @@ export default function Calories({route, navigation}) {
   const [smeals, setSmeals] = useState([]);
   const [dmeals, setDmeals] = useState([]);
 
+  const [bcal, setBcal] = useState('');
+  const [lcal, setLcal] = useState('');
+  const [scal, setScal] = useState('');
+  const [dcal, setDcal] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   const fetchMeal = async date => {
@@ -55,6 +60,10 @@ export default function Calories({route, navigation}) {
     setLmeals([]);
     setSmeals([]);
     setDmeals([]);
+    setBcal('');
+    setLcal('');
+    setScal('');
+    setDcal('');
     var data = JSON.stringify({
       email: email,
       date: date,
@@ -85,15 +94,35 @@ export default function Calories({route, navigation}) {
 
       if (categoryArrays['Breakfast']) {
         setBmeals(categoryArrays['Breakfast']);
+        const breakfastSum = categoryArrays['Breakfast'].reduce(
+          (totalCalories, item) => totalCalories + item.calories,
+          0,
+        );
+        setBcal(breakfastSum);
       }
       if (categoryArrays['Lunch']) {
         setLmeals(categoryArrays['Lunch']);
+        const LunchSum = categoryArrays['Lunch'].reduce(
+          (totalCalories, item) => totalCalories + item.calories,
+          0,
+        );
+        setLcal(LunchSum);
       }
       if (categoryArrays['Snacks']) {
         setSmeals(categoryArrays['Snacks']);
+        const SnackSum = categoryArrays['Snacks'].reduce(
+          (totalCalories, item) => totalCalories + item.calories,
+          0,
+        );
+        setScal(SnackSum);
       }
       if (categoryArrays['Dinner']) {
         setDmeals(categoryArrays['Dinner']);
+        const DinnerSum = categoryArrays['Dinner'].reduce(
+          (totalCalories, item) => totalCalories + item.calories,
+          0,
+        );
+        setDcal(DinnerSum);
       }
       console.log(bmeals);
       console.log(lmeals);
@@ -105,38 +134,6 @@ export default function Calories({route, navigation}) {
       console.log(error.response);
     }
   };
-
-  // useEffect(() => {
-  //   // Assuming your response object is obtained and stored in a variable called "response"
-  //   const categoryArrays = {};
-  //   response.forEach(item => {
-  //     const category = item.category;
-  //     if (!categoryArrays[category]) {
-  //       categoryArrays[category] = [];
-  //     }
-  //     categoryArrays[category].push(item);
-  //   });
-
-  //   // Clear the existing hook values
-  //   setDinnerRecipes([]);
-  //   setBreakfastRecipes([]);
-  //   setLunchRecipes([]);
-  //   setSnacksRecipes([]);
-
-  //   // Set new values if the category arrays exist in the response data
-  //   if (categoryArrays['Dinner']) {
-  //     setDinnerRecipes(categoryArrays['Dinner']);
-  //   }
-  //   if (categoryArrays['Breakfast']) {
-  //     setBreakfastRecipes(categoryArrays['Breakfast']);
-  //   }
-  //   if (categoryArrays['Lunch']) {
-  //     setLunchRecipes(categoryArrays['Lunch']);
-  //   }
-  //   if (categoryArrays['Snacks']) {
-  //     setSnacksRecipes(categoryArrays['Snacks']);
-  //   }
-  // }, [response]);
 
   const handleDatePress = date => {
     setSelectedDate(date);
@@ -181,32 +178,32 @@ export default function Calories({route, navigation}) {
     }, 1000);
   };
 
-  // useEffect(() => {
-  //   // Fetch the latest data or update the state here
-  //   const currentDate = moment().toDate();
-  //   const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
-  //     'D MMMM YYYY',
-  //   );
-  //   setCDate(formattedDate);
-  //   getWeekDates(currentDate);
-  // }, []);
+  useEffect(() => {
+    // Fetch the latest data or update the state here
+    const currentDate = moment().toDate();
+    const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
+      'D MMMM YYYY',
+    );
+    setCDate(formattedDate);
+    getWeekDates(currentDate);
+  }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      // Fetch the latest data or update the state here
-      const currentDate = moment().toDate();
-      const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
-        'D MMMM YYYY',
-      );
-      setCDate(formattedDate);
-      getWeekDates(currentDate);
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     // Fetch the latest data or update the state here
+  //     const currentDate = moment().toDate();
+  //     const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
+  //       'D MMMM YYYY',
+  //     );
+  //     setCDate(formattedDate);
+  //     getWeekDates(currentDate);
 
-      // Return a cleanup function if needed
-      return () => {
-        // Clean up any subscriptions or resources if necessary
-      };
-    }, []),
-  );
+  //     // Return a cleanup function if needed
+  //     return () => {
+  //       // Clean up any subscriptions or resources if necessary
+  //     };
+  //   }, []),
+  // );
 
   useEffect(() => {
     if (date !== null) {
@@ -311,7 +308,7 @@ export default function Calories({route, navigation}) {
             <View style={styles.section}>
               <View style={styles.subsection}>
                 <Text style={styles.heading1}>Breakfast</Text>
-                <Text style={styles.desc}>230 calories</Text>
+                <Text style={styles.desc}>{bcal} calories</Text>
               </View>
               {bmeals.map((item, index) => (
                 <View
@@ -328,7 +325,10 @@ export default function Calories({route, navigation}) {
                     <Text style={styles.name1}>{item.name}</Text>
                     <Text style={styles.desc}>7:00 am</Text>
                   </View>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('ViewMeal', {item: item});
+                    }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}
                       height={(24 / dim.w) * dim.Width}
@@ -343,7 +343,7 @@ export default function Calories({route, navigation}) {
             <View style={styles.section}>
               <View style={styles.subsection}>
                 <Text style={styles.heading1}>Lunch</Text>
-                <Text style={styles.desc}>500 calories</Text>
+                <Text style={styles.desc}>{lcal} calories</Text>
               </View>
 
               {lmeals.map((item, index) => (
@@ -361,7 +361,10 @@ export default function Calories({route, navigation}) {
                     <Text style={styles.name1}>{item.name}</Text>
                     <Text style={styles.desc}>1:00 pm</Text>
                   </View>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('ViewMeal', {item: item});
+                    }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}
                       height={(24 / dim.w) * dim.Width}
@@ -377,7 +380,7 @@ export default function Calories({route, navigation}) {
             <View style={styles.section}>
               <View style={styles.subsection}>
                 <Text style={styles.heading1}>Snacks</Text>
-                <Text style={styles.desc}>50 calories</Text>
+                <Text style={styles.desc}>{scal} calories</Text>
               </View>
               {smeals.map((item, index) => (
                 <View key={index} style={[styles.subsection, {marginTop: 10}]}>
@@ -389,7 +392,10 @@ export default function Calories({route, navigation}) {
                     <Text style={styles.name1}>{item.name}</Text>
                     <Text style={styles.desc}>5:00 pm</Text>
                   </View>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('ViewMeal', {item: item});
+                    }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}
                       height={(24 / dim.w) * dim.Width}
@@ -405,7 +411,7 @@ export default function Calories({route, navigation}) {
             <View style={styles.section}>
               <View style={styles.subsection}>
                 <Text style={styles.heading1}>Dinner</Text>
-                <Text style={styles.desc}>120 calories</Text>
+                <Text style={styles.desc}>{dcal} calories</Text>
               </View>
               {dmeals.map((item, index) => (
                 <View
@@ -422,7 +428,10 @@ export default function Calories({route, navigation}) {
                     <Text style={styles.name1}>{item.name}</Text>
                     <Text style={styles.desc}>7:10 pm</Text>
                   </View>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('ViewMeal', {item: item});
+                    }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}
                       height={(24 / dim.w) * dim.Width}

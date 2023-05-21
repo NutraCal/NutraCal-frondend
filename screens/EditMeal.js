@@ -19,10 +19,11 @@ import dim from '../util/dim';
 
 import {AuthContext} from '../context/AuthContext';
 
-export default function AddMeal({route, navigation}) {
+export default function EditMeal({route, navigation}) {
+  const item = route.params?.item;
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
-
+  const userId = user?.data?.user?._id;
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);
 
@@ -40,25 +41,7 @@ export default function AddMeal({route, navigation}) {
   const [carbs, setCarbs] = useState('');
   const [loadId, setLoadId] = useState(true);
   const [loadData, setLoadData] = useState(true);
-  const [userId, setUserId] = useState('');
   const [json, setJson] = useState('');
-
-  const getUserId = async res => {
-    console.log('inside');
-    try {
-      const response = await axios({
-        method: 'get',
-        url: endpoint + '/users/getUserId/' + email,
-        headers: {},
-      });
-
-      console.log(JSON.stringify(response.data));
-
-      setJson(response.data);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
 
   const saveMeal = async res => {
     console.log('here');
@@ -115,6 +98,17 @@ export default function AddMeal({route, navigation}) {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    console.log('made it------------');
+    console.log(item);
+    // setName(item.name);
+    // setValue3(item.category);
+    // setCalories(item.calories.toString());
+    // setFats(item.fats.toString());
+    // setProteins(item.proteins.toString());
+    // setCarbs(item.carbohydrates.toString());
+  }, []);
 
   return (
     <View style={styles.container}>
