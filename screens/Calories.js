@@ -301,13 +301,16 @@ export default function Calories({route, navigation}) {
       </ScrollView>
 
       {loading ? (
-        <ActivityIndicator></ActivityIndicator>
+        <ActivityIndicator
+          size="large"
+          color="#91C788"
+          style={{marginTop: (220 / dim.h) * dim.Height}}></ActivityIndicator>
       ) : (
         <View>
           {bmeals.length > 0 && (
             <View style={styles.section}>
               <View style={styles.subsection}>
-                <Text style={styles.heading}>Breakfast</Text>
+                <Text style={styles.heading1}>Breakfast</Text>
                 <Text style={styles.desc}>230 calories</Text>
               </View>
               {bmeals.map((item, index) => (
@@ -339,7 +342,7 @@ export default function Calories({route, navigation}) {
           {lmeals.length > 0 && (
             <View style={styles.section}>
               <View style={styles.subsection}>
-                <Text style={styles.heading}>Lunch</Text>
+                <Text style={styles.heading1}>Lunch</Text>
                 <Text style={styles.desc}>500 calories</Text>
               </View>
 
@@ -373,7 +376,7 @@ export default function Calories({route, navigation}) {
           {smeals.length > 0 && (
             <View style={styles.section}>
               <View style={styles.subsection}>
-                <Text style={styles.heading}>Snacks</Text>
+                <Text style={styles.heading1}>Snacks</Text>
                 <Text style={styles.desc}>50 calories</Text>
               </View>
               {smeals.map((item, index) => (
@@ -401,7 +404,7 @@ export default function Calories({route, navigation}) {
           {dmeals.length > 0 && (
             <View style={styles.section}>
               <View style={styles.subsection}>
-                <Text style={styles.heading}>Dinner</Text>
+                <Text style={styles.heading1}>Dinner</Text>
                 <Text style={styles.desc}>120 calories</Text>
               </View>
               {dmeals.map((item, index) => (
@@ -475,6 +478,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
+  heading1: {
+    fontFamily: 'Inter-Bold',
+    color: '#575757',
+    fontSize: 18,
+  },
+
   desc: {
     fontSize: 14,
     color: '#7B6F72',
@@ -491,22 +500,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  // addButton: {
-  //   backgroundColor: '#91C788',
-  //   borderRadius: 50,
-  //   width: (50 / dim.w) * dim.Width,
-  //   height: (50 / dim.w) * dim.Width,
-  //   position: 'absolute',
-  //   marginTop: (40 / dim.h) * dim.Height,
-  //   bottom: (10 / dim.h) * dim.Height,
-  //   right: (20 / dim.w) * dim.Width,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
-
-  // buttonText: {
-  //   color: '#fff',
-  //   fontSize: 24,
-  //   fontWeight: 'bold',
-  // },
 });
