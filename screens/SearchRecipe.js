@@ -432,40 +432,6 @@ export default function SearchRecipe({route, navigation}) {
               />
             </View>
 
-            {/* <View style={[styles.box4, {backgroundColor: '#F9EBF8'}]}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Ing2
-                  width={40}
-                  height={39}
-                  style={{marginRight: (20 / dim.w) * dim.Width}}
-                />
-                <Text style={styles.name2}>Baking Soda</Text>
-              </View>
-              <TouchableOpacity
-                style={[
-                  styles.cbtn,
-                  {
-                    marginLeft: (50 / dim.w) * dim.Width,
-                    elevation: 2,
-                    backgroundColor: 'white',
-                  },
-                ]}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: '#91C788',
-                    alignSelf: 'center',
-                  }}>
-                  -
-                </Text>
-              </TouchableOpacity>
-            </View> */}
-
             <TouchableOpacity
               style={{
                 width: (300 / dim.w) * dim.Width,

@@ -86,7 +86,7 @@ export default function Shopping({route, navigation}) {
       });
       console.log(JSON.stringify(response.data));
       setLoadData(true);
-      setLoading(false);
+      // setLoading(false);
       setAitem('');
       setItem('');
     } catch (error) {
@@ -95,6 +95,7 @@ export default function Shopping({route, navigation}) {
   };
 
   const delItem = async res => {
+    // setLoading(true);
     var data = JSON.stringify({
       userId: userId,
       list: [ditem],
@@ -112,7 +113,7 @@ export default function Shopping({route, navigation}) {
       });
       console.log(JSON.stringify(response.data));
       setLoadData(true);
-      setLoading(false);
+      // setLoading(false);
     } catch (error) {
       console.log(error.message);
     }

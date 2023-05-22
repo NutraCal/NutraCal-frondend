@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  FlatList,
   Image,
 } from 'react-native';
 import {Avatar, Title} from 'react-native-paper';
@@ -179,32 +178,26 @@ export default function ViewRecipe({route, navigation}) {
 
           <Text style={styles.heading}>Cooking Steps:</Text>
 
-          <FlatList
-            data={desc}
-            renderItem={({index, item}) => (
-              <View key={index}>
-                <TouchableOpacity
-                  style={[styles.steps, {backgroundColor: '#F7F8F8'}]}>
-                  <Step
-                    width={(20 / dim.w) * dim.Width}
-                    height={(20 / dim.w) * dim.Width}
-                    style={{marginRight: 10}}
-                  />
-                  <Text style={[styles.step, {width: 280}]}>{item}</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
+          {desc.map((item, index) => (
+            <View key={index}>
+              <TouchableOpacity
+                style={[styles.steps, {backgroundColor: '#F7F8F8'}]}>
+                <Step
+                  width={(20 / dim.w) * dim.Width}
+                  height={(20 / dim.w) * dim.Width}
+                  style={{marginRight: 10}}
+                />
+                <Text style={[styles.step, {width: 280}]}>{item}</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
 
           <Text style={[styles.heading, {width: (250 / dim.w) * dim.Width}]}>
             Ingredients That You Will Need
           </Text>
 
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={getlist}
-            renderItem={({index, item}) => (
+          <ScrollView horizontal={true}>
+            {getlist.map((item, index) => (
               <View key={index} style={{alignItems: 'center'}}>
                 <View style={styles.box1}>
                   <Ing
@@ -219,8 +212,8 @@ export default function ViewRecipe({route, navigation}) {
                   </Text>
                 </View>
               </View>
-            )}
-          />
+            ))}
+          </ScrollView>
 
           <TouchableOpacity
             style={styles.btnn}
