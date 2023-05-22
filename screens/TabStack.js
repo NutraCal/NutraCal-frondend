@@ -10,7 +10,7 @@ import RecipeBook from './SearchRecipe';
 import DietPlans from './DietPlans';
 import Shopping from './Shopping';
 import ViewBlog from './ViewBlog';
-import Blogs from './SearchBlog';
+import Blogs from './Community';
 import DiscussionThread from './DiscussionThread';
 import AddMealScan from './AddMealScan';
 import AddMeal from './AddMeal';

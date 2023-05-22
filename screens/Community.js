@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import N1 from '../assets/images/nutritionist1.svg';
@@ -12,14 +13,32 @@ import N2 from '../assets/images/nutritionist2.svg';
 import N3 from '../assets/images/nutritionist3.svg';
 import dim from '../util/dim';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
+import axios from 'axios';
+import {endpoint} from '../util/config';
 
-export default function SearchBlog({route, navigation}) {
+export default function Community({route, navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [activeView, setActiveView] = useState('nutritionist');
+  const [blogs, setBlogs] = useState([]);
   const onChangeSearch = query => setSearchQuery(query);
 
   const handleToggle = value => {
     setActiveView(value);
+  };
+
+  const getBlogs = async res => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: endpoint + '/blogs/viewBlogs',
+        headers: {},
+      });
+
+      console.log(JSON.stringify(response.data));
+      setBlogs(response.data);
+    } catch (error) {
+      console.log(error.response.data);
+    }
   };
 
   const NutritionistView = () => (
@@ -55,9 +74,32 @@ export default function SearchBlog({route, navigation}) {
 
   const BlogView = () => (
     <View>
-      <Text>Heheheeeeeeeeeee blogs</Text>
+      {blogs.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          style={styles.box3}
+          onPress={() => {
+            console.log(item.Title);
+            navigation.navigate('ViewBlog', {title: item.Title});
+          }}>
+          <Image
+            source={{
+              uri: endpoint + '/' + item.Image.filename,
+            }}
+            style={[styles.thumbnail, {marginRight: 20}]}
+          />
+          <View style={{width: 220}}>
+            <Text style={styles.name}>{item.Title}</Text>
+            <Text style={styles.desc}>Blog</Text>
+          </View>
+        </TouchableOpacity>
+      ))}
     </View>
   );
+
+  useEffect(() => {
+    getBlogs();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -146,5 +188,12 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontFamily: 'Inter-Medium',
     fontSize: 14,
+  },
+  thumbnail: {
+    width: (50 / dim.w) * dim.Width,
+    height: (50 / dim.w) * dim.Width,
+    marginRight: 10,
+    borderRadius: 25,
+    backgroundColor: 'red',
   },
 });

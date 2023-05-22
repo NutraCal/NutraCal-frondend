@@ -321,9 +321,9 @@ export default function MainNavigator() {
         />
 
         <Stack.Screen
-          name="View"
+          name="ViewBlog"
           component={ViewBlog}
-          options={{headerShown: false}}
+          options={{headerShown: true}}
         />
 
         <Stack.Screen

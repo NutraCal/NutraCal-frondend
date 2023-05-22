@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   },
 
   coverimg: {
-    width: '100%',
+    width: dim.Width,
     height: 250,
   },
 
