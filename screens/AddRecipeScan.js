@@ -50,14 +50,52 @@ const AddRecipeScan = () => {
 
   useEffect(() => {});
 
-  const imagePick = () => {
-    ImagePicker.openPicker({
-      width: (300 / dim.w) * dim.Width,
-      height: (400 / dim.h) * dim.Height,
-      cropping: true,
-    }).then(image => {
+  // const imagePick = () => {
+  //   ImagePicker.openPicker({
+  //     width: (300 / dim.w) * dim.Width,
+  //     height: (400 / dim.h) * dim.Height,
+  //     cropping: true,
+  //   }).then(image => {
+  //     console.log(image);
+  //   });
+  // };
+
+  const imagePick = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'App needs access to your camera',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('hehe');
+        try {
+        } catch (error) {
+          console.log(error);
+        }
+        // Permission granted, you can proceed with using the camera
+        imagePickee();
+      }
+    } catch (error) {
+      console.warn('Camera permission request failed:', error);
+    }
+  };
+
+  const imagePickee = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        width: (300 / dim.w) * dim.Width,
+        height: (400 / dim.h) * dim.Height,
+        cropping: true,
+      });
       console.log(image);
-    });
+    } catch (error) {
+      console.log('Image picker error:', error);
+    }
   };
 
   // const storeData = () => {
@@ -152,11 +190,12 @@ const AddRecipeScan = () => {
         }}>
         {text}
       </Text>
-      {/* <TouchableOpacity onPress={()=>{
-        imagePick();
-      }}>
-        <Text style={{color:'black'}}>Open me</Text>
-      </TouchableOpacity> */}
+      <TouchableOpacity
+        onPress={() => {
+          imagePick();
+        }}>
+        <Text style={{color: 'black'}}>Open me</Text>
+      </TouchableOpacity>
     </View>
   );
 };
