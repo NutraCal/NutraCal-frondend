@@ -19,6 +19,7 @@ import DrawerNav from './DrawerNav';
 import {endpoint} from '../util/config';
 import axios from 'axios';
 import dim from '../util/dim';
+import deviceStorage from '../util/deviceStorage';
 
 import {
   GoogleSignin,
@@ -49,6 +50,62 @@ export default function Login({route, navigation}) {
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
   const {login} = useContext(AuthContext);
+  const [notification, setNotification] = useState('');
+
+  const getNotifications = async email => {
+    console.log('getNotification');
+    const fcmToken = await deviceStorage.loadItem('FCMToken');
+    var data = JSON.stringify({
+      tokenID: fcmToken,
+      email: email,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/notifications/getNotification',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      if (response.status == 200) {
+        setNotification(response.data);
+        console.log(response.data);
+        alert('We got a notification');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const updateDevice = async email => {
+    console.log('registerDevice');
+    const fcmToken = await deviceStorage.loadItem('FCMToken');
+    var data = JSON.stringify({
+      tokenID: fcmToken,
+      email: email,
+    });
+
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/notifications/registerNotification',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      if (response.status == 200) {
+        alert('We got a successful response from the server');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const credentialsValidation = async () => {
     console.log(endpoint + '/users/login');
@@ -86,6 +143,8 @@ export default function Login({route, navigation}) {
 
       if (res.status == 200) {
         await login(res?.data);
+        updateDevice(email);
+        getNotifications(email);
         navigation.navigate('DrawerNav', {
           email: email,
         });

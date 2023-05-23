@@ -17,6 +17,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import FormData from 'form-data';
 import axios from 'axios';
+import deviceStorage from '../util/deviceStorage';
 
 const Register = ({route, navigation}) => {
   const [email, setEmail] = useState('');
@@ -234,18 +235,20 @@ const Register = ({route, navigation}) => {
           });
 
           console.log(JSON.stringify(response.data));
+          if (response.status === 200) {
+            registerDevice(email);
+            navigation.navigate('Login');
+          } else {
+            Alert.alert(
+              'User already exists',
+              'Create Account with new Email',
+              [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+            );
+          }
         } catch (error) {
-          console.log('you are poop');
           console.log(error.response);
         }
 
-        // if (response.status === 200) {
-        //   navigation.navigate('Login');
-        // } else {
-        //   Alert.alert('User already exists', 'Create Account with new Email', [
-        //     {text: 'OK', onPress: () => console.log('OK Pressed')},
-        //   ]);
-        // }
         console.log('hehe in if dumbooooo');
       } else {
         console.log('hehe in else');
@@ -257,6 +260,33 @@ const Register = ({route, navigation}) => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const registerDevice = async email => {
+    console.log('registerDevice');
+    const fcmToken = await deviceStorage.loadItem('FCMToken');
+    var data = JSON.stringify({
+      tokenID: fcmToken,
+      email: email,
+    });
+
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/notifications/registerNotification',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      if (response.status == 200) {
+        alert('Device Registered Successfully');
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
