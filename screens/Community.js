@@ -20,6 +20,8 @@ export default function Community({route, navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [activeView, setActiveView] = useState('nutritionist');
   const [blogs, setBlogs] = useState([]);
+  const [nutritionists, setNutritionists] = useState([]);
+
   const onChangeSearch = query => setSearchQuery(query);
 
   const handleToggle = value => {
@@ -41,34 +43,94 @@ export default function Community({route, navigation}) {
     }
   };
 
+  const getNutritionists = async res => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: endpoint + '/nutritionist/viewNutritionists',
+        headers: {},
+      });
+
+      console.log(JSON.stringify(response.data));
+      setNutritionists(response.data);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  const searchNutritionist = async res => {
+    var data = JSON.stringify({
+      name: searchQuery,
+    });
+
+    console.log(data);
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/nutritionist/searchNutritionist',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      setNutritionists(response.data);
+    } catch (error) {
+      console.log(error.response.data);
+      alert(error.response.data);
+      getNutritionists();
+    }
+  };
+
+  const searchBlog = async res => {
+    var data = JSON.stringify({
+      title: searchQuery,
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/blogs/viewBlogByTitle',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      setBlogs(response.data);
+      // console.log(comments);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   const NutritionistView = () => (
     <View>
-      <TouchableOpacity style={styles.box3}>
-        <N1 width={70} height={50} style={{marginRight: 20}} />
-        <View style={{width: 220}}>
-          <Text style={styles.name}>Anamwp</Text>
-          <Text style={styles.desc}>Nutritionist</Text>
-        </View>
-        <Text style={styles.rating}>4.8</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.box3}>
-        <N2 width={70} height={50} style={{marginRight: 20}} />
-        <View style={{width: 220}}>
-          <Text style={styles.name}>Guy Hawkins</Text>
-          <Text style={styles.desc}>Nutritionist</Text>
-        </View>
-        <Text style={styles.rating}>4.8</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.box3}>
-        <N3 width={70} height={50} style={{marginRight: 20}} />
-        <View style={{width: 220}}>
-          <Text style={styles.name}>Lexie Alexandar</Text>
-          <Text style={styles.desc}>Nutritionist</Text>
-        </View>
-        <Text style={styles.rating}>4.8</Text>
-      </TouchableOpacity>
+      {nutritionists.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          style={styles.box3}
+          onPress={() => {
+            navigation.navigate('ViewNutritionist', {
+              name: item.name,
+              nId: item._id,
+            });
+          }}>
+          <Image
+            source={{
+              uri: endpoint + '/' + item.Image.filename,
+            }}
+            style={[styles.thumbnail, {marginRight: 20}]}
+          />
+          <View style={{width: 220}}>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.desc}>Nutritionist</Text>
+          </View>
+          <Text style={styles.rating}>{item.ratingAverage}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 
@@ -99,6 +161,7 @@ export default function Community({route, navigation}) {
 
   useEffect(() => {
     getBlogs();
+    getNutritionists();
   }, []);
 
   return (
@@ -106,27 +169,48 @@ export default function Community({route, navigation}) {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Searchbar
-            placeholder="Nutritionists"
+            placeholder="Search here"
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchbar}
+            onIconPress={() => {
+              if (searchQuery === '') {
+                alert('Enter search query');
+              } else if (activeView === 'nutritionist') {
+                searchNutritionist();
+              } else {
+                searchBlog();
+              }
+            }}
+            // onClearIconPress={() => {
+            //   if (activeView === 'nutritionist') {
+            //     console.log('-----------------------ugh');
+            //     // getNutritionists();
+            //   } else {
+            //     getBlogs();
+            //   }
+            // }}
           />
           <DuoToggleSwitch
             primaryText="Nutritionist"
             secondaryText="Blogs"
             onPrimaryPress={() => {
+              setSearchQuery('');
               handleToggle('nutritionist');
             }}
             onSecondaryPress={() => {
+              setSearchQuery('');
               handleToggle('blog');
             }}
-            activeColor="green"
-            inactiveColor="blue"
-            activeTextColor="yellow"
-            inactiveTextColor="white"
-            primaryButtonStyle={{width: 150}}
-            secondaryButtonStyle={{width: 150}}
-            style={{width: 300}}
+            activeColor="#91C788"
+            inactiveColor="#DCEDDA"
+            activeTextColor="white"
+            inactiveTextColor="#91C788"
+            primaryTextStyle={{fontSize: 16}}
+            secondaryTextStyle={{fontSize: 16}}
+            primaryButtonStyle={{width: 180, height: 50}}
+            secondaryButtonStyle={{width: 180, height: 50}}
+            style={{width: 300, borderRadius: 0}}
           />
 
           {activeView === 'nutritionist' ? <NutritionistView /> : <BlogView />}
@@ -193,7 +277,9 @@ const styles = StyleSheet.create({
     width: (50 / dim.w) * dim.Width,
     height: (50 / dim.w) * dim.Width,
     marginRight: 10,
-    borderRadius: 25,
+    borderRadius: 10,
     backgroundColor: 'red',
+    borderColor: '#91C788',
+    borderWidth: 1,
   },
 });

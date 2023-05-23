@@ -20,10 +20,8 @@ import dim from '../util/dim';
 import {AuthContext} from '../context/AuthContext';
 
 export default function ViewMeal({route, navigation}) {
-  const {editable} = route.params?.editable;
-  const [edit, setEditable] = useState(false);
-
   const item = route.params?.item;
+  const [edit, setEditable] = useState(false);
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
@@ -101,7 +99,6 @@ export default function ViewMeal({route, navigation}) {
   };
 
   useEffect(() => {
-    console.log('made it------------');
     console.log(item);
     setName(item.name);
     setValue3(item.category);

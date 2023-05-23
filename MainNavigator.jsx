@@ -58,10 +58,13 @@ import DietPlans from './screens/DietPlans';
 
 import ViewThread from './screens/ViewThread';
 import ViewBlog from './screens/ViewBlog';
+import PostBlog from './screens/PostBlog';
 import ViewMeal from './screens/ViewMeal';
 import EditMeal from './screens/EditMeal';
 
 import ViewNutritionistProfile from './screens/ViewNutritionistProfile';
+import EditNutritionistProfile from './screens/EditNutritionistProfile';
+import ViewNutritionist from './screens/ViewNutritionist';
 
 import dim from './util/dim';
 
@@ -73,6 +76,8 @@ import {AuthContext} from './context/AuthContext';
 
 export default function MainNavigator() {
   const {isLoading, token, user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const role = user?.data?.user?.role;
 
   console.log(user);
 
@@ -330,6 +335,56 @@ export default function MainNavigator() {
           name="EditMeal"
           component={EditMeal}
           options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="PostBlog"
+          component={PostBlog}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="EditNutritionistProfile"
+          component={EditNutritionistProfile}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="ViewNutritionist"
+          component={ViewNutritionist}
+          options={({route, navigation}) => {
+            const {name} = route.params; // Assuming you pass the nutritionistId as a parameter
+            const {nId} = route.params;
+
+            const handleEditNutritionist = () => {
+              navigation.navigate('EditNutritionistProfile', {name, nId}); // Pass the nutritionistId to the "EditNutritionist" screen
+            };
+
+            return {
+              title: 'View Nutritionist',
+              headerShown: true,
+              headerRight: () => {
+                if (role === 'User') {
+                  return (
+                    <TouchableOpacity
+                      onPress={handleEditNutritionist}
+                      styles={{backgroundColor: '#91C788'}}>
+                      <Text
+                        style={{
+                          color: '#91C788',
+                          fontSize: 16,
+                          marginRight: (10 / dim.w) * dim.Width,
+                          fontWeight: 'bold',
+                        }}>
+                        Edit
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return null; // Return null if the role is not "Nutritionist"
+                }
+              },
+            };
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

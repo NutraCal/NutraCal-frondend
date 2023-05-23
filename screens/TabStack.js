@@ -14,6 +14,7 @@ import Blogs from './Community';
 import DiscussionThread from './DiscussionThread';
 import AddMealScan from './AddMealScan';
 import AddMeal from './AddMeal';
+import PostBlog from './PostBlog';
 
 import HomeHeader from './HomeHeader';
 import CallHome from './CallHome';
@@ -270,21 +271,24 @@ const TabStack = ({route, navigation}) => {
             marginLeft: (20 / dim.w) * dim.Width,
           },
 
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('CallHome')}
-              styles={{backgroundColor: '#91C788'}}>
-              <Text
-                style={{
-                  color: '#91C788',
-                  fontSize: 16,
-                  marginRight: (30 / dim.w) * dim.Width,
-                  fontWeight: 'bold',
-                }}>
-                Call
-              </Text>
-            </TouchableOpacity>
-          ),
+          headerRight:
+            role === 'User'
+              ? () => (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('PostBlog')}
+                    styles={{backgroundColor: '#91C788'}}>
+                    <Text
+                      style={{
+                        color: '#91C788',
+                        fontSize: 16,
+                        marginRight: (30 / dim.w) * dim.Width,
+                        fontWeight: 'bold',
+                      }}>
+                      Post Blog
+                    </Text>
+                  </TouchableOpacity>
+                )
+              : undefined,
         })}
       />
     </Tab.Navigator>

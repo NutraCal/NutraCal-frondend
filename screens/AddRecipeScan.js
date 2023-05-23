@@ -1,66 +1,54 @@
-import React, {useState, useEffect} from 'react';
-import type {Node} from 'react';
+import React, {useState} from 'react';
 import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Button,
   View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
   Image,
   PermissionsAndroid,
 } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import TextRecognition from 'react-native-text-recognition';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import dim from '../util/dim';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ImagePicker from 'react-native-image-crop-picker';
+import FormData from 'form-data';
+import axios from 'axios';
+import {endpoint} from '../util/config';
 
-const AddRecipeScan = () => {
-  const [cameraPhoto, setCameraPhoto] = useState();
-  const [image, setImage] = useState(null);
-  const [text, setText] = useState('');
+export default function AddRecipeScan({route, navigation}) {
+  const [step, setStep] = useState(1);
+  const [directionsImage, setDirectionsImage] = useState(null);
+  const [directionsResponse, setDirectionsResponse] = useState('');
+  const [ingredientsImage, setIngredientsImage] = useState(null);
+  const [ingredientsResponse, setIngredientsResponse] = useState('');
+  const [recipeName, setRecipeName] = useState('');
+  const [category, setCategory] = useState('');
+  const [servingSize, setServingSize] = useState('');
+  const [allergy, setAllergy] = useState('');
 
-  let options = {
-    saveToPhotos: true,
-    mediaType: 'photo',
+  const handleDirectionsImageSelect = async image => {
+    const imagePath = image.path;
+    console.log(imagePath.toString());
+    setDirectionsImage(imagePath);
+    console.log(directionsImage);
   };
 
-  const openCamera = async () => {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.CAMERA,
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      const result = await launchCamera(options);
-      setCameraPhoto(result.assets[0].uri);
-      const result1 = await TextRecognition.recognize(result.assets[0].uri);
-      setText(result1);
-    }
+  const handleIngredientsImageSelect = image => {
+    const imagePath = image.path;
+    console.log(imagePath.toString());
+    setIngredientsImage(imagePath);
+    //make call to ocr
   };
 
-  const selectImage = () => {
-    launchImageLibrary({}, setImage);
-    (async () => {
-      if (image) {
-        const result1 = await TextRecognition.recognize(image.assets[0].uri);
-        setText(result1);
-      }
-    })();
+  const handleNext = () => {
+    setStep(step + 1);
   };
 
-  useEffect(() => {});
+  const handleBack = () => {
+    setStep(step - 1);
+  };
 
-  // const imagePick = () => {
-  //   ImagePicker.openPicker({
-  //     width: (300 / dim.w) * dim.Width,
-  //     height: (400 / dim.h) * dim.Height,
-  //     cropping: true,
-  //   }).then(image => {
-  //     console.log(image);
-  //   });
-  // };
-
-  const imagePick = async () => {
+  const getPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -72,20 +60,14 @@ const AddRecipeScan = () => {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('hehe');
-        try {
-        } catch (error) {
-          console.log(error);
-        }
-        // Permission granted, you can proceed with using the camera
-        imagePickee();
+        imagePickerCamera();
       }
     } catch (error) {
       console.warn('Camera permission request failed:', error);
     }
   };
 
-  const imagePickee = async () => {
+  const imagePickerGallery = async () => {
     try {
       const image = await ImagePicker.openPicker({
         width: (300 / dim.w) * dim.Width,
@@ -93,111 +75,226 @@ const AddRecipeScan = () => {
         cropping: true,
       });
       console.log(image);
+      setDirectionsImage(null);
+      // handleDirectionsImageSelect(image);
+      handleIngredientsImageSelect(image);
     } catch (error) {
       console.log('Image picker error:', error);
     }
   };
 
-  // const storeData = () => {
-  //   fetch('http://10.0.2.2:3000/abc', {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       name: 'yourValue',
-  //       regNo: 'yourOtherValue',
-  //     }),
-  //   });
-  // };
+  const imagePickerCamera = async () => {
+    try {
+      const image = await ImagePicker.openCamera({
+        width: (300 / dim.w) * dim.Width,
+        height: (400 / dim.h) * dim.Height,
+        cropping: true,
+      });
+      console.log(image);
+      setDirectionsImage(null);
+      // handleDirectionsImageSelect(image);
+      handleIngredientsImageSelect(image);
+    } catch (error) {
+      console.log('Image picker error:', error);
+    }
+  };
+
+  const ocr = async res => {
+    const data = new FormData();
+    data.append('photo', {
+      // uri: directionsImage,
+      uri: ingredientsImage,
+      name: 'photo.jpg',
+      type: 'image/jpeg',
+    });
+
+    console.log(data);
+
+    try {
+      const response = await axios({
+        method: 'post',
+        maxContentLength: Infinity,
+        url: endpoint + '/recipes/detectText',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      // setDirectionsResponse(response.data);
+      setIngredientsResponse(response.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text
-        style={{
-          color: 'black',
-          fontSize: 25,
-          margin: (10 / dim.h) * dim.Height,
-          fontWeight: 'bold',
-        }}>
-        Optical Character Recognition
-      </Text>
-      <TouchableOpacity
-        style={{
-          height: (60 / dim.h) * dim.Height,
-          margin: (10 / dim.h) * dim.Height,
-          backgroundColor: 'red',
-          borderColor: 'white',
-          borderWidth: 2,
-          borderRadius: 10,
-        }}
-        onPress={openCamera}>
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 25,
-            margin: (10 / dim.h) * dim.Height,
-            fontWeight: 'bold',
-          }}>
-          Select from Camera
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{
-          height: (60 / dim.h) * dim.Height,
-          margin: (10 / dim.h) * dim.Height,
-          backgroundColor: 'purple',
-          borderColor: 'white',
-          borderWidth: 2,
-          borderRadius: 10,
-        }}
-        onPress={selectImage}>
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 25,
-            margin: (10 / dim.h) * dim.Height,
-            fontWeight: 'bold',
-          }}>
-          Select from Gallery
-        </Text>
-      </TouchableOpacity>
-      <Text
-        style={{
-          color: 'yellow',
-          fontSize: 25,
-          fontWeight: 'bold',
-        }}>
-        Result
-      </Text>
-      <Text
-        style={{
-          color: 'yellow',
-          fontSize: 25,
-          fontWeight: 'bold',
-        }}>
-        ____________________
-      </Text>
-      <Text
-        style={{
-          color: 'black',
-          margin: (10 / dim.h) * dim.Height,
-          fontSize: 18,
-          fontWeight: 'bold',
-          width: (350 / dim.w) * dim.Width,
-          textAlign: 'justify',
-        }}>
-        {text}
-      </Text>
-      <TouchableOpacity
-        onPress={() => {
-          imagePick();
-        }}>
-        <Text style={{color: 'black'}}>Open me</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      {step === 1 && (
+        <View>
+          <View style={styles.header}>
+            {/* <TouchableOpacity>
+              <Ionicons name="chevron-back-sharp" size={25} color="#91C788" />
+            </TouchableOpacity> */}
+            <Text style={styles.heading}>Select Directions</Text>
+            <TouchableOpacity onPress={handleNext}>
+              <Text style={styles.nextbtn}>Next</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              getPermission();
+            }}
+            style={styles.imgc}>
+            {directionsImage !== null && (
+              <View>
+                <Image
+                  source={{
+                    uri: directionsImage,
+                  }}
+                  style={styles.image}
+                />
+              </View>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{backgroundColor: 'red', height: 50}}
+            onPress={ocr}>
+            <Text>heheheheheh</Text>
+          </TouchableOpacity>
+          {/* <TextInput
+            style={styles.txtinput}
+            value={directionsResponse}
+            onChangeText={setDirectionsResponse}
+          /> */}
+        </View>
+      )}
+      {step === 2 && (
+        <View>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={handleBack}>
+              <Ionicons name="chevron-back-sharp" size={25} color="#91C788" />
+            </TouchableOpacity>
+            <Text style={styles.heading}>Select Ingredients</Text>
+            <TouchableOpacity onPress={handleNext}>
+              <Text style={styles.nextbtn}>Next</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              getPermission();
+            }}
+            style={styles.imgc}>
+            {ingredientsImage !== null && (
+              <View>
+                <Image
+                  source={{
+                    uri: ingredientsImage,
+                  }}
+                  style={styles.image}
+                />
+              </View>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{backgroundColor: 'red', height: 50}}
+            onPress={ocr}>
+            <Text>heheheheheh</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {step === 3 && (
+        <View>
+          <Text>Recipe Picture</Text>
+          {/* Render the recipe picture */}
+          <Image source={{uri: recipePicture}} />
+          <TextInput
+            value={recipeName}
+            onChangeText={setRecipeName}
+            placeholder="Recipe Name"
+          />
+          <TextInput
+            value={category}
+            onChangeText={setCategory}
+            placeholder="Category"
+          />
+          <TextInput
+            value={servingSize}
+            onChangeText={setServingSize}
+            placeholder="Serving Size"
+          />
+          <TextInput
+            value={allergy}
+            onChangeText={setAllergy}
+            placeholder="Allergy"
+          />
+          <TouchableOpacity onPress={handleSave}>
+            <Text>Save Recipe</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
-};
+}
 
-export default AddRecipeScan;
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // padding: (8 / dim.h) * dim.Height,
+    paddingBottom: 0,
+    // backgroundColor: 'blue',
+  },
+
+  header: {
+    flexDirection: 'row',
+    width: dim.Width,
+    borderWidth: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: (55 / dim.h) * dim.Height,
+  },
+
+  heading: {
+    fontFamily: 'Inter-Bold',
+    color: 'black',
+    fontSize: 18,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (8 / dim.h) * dim.Height,
+  },
+  nextbtn: {
+    color: '#91C788',
+    fontSize: 16,
+    marginRight: (10 / dim.w) * dim.Width,
+    fontWeight: 'bold',
+  },
+  txtinput: {
+    borderColor: '#E1E3E8',
+    borderWidth: 1,
+    height: (48 / dim.h) * dim.Height,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
+    borderRadius: 10,
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+    marginTop: (20 / dim.h) * dim.Height,
+    marginBottom: (20 / dim.h) * dim.Height,
+    alignSelf: 'center',
+  },
+  imgc: {
+    // backgroundColor: 'black',
+    width: dim.Width,
+    height: (650 / dim.h) * dim.Height,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#91C788',
+  },
+
+  image: {
+    width: dim.Width,
+    height: (500 / dim.h) * dim.Height,
+  },
+});

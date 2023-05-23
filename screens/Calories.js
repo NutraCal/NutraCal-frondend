@@ -207,7 +207,6 @@ export default function Calories({route, navigation}) {
 
   useEffect(() => {
     if (date !== null) {
-      console.log('hhehhhhhhhh');
       getWeekDates(date);
       console.log(date);
       // handleDateChange(date);
@@ -329,7 +328,6 @@ export default function Calories({route, navigation}) {
                     onPress={() => {
                       navigation.navigate('ViewMeal', {
                         item: item,
-                        editable: false,
                       });
                     }}>
                     <Forw

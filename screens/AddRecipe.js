@@ -257,6 +257,7 @@ export default function AddRecipe({route, navigation}) {
                 ]}
                 placeholder="Type something here"
                 placeholderTextColor="#8F9098"
+                multiline={true}
               />
               <Text style={styles.heading}>Serving Size</Text>
               <TextInput

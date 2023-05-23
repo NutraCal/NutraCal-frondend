@@ -21,6 +21,7 @@ import axios from 'axios';
 import {endpoint} from '../util/config';
 import {AuthContext} from '../context/AuthContext';
 import dim from '../util/dim';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function ViewRecipe({route, navigation}) {
   const {title} = route.params;
@@ -35,10 +36,41 @@ export default function ViewRecipe({route, navigation}) {
   const [quantity, setQuantity] = useState([]);
   const [item, setItem] = useState('');
   const [getlist, setList] = useState([]);
+  const [likes, setLikes] = useState(0);
+
+  const [liked, setLiked] = useState(false);
 
   const {user} = useContext(AuthContext);
-
   const userId = user?.data?.user?._id;
+  const email = user?.data?.user?.email;
+
+  const handleLikePress = () => {
+    setLiked(!liked);
+    updateLikes();
+  };
+
+  const updateLikes = async res => {
+    var data = JSON.stringify({
+      email: email,
+      title: name,
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/recipes/likeRecipe',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      if (response) {
+        searchRecipeByName();
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
 
   const searchRecipeByName = async res => {
     console.log('here');
@@ -67,6 +99,7 @@ export default function ViewRecipe({route, navigation}) {
       setProteins(p);
       const ca = response.data[0].Carbs.toString();
       setCarbs(ca);
+      setLikes(response.data[0].Likes);
       const slist = response.data[0].Ingredients;
       console.log(...slist);
       setList([...slist]);
@@ -105,129 +138,156 @@ export default function ViewRecipe({route, navigation}) {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container2}>
-          <Image
-            // source={{uri: item.thumbnail}}
-            source={require('../assets/images/recipefood.png')}
-            style={styles.coverimg}
-          />
+        <Image
+          // source={{uri: item.thumbnail}}
+          source={require('../assets/images/recipefood.png')}
+          style={styles.coverimg}
+        />
 
-          <Text style={styles.heading}>{name}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            // backgroundColor: 'red',
+            width: dim.Width,
+          }}>
+          <View>
+            <Text style={styles.heading2}>{name}</Text>
+          </View>
+          <View>
+            <TouchableOpacity
+              onPress={handleLikePress}
+              style={{
+                // backgroundColor: 'blue',
+                marginRight: 50,
+                padding: 10,
+                alignItems: 'center',
+              }}>
+              <Ionicons
+                name={liked ? 'heart' : 'heart-outline'}
+                size={25}
+                color={liked ? 'red' : 'black'}
+              />
+              {/* <Text>{liked ? 'Unlike' : 'Like'}</Text> */}
+              <Text>{likes} likes</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-          <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+          <View>
             <View>
-              <View>
-                <View style={styles.box}>
-                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
-                    <Text style={styles.name}>{calories}</Text>
-                    <Text style={styles.tag}>kCal</Text>
-                  </View>
-                  <Macro1
-                    width={(20 / dim.w) * dim.Width}
-                    height={(21 / dim.w) * dim.Width}
-                  />
+              <View style={styles.box}>
+                <View style={{marginRight: (10 / dim.w) * dim.Width}}>
+                  <Text style={styles.name}>{calories}</Text>
+                  <Text style={styles.tag}>kCal</Text>
                 </View>
-              </View>
-            </View>
-
-            <View>
-              <View>
-                <View style={styles.box}>
-                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
-                    <Text style={styles.name}>{fats}</Text>
-                    <Text style={styles.tag}>fats</Text>
-                  </View>
-                  <Macro2
-                    width={(20 / dim.w) * dim.Width}
-                    height={(21 / dim.w) * dim.Width}
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View>
-              <View>
-                <View style={styles.box}>
-                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
-                    <Text style={styles.name}>{proteins}</Text>
-                    <Text style={styles.tag}>proteins</Text>
-                  </View>
-                  <Macro3
-                    width={(20 / dim.w) * dim.Width}
-                    height={(21 / dim.w) * dim.Width}
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View>
-              <View>
-                <View style={styles.box}>
-                  <View style={{marginRight: (10 / dim.w) * dim.Width}}>
-                    <Text style={styles.name}>{carbs}</Text>
-                    <Text style={styles.tag}>carbs</Text>
-                  </View>
-                  <Macro4
-                    width={(20 / dim.w) * dim.Width}
-                    height={(21 / dim.w) * dim.Width}
-                  />
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-
-          <Text style={styles.heading}>Cooking Steps:</Text>
-
-          {desc.map((item, index) => (
-            <View key={index}>
-              <TouchableOpacity
-                style={[styles.steps, {backgroundColor: '#F7F8F8'}]}>
-                <Step
+                <Macro1
                   width={(20 / dim.w) * dim.Width}
-                  height={(20 / dim.w) * dim.Width}
-                  style={{marginRight: 10}}
+                  height={(21 / dim.w) * dim.Width}
                 />
-                <Text style={[styles.step, {width: 280}]}>{item}</Text>
-              </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          <View>
+            <View>
+              <View style={styles.box}>
+                <View style={{marginRight: (10 / dim.w) * dim.Width}}>
+                  <Text style={styles.name}>{fats}</Text>
+                  <Text style={styles.tag}>fats</Text>
+                </View>
+                <Macro2
+                  width={(20 / dim.w) * dim.Width}
+                  height={(21 / dim.w) * dim.Width}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View>
+            <View>
+              <View style={styles.box}>
+                <View style={{marginRight: (10 / dim.w) * dim.Width}}>
+                  <Text style={styles.name}>{proteins}</Text>
+                  <Text style={styles.tag}>proteins</Text>
+                </View>
+                <Macro3
+                  width={(20 / dim.w) * dim.Width}
+                  height={(21 / dim.w) * dim.Width}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View>
+            <View>
+              <View style={styles.box}>
+                <View style={{marginRight: (10 / dim.w) * dim.Width}}>
+                  <Text style={styles.name}>{carbs}</Text>
+                  <Text style={styles.tag}>carbs</Text>
+                </View>
+                <Macro4
+                  width={(20 / dim.w) * dim.Width}
+                  height={(21 / dim.w) * dim.Width}
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+
+        <Text style={styles.heading}>Cooking Steps:</Text>
+
+        {desc.map((item, index) => (
+          <View key={index}>
+            <TouchableOpacity
+              style={[styles.steps, {backgroundColor: '#F7F8F8'}]}>
+              <Step
+                width={(20 / dim.w) * dim.Width}
+                height={(20 / dim.w) * dim.Width}
+                style={{marginRight: 10}}
+              />
+              <Text style={[styles.step, {width: 280}]}>{item}</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+
+        <Text style={[styles.heading, {width: (250 / dim.w) * dim.Width}]}>
+          Ingredients That You Will Need
+        </Text>
+
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          {getlist.map((item, index) => (
+            <View key={index} style={{alignItems: 'center'}}>
+              <View style={styles.box1}>
+                <Ing
+                  width={(50 / dim.w) * dim.Width}
+                  height={(50 / dim.w) * dim.Width}
+                />
+              </View>
+
+              <View>
+                <Text style={[styles.name, {width: 80, textAlign: 'center'}]}>
+                  {item}
+                </Text>
+              </View>
             </View>
           ))}
+        </ScrollView>
 
-          <Text style={[styles.heading, {width: (250 / dim.w) * dim.Width}]}>
-            Ingredients That You Will Need
+        <TouchableOpacity
+          style={styles.btnn}
+          onPress={() => updateShoppingList()}>
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 16,
+              fontFamily: 'Inter-SemiBold',
+            }}>
+            Add to Shopping List
           </Text>
-
-          <ScrollView horizontal={true}>
-            {getlist.map((item, index) => (
-              <View key={index} style={{alignItems: 'center'}}>
-                <View style={styles.box1}>
-                  <Ing
-                    width={(50 / dim.w) * dim.Width}
-                    height={(50 / dim.w) * dim.Width}
-                  />
-                </View>
-
-                <View>
-                  <Text style={[styles.name, {width: 80, textAlign: 'center'}]}>
-                    {item}
-                  </Text>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
-
-          <TouchableOpacity
-            style={styles.btnn}
-            onPress={() => updateShoppingList()}>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 16,
-                fontFamily: 'Inter-SemiBold',
-              }}>
-              Add to Shopping List
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -240,10 +300,7 @@ const styles = StyleSheet.create({
     padding: (12 / dim.h) * dim.Height,
     paddingTop: (20 / dim.h) * dim.Height,
   },
-  container2: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
   heading: {
     fontFamily: 'Inter-Bold',
     color: 'black',
@@ -251,6 +308,13 @@ const styles = StyleSheet.create({
     marginTop: (10 / dim.h) * dim.Height,
     alignSelf: 'flex-start',
   },
+  heading2: {
+    fontFamily: 'Inter-Bold',
+    color: 'black',
+    fontSize: 20,
+    // backgroundColor: 'blue',
+  },
+
   box: {
     height: (73 / dim.h) * dim.Height,
     width: (90 / dim.w) * dim.Width,
