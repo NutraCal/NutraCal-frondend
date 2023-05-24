@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {useId} from 'react';
 
 import {StyleSheet, View, Text, Button} from 'react-native';
@@ -7,11 +7,19 @@ import ZegoUIKitPrebuiltCall, {
   ONE_ON_ONE_VOICE_CALL_CONFIG,
 } from '@zegocloud/zego-uikit-prebuilt-call-rn';
 import dim from '../util/dim';
+import axios from 'axios';
+import {endpoint} from '../util/config';
+import {AuthContext} from '../context/AuthContext';
 
-export default function Call(props) {
-  const {route} = props;
-  const {params} = route;
-  const {userID, userName} = params;
+export default function Call({route, navigation}) {
+  // const {route} = props;
+  // const {params} = route;
+  // const {userID, userName} = params;
+
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const userID = user?.data?.user?._id;
+  const userName = user?.data?.user?.name;
 
   return (
     <View style={styles.container}>

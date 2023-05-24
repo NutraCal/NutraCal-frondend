@@ -10,6 +10,7 @@ import ViewProfile from './ViewProfile';
 import ViewNutritionistProfile from './ViewNutritionistProfile';
 import BlogApproval from './BlogApproval';
 import RecipeApproval from './RecipeApproval';
+import MyAppointments from './MyAppointments';
 import dim from '../util/dim';
 
 const Drawer = createDrawerNavigator();
@@ -87,6 +88,22 @@ const DrawerNav = ({route, navigation}) => {
           }}
         />
       )}
+
+      <Drawer.Screen
+        name="MyAppointments"
+        component={MyAppointments}
+        options={{
+          headerShown: true,
+          drawerIcon: ({color}) => (
+            <Ionicons
+              name="home-outline"
+              size={(22 / dim.w) * dim.Width}
+              color={color}
+            />
+          ),
+        }}
+      />
+
       {role === 'User' && (
         <Drawer.Screen
           name="My Profile"

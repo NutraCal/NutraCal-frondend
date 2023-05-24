@@ -188,23 +188,6 @@ export default function Calories({route, navigation}) {
     getWeekDates(currentDate);
   }, []);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     // Fetch the latest data or update the state here
-  //     const currentDate = moment().toDate();
-  //     const formattedDate = moment(currentDate, 'YYYY/MM/DD').format(
-  //       'D MMMM YYYY',
-  //     );
-  //     setCDate(formattedDate);
-  //     getWeekDates(currentDate);
-
-  //     // Return a cleanup function if needed
-  //     return () => {
-  //       // Clean up any subscriptions or resources if necessary
-  //     };
-  //   }, []),
-  // );
-
   useEffect(() => {
     if (date !== null) {
       getWeekDates(date);

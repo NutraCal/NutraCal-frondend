@@ -61,7 +61,12 @@ export default function DietPlans({route, navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
   const [recipes, setRecipes] = useState([]);
+  // const [srecipes, setSRecipes] = useState([]);
   const [title, setTitle] = useState('');
+
+  const [stitle, setSTitle] = useState('');
+  const [scategory, setSCategory] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   const [checked, setChecked] = useState(false);
@@ -72,12 +77,29 @@ export default function DietPlans({route, navigation}) {
     setSearchQuery(query);
   };
 
+  const getRecipes = async res => {
+    setLoading(true);
+    try {
+      const response = await axios({
+        method: 'get',
+        url: endpoint + '/recipes/viewRecipes',
+        headers: {},
+      });
+
+      // console.log(JSON.stringify(response.data));
+      setRecipes(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
   const fetchRecipe = async res => {
     console.log(searchQuery);
     if (searchQuery != '') {
       setLoading(true);
       var data = JSON.stringify({
-        title: 'Broccoli Salad',
+        title: searchQuery,
       });
       try {
         const response = await axios({
@@ -120,6 +142,35 @@ export default function DietPlans({route, navigation}) {
     }
   };
 
+  const editDietPlan = async res => {
+    var data = JSON.stringify({
+      email: email,
+      date: cDate,
+      day: parseInt(day),
+      mealType: scategory,
+      mealName: stitle,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/diet/editPlan',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      alert('Diet Plan updated successfully');
+      setSearchQuery('');
+      setSCategory('');
+      setSTitle('');
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   const getCalories = async res => {
     var data = JSON.stringify({
       titles: [bname, lname, dname],
@@ -154,6 +205,9 @@ export default function DietPlans({route, navigation}) {
     var dayNumber = moment(date).format('d');
     dayNumber = parseInt(dayNumber) + 1;
     console.log(dayNumber);
+    setDay(dayNumber.toString());
+    console.log(day);
+
     // Load meal log for the selected date
 
     var data = JSON.stringify({
@@ -229,12 +283,6 @@ export default function DietPlans({route, navigation}) {
     }
   }, [val]);
 
-  // useEffect(() => {
-  //   // This effect will be triggered whenever `bcal` changes
-  //   // and will update the screen immediately
-  //   setBcal(bcal);
-  // }, [bcal]);
-
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -272,9 +320,8 @@ export default function DietPlans({route, navigation}) {
           </View>
         </View>
 
-        <Modal isVisible={isModalVisible} style={{backgroundColor: 'white'}}>
-          <View>
-            <Text>Recipe Suggestions</Text>
+        <Modal isVisible={isModalVisible}>
+          <View style={{backgroundColor: 'blue'}}>
             <Searchbar
               placeholder="Recipes"
               onChangeText={onChangeSearch}
@@ -282,7 +329,6 @@ export default function DietPlans({route, navigation}) {
               value={searchQuery}
               style={styles.searchbar}
             />
-            <Text>hehe</Text>
 
             {loading ? (
               <ActivityIndicator></ActivityIndicator>
@@ -291,7 +337,7 @@ export default function DietPlans({route, navigation}) {
                 data={recipes}
                 scrollEnabled={false}
                 renderItem={({index, item}) => (
-                  <View key={index}>
+                  <View key={index} style={{backgroundColor: 'red'}}>
                     <TouchableOpacity
                       style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
                       <Image
@@ -310,7 +356,9 @@ export default function DietPlans({route, navigation}) {
                         status={checked ? 'checked' : 'unchecked'}
                         color="#91C788"
                         onPress={() => {
+                          setSTitle(item.Title);
                           setChecked(!checked);
+                          editDietPlan();
                           setTimeout(() => {
                             setModalVisible(false);
                           }, 1000);
@@ -386,6 +434,11 @@ export default function DietPlans({route, navigation}) {
                   name="swap-horizontal"
                   size={22}
                   style={{marginLeft: (10 / dim.w) * dim.Width}}
+                  onPress={() => {
+                    getRecipes();
+                    setSCategory('Breakfast');
+                    setModalVisible(true);
+                  }}
                 />
               </View>
 
@@ -420,6 +473,11 @@ export default function DietPlans({route, navigation}) {
                   name="swap-horizontal"
                   size={22}
                   style={{marginLeft: (10 / dim.w) * dim.Width}}
+                  onPress={() => {
+                    getRecipes();
+                    setSCategory('Lunch');
+                    setModalVisible(true);
+                  }}
                 />
               </View>
               <Text style={styles.desc}>{lcal} calories</Text>
@@ -453,7 +511,11 @@ export default function DietPlans({route, navigation}) {
                   name="swap-horizontal"
                   size={22}
                   style={{marginLeft: (10 / dim.w) * dim.Width}}
-                  onPress={() => setModalVisible(true)}
+                  onPress={() => {
+                    getRecipes();
+                    setSCategory('Dinner');
+                    setModalVisible(true);
+                  }}
                 />
               </View>
               <Text style={styles.desc}>{dcal} calories</Text>

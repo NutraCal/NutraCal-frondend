@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,9 +15,17 @@ import axios from 'axios';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
 
+import {AuthContext} from '../context/AuthContext';
+
 const WaterLog = ({route, navigation}) => {
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
+  const userName = user?.data?.user?.name;
+
   const {email} = route.params;
   console.log(email);
+
   const [isVisible, setIsVisible] = useState(false);
   const [isGoalVisible, setIsGoalVisible] = useState(false);
   const [glasses, setGlasses] = useState('');

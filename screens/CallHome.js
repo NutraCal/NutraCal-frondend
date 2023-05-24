@@ -5,6 +5,7 @@ import dim from '../util/dim';
 
 export default function CallHome(props) {
   const navigation = useNavigation();
+
   const onJoinPress = (userID, userName) => {
     navigation.navigate('Call', {
       userID: userID,

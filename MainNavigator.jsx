@@ -61,6 +61,10 @@ import ViewThread from './screens/ViewThread';
 import DiscussionThread from './screens/DiscussionThread';
 import ViewBlog from './screens/ViewBlog';
 import PostBlog from './screens/PostBlog';
+import UpdateBlog from './screens/UpdateBlog';
+import UpdateRecipe from './screens/UpdateRecipe';
+import BookAppointment from './screens/BookAppointment';
+
 import PostThread from './screens/PostThread';
 import ViewMeal from './screens/ViewMeal';
 import EditMeal from './screens/EditMeal';
@@ -68,6 +72,8 @@ import EditMeal from './screens/EditMeal';
 import ViewNutritionistProfile from './screens/ViewNutritionistProfile';
 import EditNutritionistProfile from './screens/EditNutritionistProfile';
 import ViewNutritionist from './screens/ViewNutritionist';
+
+import MyAppointments from './screens/MyAppointments';
 
 import dim from './util/dim';
 import axios from 'axios';
@@ -159,12 +165,78 @@ export default function MainNavigator() {
           component={Home}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="UpdateRecipe"
+          component={UpdateRecipe}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="UpdateBlog"
+          component={UpdateBlog}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="ViewBlog"
+          component={ViewBlog}
+          options={({route, navigation}) => {
+            const {title} = route.params;
+
+            const handleUpdateRecipe = () => {
+              navigation.navigate('UpdateBlog', {title});
+            };
+
+            return {
+              title: 'View Blog',
+              headerShown: true,
+              headerRight: () => (
+                <TouchableOpacity onPress={handleUpdateRecipe}>
+                  <Text
+                    style={{
+                      color: '#91C788',
+                      fontSize: 16,
+                      marginRight: (10 / dim.w) * dim.Width,
+                      fontWeight: 'bold',
+                    }}>
+                    Update Blog
+                  </Text>
+                </TouchableOpacity>
+              ),
+            };
+          }}
+        />
 
         <Stack.Screen
           name="ViewRecipe"
           component={ViewRecipe}
-          options={{headerShown: true}}
+          options={({route, navigation}) => {
+            const {title} = route.params;
+
+            const handleUpdateRecipe = () => {
+              navigation.navigate('UpdateRecipe', {title}); // Pass the nutritionistId to the "EditNutritionist" screen
+            };
+
+            return {
+              title: 'View Recipe',
+              headerShown: true,
+              headerRight: () => (
+                <TouchableOpacity onPress={handleUpdateRecipe}>
+                  <Text
+                    style={{
+                      color: '#91C788',
+                      fontSize: 16,
+                      marginRight: (10 / dim.w) * dim.Width,
+                      fontWeight: 'bold',
+                    }}>
+                    Update Recipe
+                  </Text>
+                </TouchableOpacity>
+              ),
+            };
+          }}
         />
+
         <Stack.Screen
           name="MyRecipes"
           component={MyRecipes}
@@ -193,6 +265,29 @@ export default function MainNavigator() {
               fontWeight: 'bold',
             },
           }}
+        />
+
+        <Stack.Screen
+          name="MyAppointments"
+          component={MyAppointments}
+          options={({navigation}) => ({
+            headerShown: true,
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Call')}
+                styles={{backgroundColor: '#91C788'}}>
+                <Text
+                  style={{
+                    color: '#91C788',
+                    fontSize: 16,
+                    marginRight: (10 / dim.w) * dim.Width,
+                    fontWeight: 'bold',
+                  }}>
+                  Call
+                </Text>
+              </TouchableOpacity>
+            ),
+          })}
         />
 
         <Stack.Screen
@@ -330,6 +425,12 @@ export default function MainNavigator() {
         />
 
         <Stack.Screen
+          name="BookAppointment"
+          component={BookAppointment}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
           name="ViewMeal"
           component={ViewMeal}
           options={({route, navigation}) => {
@@ -417,12 +518,6 @@ export default function MainNavigator() {
         /> */}
 
         <Stack.Screen
-          name="ViewBlog"
-          component={ViewBlog}
-          options={{headerShown: true}}
-        />
-
-        <Stack.Screen
           name="EditMeal"
           component={EditMeal}
           options={{headerShown: true}}
@@ -508,40 +603,39 @@ export default function MainNavigator() {
         <Stack.Screen
           name="ViewNutritionist"
           component={ViewNutritionist}
-          options={({route, navigation}) => {
-            const {name} = route.params; // Assuming you pass the nutritionistId as a parameter
-            const {nId} = route.params;
+          options={{headerShown: true}}
+          // options={({route, navigation}) => {
+          //   const {name} = route.params; // Assuming you pass the nutritionistId as a parameter
+          //   const {nId} = route.params;
 
-            const handleEditNutritionist = () => {
-              navigation.navigate('EditNutritionistProfile', {name, nId}); // Pass the nutritionistId to the "EditNutritionist" screen
-            };
+          //   const handleEditNutritionist = () => {
+          //     navigation.navigate('EditNutritionistProfile', {name, nId}); // Pass the nutritionistId to the "EditNutritionist" screen
+          //   };
 
-            return {
-              title: 'View Nutritionist',
-              headerShown: true,
-              headerRight: () => {
-                if (role === 'User') {
-                  return (
-                    <TouchableOpacity
-                      onPress={handleEditNutritionist}
-                      style={{backgroundColor: '#91C788'}}>
-                      <Text
-                        style={{
-                          color: '#91C788',
-                          fontSize: 16,
-                          marginRight: (10 / dim.w) * dim.Width,
-                          fontWeight: 'bold',
-                        }}>
-                        Edit
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                } else {
-                  return null; // Return null if the role is not "Nutritionist"
-                }
-              },
-            };
-          }}
+          //   return {
+          //     title: 'View Nutritionist',
+          //     headerShown: true,
+          //     headerRight: () => {
+          //       if (role === 'User') {
+          //         return (
+          //           <TouchableOpacity onPress={handleEditNutritionist}>
+          //             <Text
+          //               style={{
+          //                 color: '#91C788',
+          //                 fontSize: 16,
+          //                 marginRight: (10 / dim.w) * dim.Width,
+          //                 fontWeight: 'bold',
+          //               }}>
+          //               Edit
+          //             </Text>
+          //           </TouchableOpacity>
+          //         );
+          //       } else {
+          //         return null; // Return null if the role is not "Nutritionist"
+          //       }
+          //     },
+          //   };
+          // }}
         />
       </Stack.Navigator>
     </NavigationContainer>

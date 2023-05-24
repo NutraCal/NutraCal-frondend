@@ -12,7 +12,6 @@ import {
 // import {ScrollView} from 'react-native-gesture-handler';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
@@ -22,96 +21,70 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
 import FormData from 'form-data';
 
-export default function UpdateBlog({route, navigation}) {
-  const {title} = route.params;
+export default function BookAppointment({route, navigation}) {
+  const nEmail = route.params.nEmail;
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
-  const [id, setId] = useState('');
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [loadData, setLoadData] = useState(true);
   const [image, setImage] = useState(null);
-  const [imageuri, setImageUri] = useState(0);
 
-  const handleChoosePhoto = async () => {
-    try {
-      const response = await launchImageLibrary({mediaType: 'photo'});
-      if (!response.didCancel) {
-        setImage(response);
-      } else {
-        console.log('Image selection cancelled.');
-      }
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  };
+  const [open2, setOpen2] = useState(false);
+  const [value2, setValue2] = useState(null);
 
-  const saveBlog = async res => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+
+  const [Day, setDay] = useState([
+    {label: 'Monday', value: 'Monday'},
+    {label: 'Tuesday', value: 'Tuesday'},
+    {label: 'Wednesday', value: 'Wednesday'},
+    {label: 'Thursday', value: 'Thursday'},
+    {label: 'Friday', value: 'Friday'},
+    {label: 'Saturday', value: 'Saturday'},
+    {label: 'Sunday', value: 'Sunday'},
+  ]);
+
+  const [time, setTime] = useState([
+    {label: '11 AM', value: '11 AM'},
+    {label: '12 PM', value: '12 AM'},
+    {label: '1 PM', value: '1 PM'},
+    {label: '2 PM', value: '2 PM'},
+    {label: '3 PM', value: '3 PM'},
+    {label: '4 PM', value: '4 PM'},
+  ]);
+
+  const Book = async res => {
     var data = JSON.stringify({
-      blogId: id,
-      title: name,
-      content: desc,
+      nutritionistEmail: nEmail,
+      userEmail: email,
+      day: value2,
+      time: value,
     });
 
     console.log(data);
-    try {
-      const response = await axios({
-        method: 'put',
-        url: endpoint + '/blogs/editBlog',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: data,
-      });
-      console.log(JSON.stringify(response.data));
-      if (response.status == 200) {
-        alert('blog updated successfully');
-        // navigation.goBack();
-        setName('');
-        setDesc('');
-        setImageUri('');
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
 
-  const fetchBlog = async res => {
-    // console.log(role);
-    console.log(title);
-    var data = JSON.stringify({
-      title: title,
-    });
     try {
       const response = await axios({
         method: 'post',
-        url: endpoint + '/blogs/viewBlogByTitle',
+        url: endpoint + '/nutritionist/bookAppointment',
         headers: {
           'Content-Type': 'application/json',
         },
         data: data,
       });
 
-      console.log(response.data);
-      //   setBlog(response.data[0]);
-      setId(response.data[0]._id);
-      setName(title);
-      setDesc(response.data[0].Content);
-
-      const filename = response.data[0].Image.filename;
-      const u = endpoint + '/' + filename;
-      // console.log(u);
-      setImageUri(u);
-      // setImage(response.data[0].Image);
+      console.log(JSON.stringify(response.data));
+      alert('Appointment Booked Successfully');
+      setValue(null);
+      setValue2(null);
     } catch (error) {
-      console.log(error.response);
+      console.log(error.response.data);
+      alert(error.response.data);
     }
   };
-
-  useEffect(() => {
-    fetchBlog();
-  }, []);
 
   return (
     // <View style={styles.container}>
@@ -119,55 +92,75 @@ export default function UpdateBlog({route, navigation}) {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.container}>
       <View style={styles.container2}>
-        <TouchableOpacity>
-          {imageuri ? (
-            <Image source={{uri: imageuri}} style={styles.img} />
-          ) : (
-            <View style={styles.imgView}>
-              <Text style={{color: '#FFFFFF', fontSize: 40}}>+</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-
         <View
           style={{
             alignItems: 'flex-start',
             padding: (10 / dim.h) * dim.Height,
             justifyContent: 'center',
           }}>
-          <Text style={styles.heading}>Blog Title</Text>
-          <TextInput
+          <Text style={styles.heading}>Pick a day</Text>
+          {/* <TextInput
             style={styles.txtinput}
             value={name}
             onChangeText={text => setName(text)}
             placeholder="Enter blog title"
             placeholderTextColor="#8F9098"
             multiline={true}
+          /> */}
+          <DropDownPicker
+            style={styles.ddpicker}
+            containerStyle={{
+              width: (350 / dim.w) * dim.Width,
+            }}
+            textStyle={{
+              fontSize: 16,
+            }}
+            dropDownContainerStyle={{
+              height: (120 / dim.h) * dim.Height,
+            }}
+            zIndex={2000}
+            zIndexInverse={2000}
+            open={open2}
+            value={value2}
+            items={Day}
+            setOpen={setOpen2}
+            setValue={setValue2}
+            setItems={setDay}
+            dropDownDirection="BOTTOM"
+            placeholder="Select day"
           />
-          <Text style={styles.heading}>Content</Text>
-          <TextInput
-            value={desc}
-            onChangeText={text => setDesc(text)}
-            style={[
-              styles.txtinput,
-              {
-                height: (310 / dim.h) * dim.Height,
-                textAlignVertical: 'top',
-              },
-            ]}
-            placeholder="Type something here"
-            placeholderTextColor="#8F9098"
-            multiline={true}
+          <Text style={styles.heading}>Pick a time</Text>
+          <DropDownPicker
+            style={styles.ddpicker}
+            containerStyle={{
+              width: (350 / dim.w) * dim.Width,
+            }}
+            textStyle={{
+              fontSize: 16,
+            }}
+            dropDownContainerStyle={{
+              height: (120 / dim.h) * dim.Height,
+            }}
+            zIndex={1000}
+            zIndexInverse={3000}
+            open={open}
+            value={value}
+            items={time}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setTime}
+            dropDownDirection="BOTTOM"
+            placeholder="Select time"
           />
 
-          <TouchableOpacity onPress={saveBlog} style={styles.btn}>
+          <TouchableOpacity onPress={Book} style={styles.btn}>
             <Text
               style={{
                 color: 'white',
                 fontSize: 16,
                 fontFamily: 'Inter-SemiBold',
               }}>
-              Update Blog
+              Book Appointment
             </Text>
           </TouchableOpacity>
         </View>
@@ -182,6 +175,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: (8 / dim.h) * dim.Height,
+    flex: 1,
   },
 
   container2: {
@@ -242,5 +236,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: (20 / dim.h) * dim.Height,
     marginBottom: (20 / dim.h) * dim.Height,
+    marginTop: (40 / dim.h) * dim.Height,
   },
 });
