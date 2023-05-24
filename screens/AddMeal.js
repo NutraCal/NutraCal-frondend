@@ -6,10 +6,10 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  ScrollView,
+  // ScrollView,
   Image,
 } from 'react-native';
-// import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -21,6 +21,8 @@ import {AuthContext} from '../context/AuthContext';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
 import FormData from 'form-data';
+import DatePicker from 'react-native-modern-datepicker';
+import Modal from 'react-native-modal';
 
 export default function AddMeal({route, navigation}) {
   const {user} = useContext(AuthContext);
@@ -29,6 +31,8 @@ export default function AddMeal({route, navigation}) {
 
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);
+
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const [category, setCategory] = useState([
     {label: 'Breakfast', value: 'Breakfast'},
@@ -46,6 +50,7 @@ export default function AddMeal({route, navigation}) {
   const [loadData, setLoadData] = useState(true);
   const [image, setImage] = useState(null);
   const [cDate, setCDate] = useState(moment().format('YYYY-MM-DD'));
+  const [time, setTime] = useState('');
 
   const handleChoosePhoto = async () => {
     try {
@@ -61,8 +66,23 @@ export default function AddMeal({route, navigation}) {
   };
 
   const saveMeal = async res => {
+    if (
+      name === '' ||
+      value3 === null ||
+      calories === '' ||
+      proteins === '' ||
+      fats === '' ||
+      carbs === '' ||
+      cDate === '' ||
+      time === '' ||
+      image === null
+    ) {
+      alert('Please fill all fields');
+      return;
+    }
     console.log(cDate);
-    const cTime = moment().format('h:mm A');
+    const fTime = moment(time, 'HH:mm').format('hh:mm A');
+
     const data = new FormData();
     data.append('name', name);
     data.append('category', value3);
@@ -71,7 +91,7 @@ export default function AddMeal({route, navigation}) {
     data.append('fats', fats);
     data.append('carbohydrates', carbs);
     data.append('date', cDate);
-    data.append('time', cTime);
+    data.append('time', fTime);
     data.append('photo', {
       uri: image.assets[0].uri,
       name: 'photo.jpg',
@@ -122,6 +142,11 @@ export default function AddMeal({route, navigation}) {
     }
   };
 
+  const handleTimeChange = time => {
+    setTime(time);
+    setModalVisible(false);
+  };
+
   return (
     // <View style={styles.container}>
     <ScrollView
@@ -139,6 +164,22 @@ export default function AddMeal({route, navigation}) {
             </View>
           )}
         </TouchableOpacity>
+
+        <Modal isVisible={isModalVisible}>
+          <View>
+            <DatePicker
+              mode="time"
+              onTimeChange={handleTimeChange}
+              options={{
+                textHeaderColor: '#333333',
+                textDefaultColor: '#333333',
+                mainColor: '#91C788',
+                textSecondaryColor: '#D6C7A1',
+              }}
+              style={{borderRadius: 10}}
+            />
+          </View>
+        </Modal>
 
         <View
           style={{
@@ -158,6 +199,7 @@ export default function AddMeal({route, navigation}) {
           <View style={styles.fieldContainer}>
             <Text style={styles.heading}>Category:</Text>
             <DropDownPicker
+              nestedScrollEnabled={true}
               style={{
                 width: (350 / dim.w) * dim.Width,
                 borderWidth: 1,
@@ -179,6 +221,17 @@ export default function AddMeal({route, navigation}) {
               dropDownDirection="BOTTOM"
               placeholder="Select category"
             />
+          </View>
+
+          <View style={[styles.fieldContainer]}>
+            <Text style={[styles.heading, {marginTop: 30}]}>Time</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(true);
+              }}
+              style={styles.to}>
+              {time !== '' && <Text style={styles.input2}>{time}</Text>}
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.heading}>Nutrition</Text>
@@ -335,5 +388,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#CCCCCC',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  input2: {
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
+  },
+
+  to: {
+    width: (350 / dim.w) * dim.Width,
+    borderWidth: 1,
+    height: (48 / dim.h) * dim.Height,
+    borderColor: '#E1E3E8',
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  label: {
+    fontFamily: 'Inter-Bold',
+    color: 'black',
+    fontSize: 16,
+    marginBottom: (5 / dim.h) * dim.Height,
+  },
+  fieldContainer: {
+    alignItems: 'flex-start',
+    marginBottom: (10 / dim.h) * dim.Height,
   },
 });

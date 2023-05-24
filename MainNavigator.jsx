@@ -309,9 +309,7 @@ export default function MainNavigator() {
           options={({navigation}) => ({
             headerShown: true,
             headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('AddMeal')}
-                styles={{backgroundColor: '#91C788'}}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddMeal')}>
                 <Text
                   style={{
                     color: '#91C788',
@@ -334,8 +332,89 @@ export default function MainNavigator() {
         <Stack.Screen
           name="ViewMeal"
           component={ViewMeal}
-          options={{headerShown: true}}
+          options={({route, navigation}) => {
+            const {item} = route.params;
+            const {edita} = route.params;
+
+            const handleUpdateMeal = () => {
+              navigation.setParams({
+                ...route.params,
+                edita: true,
+              });
+            };
+
+            return {
+              title: 'View Meal',
+              headerShown: true,
+              headerRight: () => {
+                if (role === 'User') {
+                  return (
+                    <TouchableOpacity onPress={handleUpdateMeal}>
+                      <Text
+                        style={{
+                          color: '#91C788',
+                          fontSize: 16,
+                          marginRight: (10 / dim.w) * dim.Width,
+                          fontWeight: 'bold',
+                        }}>
+                        Edit
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return null;
+                }
+              },
+            };
+          }}
         />
+
+        {/* <Stack.Screen
+          name="ViewMeal"
+          component={ViewMeal}
+          options={({route, navigation}) => {
+            // const {name} = route.params; // Assuming you pass the nutritionistId as a parameter
+            // const {nId} = route.params;
+            const {item} = route.params;
+            const {edita} = route.params;
+
+            const handleUpdateMeal = () => {
+              console.log(item);
+              console.log(edita);
+              // navigation.navigate('ViewMeal', {item, edita});
+              navigation.navigate('ViewMeal', {
+                item: item,
+                edita: true,
+              });
+            };
+
+            return {
+              title: 'View Meal',
+              headerShown: true,
+              headerRight: () => {
+                if (role === 'User') {
+                  return (
+                    <TouchableOpacity
+                      onPress={handleUpdateMeal}
+                      styles={{backgroundColor: '#91C788'}}>
+                      <Text
+                        style={{
+                          color: '#91C788',
+                          fontSize: 16,
+                          marginRight: (10 / dim.w) * dim.Width,
+                          fontWeight: 'bold',
+                        }}>
+                        Edit
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return null; // Return null if the role is not "Nutritionist"
+                }
+              },
+            };
+          }}
+        /> */}
 
         <Stack.Screen
           name="ViewBlog"
@@ -373,8 +452,6 @@ export default function MainNavigator() {
             const {title} = route.params;
 
             const handleDeleteThread = async res => {
-              // navigation.navigate('EditNutritionistProfile', {title}); // Pass the nutritionistId to the "EditNutritionist" screen
-              // const deleteBlog = async title => {
               var data = JSON.stringify({
                 title: title,
               });
@@ -393,9 +470,7 @@ export default function MainNavigator() {
                 });
 
                 console.log(JSON.stringify(response.data.message));
-                // alert(response.data.message);
                 navigation.goBack();
-                // navigation.navigate('DiscussionThread');
               } catch (error) {
                 console.log(error.response.data);
                 alert(error.response.data);
@@ -449,7 +524,7 @@ export default function MainNavigator() {
                   return (
                     <TouchableOpacity
                       onPress={handleEditNutritionist}
-                      styles={{backgroundColor: '#91C788'}}>
+                      style={{backgroundColor: '#91C788'}}>
                       <Text
                         style={{
                           color: '#91C788',

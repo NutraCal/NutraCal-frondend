@@ -380,7 +380,7 @@ const NutritionistRegister = ({navigation, route}) => {
               width: (350 / dim.w) * dim.Width,
             },
           ]}>
-          <View style={[styles.fieldContainer, {}]}>
+          <View style={[styles.fieldContainer]}>
             <Text style={styles.label}>Start Time:</Text>
             <TouchableOpacity
               onPress={() => {

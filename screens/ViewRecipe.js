@@ -348,53 +348,55 @@ export default function ViewRecipe({route, navigation}) {
         </TouchableOpacity>
       ) : null}
 
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          // backgroundColor: 'yellow',
-        }}>
+      {role === 'Admin' ? (
         <View
           style={{
-            flexDirection: 'row',
-            width: dim.Width * 0.8,
-            justifyContent: 'space-around',
-            marginBottom: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            // backgroundColor: 'yellow',
           }}>
-          <TouchableOpacity style={styles.btn1} onPress={approveRecipe}>
-            <Text style={styles.btntxt}>Approve</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btn1}
-            onPress={() => {
-              setShowRemarks(!showremarks);
-            }}>
-            <Text style={styles.btntxt}>Unapprove</Text>
-          </TouchableOpacity>
-        </View>
-        {showremarks === true && (
           <View
             style={{
-              alignItems: 'center',
-              // backgroundColor: 'blue',
+              flexDirection: 'row',
               width: dim.Width * 0.8,
+              justifyContent: 'space-around',
+              marginBottom: 10,
             }}>
-            <TextInput
-              style={styles.remarks}
-              placeholder="Leave remarks"
-              placeholderTextColor="#8F9098"
-              value={remarks}
-              onChangeText={text => setRemarks(text)}
-              multiline={true}
-            />
+            <TouchableOpacity style={styles.btn1} onPress={approveRecipe}>
+              <Text style={styles.btntxt}>Approve</Text>
+            </TouchableOpacity>
             <TouchableOpacity
-              onPress={rejectRecipe}
-              style={[styles.btn1, {alignSelf: 'flex-end', marginRight: 10}]}>
-              <Text style={styles.btntxt}>Add Remarks</Text>
+              style={styles.btn1}
+              onPress={() => {
+                setShowRemarks(!showremarks);
+              }}>
+              <Text style={styles.btntxt}>Unapprove</Text>
             </TouchableOpacity>
           </View>
-        )}
-      </View>
+          {showremarks === true && (
+            <View
+              style={{
+                alignItems: 'center',
+                // backgroundColor: 'blue',
+                width: dim.Width * 0.8,
+              }}>
+              <TextInput
+                style={styles.remarks}
+                placeholder="Leave remarks"
+                placeholderTextColor="#8F9098"
+                value={remarks}
+                onChangeText={text => setRemarks(text)}
+                multiline={true}
+              />
+              <TouchableOpacity
+                onPress={rejectRecipe}
+                style={[styles.btn1, {alignSelf: 'flex-end', marginRight: 10}]}>
+                <Text style={styles.btntxt}>Add Remarks</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      ) : null}
     </ScrollView>
     // </View>
   );

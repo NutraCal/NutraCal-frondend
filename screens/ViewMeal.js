@@ -9,7 +9,6 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-// import {ScrollView} from 'react-native-gesture-handler';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -19,9 +18,12 @@ import dim from '../util/dim';
 
 import {AuthContext} from '../context/AuthContext';
 
+import {useFocusEffect} from '@react-navigation/native';
+
 export default function ViewMeal({route, navigation}) {
   const item = route.params?.item;
-  const [edit, setEditable] = useState(false);
+  const edita = route.params?.edita;
+  const [edit, setEditable] = useState(edita);
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
@@ -41,9 +43,10 @@ export default function ViewMeal({route, navigation}) {
   const [proteins, setProteins] = useState('');
   const [carbs, setCarbs] = useState('');
   const [loadId, setLoadId] = useState(true);
-  const [loadData, setLoadData] = useState(true);
+
   const [json, setJson] = useState('');
   const [btext, setBtext] = useState('Click to update meal');
+  const [loadData, setLoadData] = useState(false);
 
   const updateMeal = async res => {
     var data = JSON.stringify({
@@ -100,6 +103,7 @@ export default function ViewMeal({route, navigation}) {
 
   useEffect(() => {
     console.log(item);
+    console.log(edita);
     setName(item.name);
     setValue3(item.category);
     setCalories(item.calories.toString());
@@ -108,137 +112,130 @@ export default function ViewMeal({route, navigation}) {
     setCarbs(item.carbohydrates.toString());
   }, []);
 
+  useEffect(() => {
+    if (edita !== edit) {
+      setEditable(edita);
+    }
+  }, [edita]);
+
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container2}>
-          <Image
-            source={require('../assets/images/recipecover.png')}
+    // <View style={styles.container}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container2}>
+      <Image
+        source={require('../assets/images/recipecover.png')}
+        style={{
+          width: (90 / dim.w) * dim.Width,
+          height: (130 / dim.w) * dim.Width,
+          borderRadius: 20,
+        }}
+      />
+
+      <View
+        style={{
+          alignItems: 'flex-start',
+          padding: (10 / dim.h) * dim.Height,
+          justifyContent: 'center',
+        }}>
+        <Text style={styles.heading}>Meal Name</Text>
+        <TextInput
+          style={styles.txtinput}
+          value={name}
+          onChangeText={text => setName(text)}
+          placeholder="Enter Meal name"
+          placeholderTextColor="#8F9098"
+          editable={edit}
+        />
+
+        <View style={styles.fieldContainer}>
+          <Text style={styles.heading}>Category:</Text>
+          <DropDownPicker
             style={{
-              width: (90 / dim.w) * dim.Width,
-              height: (150 / dim.w) * dim.Width,
+              width: (350 / dim.w) * dim.Width,
+              borderWidth: 1,
+              height: (20 / dim.h) * dim.Height,
+              borderColor: '#E1E3E8',
             }}
+            containerStyle={{
+              width: (350 / dim.w) * dim.Width,
+            }}
+            textStyle={{
+              fontSize: 16,
+            }}
+            open={open3}
+            value={value3}
+            items={category}
+            setOpen={setOpen3}
+            setValue={setValue3}
+            setItems={setCategory}
+            dropDownDirection="BOTTOM"
+            placeholder="Select category"
+            disabled={!edit}
           />
-
-          <View
-            style={{
-              alignItems: 'flex-start',
-              padding: (10 / dim.h) * dim.Height,
-              justifyContent: 'center',
-            }}>
-            <Text style={styles.heading}>Meal Name</Text>
-            <TextInput
-              style={styles.txtinput}
-              value={name}
-              onChangeText={text => setName(text)}
-              placeholder="Enter Meal name"
-              placeholderTextColor="#8F9098"
-              editable={edit}
-            />
-
-            <View style={styles.fieldContainer}>
-              <Text style={styles.heading}>Category:</Text>
-              <DropDownPicker
-                style={{
-                  width: (350 / dim.w) * dim.Width,
-                  borderWidth: 1,
-                  height: (20 / dim.h) * dim.Height,
-                  borderColor: '#E1E3E8',
-                }}
-                containerStyle={{
-                  width: (350 / dim.w) * dim.Width,
-                }}
-                textStyle={{
-                  fontSize: 16,
-                }}
-                open={open3}
-                value={value3}
-                items={category}
-                setOpen={setOpen3}
-                setValue={setValue3}
-                setItems={setCategory}
-                dropDownDirection="BOTTOM"
-                placeholder="Select category"
-                disabled={!edit}
-              />
-            </View>
-
-            <Text style={styles.heading}>Nutrition</Text>
-            <TextInput
-              value={calories}
-              keyboardType="numeric"
-              onChangeText={text => setCalories(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Calories"
-              placeholderTextColor="#8F9098"
-              editable={edit}
-            />
-            <TextInput
-              value={fats}
-              keyboardType="numeric"
-              onChangeText={text => setFats(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Fats"
-              placeholderTextColor="#8F9098"
-              editable={edit}
-            />
-            <TextInput
-              value={proteins}
-              keyboardType="numeric"
-              onChangeText={text => setProteins(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Proteins"
-              placeholderTextColor="#8F9098"
-              editable={edit}
-            />
-            <TextInput
-              value={carbs}
-              keyboardType="numeric"
-              onChangeText={text => setCarbs(text)}
-              style={[
-                styles.txtinput,
-                {marginBottom: (10 / dim.h) * dim.Height},
-              ]}
-              placeholder="Carbs"
-              placeholderTextColor="#8F9098"
-              editable={edit}
-            />
-
-            <TouchableOpacity
-              onPress={() => {
-                console.log('--------');
-                if (edit === false) {
-                  setEditable(true);
-                  setBtext('Update meal');
-                  // updateMeal();
-                }
-                if (btext === 'Update meal') {
-                  updateMeal();
-                }
-              }}
-              style={styles.btn}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 16,
-                  fontFamily: 'Inter-SemiBold',
-                }}>
-                {btext}
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </ScrollView>
-    </View>
+
+        {/* <Text style={styles.heading}>Nutrition</Text> */}
+        <Text style={styles.heading2}>Calories</Text>
+        <TextInput
+          value={calories}
+          keyboardType="numeric"
+          onChangeText={text => setCalories(text)}
+          style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+          placeholder="Calories"
+          placeholderTextColor="#8F9098"
+          editable={edit}
+        />
+        <Text style={styles.heading2}>Fats</Text>
+        <TextInput
+          value={fats}
+          keyboardType="numeric"
+          onChangeText={text => setFats(text)}
+          style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+          placeholder="Fats"
+          placeholderTextColor="#8F9098"
+          editable={edit}
+        />
+        <Text style={styles.heading2}>Proteins</Text>
+        <TextInput
+          value={proteins}
+          keyboardType="numeric"
+          onChangeText={text => setProteins(text)}
+          style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+          placeholder="Proteins"
+          placeholderTextColor="#8F9098"
+          editable={edit}
+        />
+        <Text style={styles.heading2}>Carbs</Text>
+        <TextInput
+          value={carbs}
+          keyboardType="numeric"
+          onChangeText={text => setCarbs(text)}
+          style={[styles.txtinput, {marginBottom: (10 / dim.h) * dim.Height}]}
+          placeholder="Carbs"
+          placeholderTextColor="#8F9098"
+          editable={edit}
+        />
+
+        {edita && (
+          <TouchableOpacity
+            onPress={() => {
+              updateMeal();
+            }}
+            style={styles.btn}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 16,
+                fontFamily: 'Inter-SemiBold',
+              }}>
+              Update meal
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </ScrollView>
+    // </View>
   );
 }
 
@@ -259,6 +256,14 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 18,
     marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (8 / dim.h) * dim.Height,
+  },
+
+  heading2: {
+    fontFamily: 'Inter-Bold',
+    color: 'black',
+    fontSize: 18,
+    // marginTop: (10 / dim.h) * dim.Height,
     marginBottom: (8 / dim.h) * dim.Height,
   },
 

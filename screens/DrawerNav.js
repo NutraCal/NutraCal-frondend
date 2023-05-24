@@ -54,35 +54,39 @@ const DrawerNav = ({route, navigation}) => {
           ),
         }}
       />
-      <Drawer.Screen
-        name="Blog Approvals"
-        component={BlogApproval}
-        options={{
-          headerShown: true,
-          drawerIcon: ({color}) => (
-            <Ionicons
-              name="home-outline"
-              size={(22 / dim.w) * dim.Width}
-              color={color}
-            />
-          ),
-        }}
-      />
+      {role === 'User' && (
+        <Drawer.Screen
+          name="Blog Approvals"
+          component={BlogApproval}
+          options={{
+            headerShown: true,
+            drawerIcon: ({color}) => (
+              <Ionicons
+                name="home-outline"
+                size={(22 / dim.w) * dim.Width}
+                color={color}
+              />
+            ),
+          }}
+        />
+      )}
 
-      <Drawer.Screen
-        name="Recipe Approvals"
-        component={RecipeApproval}
-        options={{
-          headerShown: true,
-          drawerIcon: ({color}) => (
-            <Ionicons
-              name="home-outline"
-              size={(22 / dim.w) * dim.Width}
-              color={color}
-            />
-          ),
-        }}
-      />
+      {role === 'Admin' && (
+        <Drawer.Screen
+          name="Recipe Approvals"
+          component={RecipeApproval}
+          options={{
+            headerShown: true,
+            drawerIcon: ({color}) => (
+              <Ionicons
+                name="home-outline"
+                size={(22 / dim.w) * dim.Width}
+                color={color}
+              />
+            ),
+          }}
+        />
+      )}
       {role === 'User' && (
         <Drawer.Screen
           name="My Profile"

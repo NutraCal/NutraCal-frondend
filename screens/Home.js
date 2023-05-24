@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
     width: (60 / dim.w) * dim.Width,
     height: (60 / dim.w) * dim.Width,
     marginRight: 10,
-    borderRadius: 30,
-    backgroundColor: 'red',
+    borderRadius: 10,
+    backgroundColor: '#91C788',
   },
 });

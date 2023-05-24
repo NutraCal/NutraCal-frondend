@@ -328,6 +328,7 @@ export default function Calories({route, navigation}) {
                     onPress={() => {
                       navigation.navigate('ViewMeal', {
                         item: item,
+                        edita: false,
                       });
                     }}>
                     <Forw
@@ -364,7 +365,10 @@ export default function Calories({route, navigation}) {
                   </View>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('ViewMeal', {item: item});
+                      navigation.navigate('ViewMeal', {
+                        item: item,
+                        edita: false,
+                      });
                     }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}
@@ -395,7 +399,10 @@ export default function Calories({route, navigation}) {
                   </View>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('ViewMeal', {item: item});
+                      navigation.navigate('ViewMeal', {
+                        item: item,
+                        edita: false,
+                      });
                     }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}
@@ -431,7 +438,10 @@ export default function Calories({route, navigation}) {
                   </View>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('ViewMeal', {item: item});
+                      navigation.navigate('ViewMeal', {
+                        item: item,
+                        edita: false,
+                      });
                     }}>
                     <Forw
                       width={(24 / dim.w) * dim.Width}

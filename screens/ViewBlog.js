@@ -19,7 +19,6 @@ import {endpoint} from '../util/config';
 import Rating from './Rating';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Ionicon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {width} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const ViewBlog = ({navigation, route}) => {
   const {title} = route.params;
