@@ -8,6 +8,8 @@ import CustomDrawer from '../components/CustomDrawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ViewProfile from './ViewProfile';
 import ViewNutritionistProfile from './ViewNutritionistProfile';
+import BlogApproval from './BlogApproval';
+import RecipeApproval from './RecipeApproval';
 import dim from '../util/dim';
 
 const Drawer = createDrawerNavigator();
@@ -43,6 +45,35 @@ const DrawerNav = ({route, navigation}) => {
         initialParams={{email: email}}
         options={{
           headerShown: false,
+          drawerIcon: ({color}) => (
+            <Ionicons
+              name="home-outline"
+              size={(22 / dim.w) * dim.Width}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="BlogApproval"
+        component={BlogApproval}
+        options={{
+          headerShown: true,
+          drawerIcon: ({color}) => (
+            <Ionicons
+              name="home-outline"
+              size={(22 / dim.w) * dim.Width}
+              color={color}
+            />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="RecipeApproval"
+        component={RecipeApproval}
+        options={{
+          headerShown: true,
           drawerIcon: ({color}) => (
             <Ionicons
               name="home-outline"

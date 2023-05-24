@@ -73,6 +73,7 @@ export default function AddRecipeScan({route, navigation}) {
         width: (300 / dim.w) * dim.Width,
         height: (400 / dim.h) * dim.Height,
         cropping: true,
+        freeStyleCropEnabled: true,
       });
       console.log(image);
       setDirectionsImage(null);
@@ -89,6 +90,7 @@ export default function AddRecipeScan({route, navigation}) {
         width: (300 / dim.w) * dim.Width,
         height: (400 / dim.h) * dim.Height,
         cropping: true,
+        freeStyleCropEnabled: true,
       });
       console.log(image);
       setDirectionsImage(null);

@@ -9,58 +9,102 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import dim from '../util/dim';
-
-const REDDIT_API_URL = 'https://www.reddit.com/r/popular.json';
+import {Searchbar} from 'react-native-paper';
+import axios from 'axios';
+import {endpoint} from '../util/config';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const DiscussionThread = ({navigation, route}) => {
   const [posts, setPosts] = useState([]);
-  const [searchText, setSearchText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [forums, setForums] = useState([]);
+
+  const onChangeSearch = query => setSearchQuery(query);
+
+  const getForums = async res => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: endpoint + '/discussionThreads/viewThreads',
+        headers: {},
+      });
+
+      console.log(JSON.stringify(response.data));
+      setForums(response.data);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  const searchThread = async res => {
+    var data = JSON.stringify({
+      title: searchQuery,
+    });
+
+    console.log(data);
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/discussionThreads/viewThreadByTitle',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      setForums(response.data);
+    } catch (error) {
+      console.log(error.response.data);
+      alert(error.response.data);
+      getForums();
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(REDDIT_API_URL);
-        const data = await response.json();
-        setPosts(data.data.children.map(child => child.data));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    getForums();
   }, []);
-
-  const renderItem = ({item}) => (
-    <View style={styles.postContainer}>
-      <Image source={{uri: item.thumbnail}} style={styles.thumbnail} />
-      <View style={styles.postContent}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.author}>Posted by {item.author}</Text>
-        <Text style={styles.comments}>{item.num_comments} comments</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('ViewThread')}>
-          <Text style={styles.viewButton}>View</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
-  const filteredPosts = posts.filter(post => post.title.includes(searchText));
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search"
-          onChangeText={setSearchText}
-          value={searchText}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Searchbar
+          placeholder="Search a forum"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+          style={styles.searchbar}
+          onIconPress={() => {
+            if (searchQuery === '') {
+              alert('Enter search query');
+            } else {
+              searchThread();
+            }
+          }}
         />
-      </View>
-      <FlatList
-        data={filteredPosts}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+
+        {forums.map((item, index) => (
+          <View key={index} style={styles.postContainer}>
+            <Image
+              source={require('../assets/images/thread-square.png')}
+              style={styles.thumbnail}
+            />
+            <View style={styles.postContent}>
+              <Text style={styles.title}>{item.Title}</Text>
+              <Text style={styles.author}>Posted by {item.User}</Text>
+              <Text style={styles.comments}>
+                {item.Comments.length} comments
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('ViewThread', {title: item.Title})
+                }>
+                <Text style={styles.viewButton}>View</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -71,27 +115,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  searchContainer: {
-    padding: 10,
-    width: 360,
-  },
-  searchInput: {
-    backgroundColor: '#eee',
-    borderRadius: 10,
-    padding: 10,
-  },
   postContainer: {
     flexDirection: 'row',
-    padding: 10,
+    padding: 18,
     width: 360,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#E1E3E8',
+    alignSelf: 'center',
   },
   thumbnail: {
-    width: 50,
-    height: 50,
-    marginRight: 10,
-    borderRadius: 25,
+    width: (50 / dim.w) * dim.Width,
+    height: (50 / dim.w) * dim.Width,
+    marginRight: 20,
+    borderRadius: 10,
   },
   postContent: {
     flex: 1,
@@ -114,14 +150,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 5,
     alignSelf: 'flex-start',
-
-    // fontSize: 16,
-    // fontWeight: 'bold',
-    // backgroundColor: '#91C788',
-    // color: '#fff',
-    // paddingVertical: 8,
-    // paddingHorizontal: 16,
-    // borderRadius: 10,
+  },
+  searchbar: {
+    borderRadius: 20,
+    margin: 15,
+    elevation: 0,
+    backgroundColor: '#F8F9FE',
+    width: 350,
   },
 });
 

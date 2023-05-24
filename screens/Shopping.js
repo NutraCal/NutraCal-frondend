@@ -184,7 +184,7 @@ export default function Shopping({route, navigation}) {
             data={getlist}
             renderItem={({index, item}) => (
               <View key={index}>
-                <View style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
+                <View style={styles.box3}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: (10 / dim.h) * dim.Height,
+    backgroundColor: '#EFF7EE',
   },
 
   cbtn: {

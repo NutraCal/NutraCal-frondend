@@ -8,18 +8,16 @@ import {
   Image,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
-import N1 from '../assets/images/nutritionist1.svg';
-import N2 from '../assets/images/nutritionist2.svg';
-import N3 from '../assets/images/nutritionist3.svg';
 import dim from '../util/dim';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 
-export default function Community({route, navigation}) {
+export default function RecipeApproval({route, navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeView, setActiveView] = useState('nutritionist');
-  const [blogs, setBlogs] = useState([]);
+  const [activeView, setActiveView] = useState('approved');
+  const [approvedrecipes, setApprovedRecipes] = useState([]);
+  const [unapprovedrecipes, setUnapprovedRecipes] = useState([]);
   const [nutritionists, setNutritionists] = useState([]);
 
   const onChangeSearch = query => setSearchQuery(query);
@@ -28,95 +26,45 @@ export default function Community({route, navigation}) {
     setActiveView(value);
   };
 
-  const getBlogs = async res => {
+  const getApprovedRecipes = async res => {
     try {
       const response = await axios({
         method: 'get',
-        url: endpoint + '/blogs/viewBlogs',
+        url: endpoint + '/recipes/viewRecipes',
         headers: {},
       });
 
       console.log(JSON.stringify(response.data));
-      setBlogs(response.data);
+      setApprovedRecipes(response.data);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
-  const getNutritionists = async res => {
+  const getUnapprovedRecipes = async res => {
     try {
       const response = await axios({
         method: 'get',
-        url: endpoint + '/nutritionist/viewNutritionists',
+        url: endpoint + '/recipes/viewAllUnapproved',
         headers: {},
       });
 
       console.log(JSON.stringify(response.data));
-      setNutritionists(response.data);
+      setUnapprovedRecipes(response.data);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
-  const searchNutritionist = async res => {
-    var data = JSON.stringify({
-      name: searchQuery,
-    });
-
-    console.log(data);
-
-    try {
-      const response = await axios({
-        method: 'post',
-        url: endpoint + '/nutritionist/searchNutritionist',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: data,
-      });
-
-      console.log(JSON.stringify(response.data));
-      setNutritionists(response.data);
-    } catch (error) {
-      console.log(error.response.data);
-      alert(error.response.data);
-      getNutritionists();
-    }
-  };
-
-  const searchBlog = async res => {
-    var data = JSON.stringify({
-      title: searchQuery,
-    });
-    try {
-      const response = await axios({
-        method: 'post',
-        url: endpoint + '/blogs/viewBlogByTitle',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: data,
-      });
-
-      console.log(JSON.stringify(response.data));
-      setBlogs(response.data);
-      // console.log(comments);
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
-  const NutritionistView = () => (
+  const ApprovedRecipeView = () => (
     <View>
-      {nutritionists.map((item, index) => (
+      {approvedrecipes.map((item, index) => (
         <TouchableOpacity
           key={index}
           style={styles.box3}
           onPress={() => {
-            navigation.navigate('ViewNutritionist', {
-              name: item.name,
-              nId: item._id,
-            });
+            console.log(item.Title);
+            navigation.navigate('ViewRecipe', {title: item.Title});
           }}>
           <Image
             source={{
@@ -125,18 +73,17 @@ export default function Community({route, navigation}) {
             style={[styles.thumbnail, {marginRight: 20}]}
           />
           <View style={{width: 220}}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.desc}>Nutritionist</Text>
+            <Text style={styles.name}>{item.Title}</Text>
+            <Text style={styles.desc}>Recipe</Text>
           </View>
-          <Text style={styles.rating}>{item.ratingAverage}</Text>
         </TouchableOpacity>
       ))}
     </View>
   );
 
-  const BlogView = () => (
+  const UnapprovedRecipeView = () => (
     <View>
-      {blogs.map((item, index) => (
+      {unapprovedrecipes.map((item, index) => (
         <TouchableOpacity
           key={index}
           style={styles.box3}
@@ -160,8 +107,8 @@ export default function Community({route, navigation}) {
   );
 
   useEffect(() => {
-    getBlogs();
-    getNutritionists();
+    getApprovedRecipes();
+    getUnapprovedRecipes();
   }, []);
 
   return (
@@ -173,15 +120,7 @@ export default function Community({route, navigation}) {
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchbar}
-            onIconPress={() => {
-              if (searchQuery === '') {
-                alert('Enter search query');
-              } else if (activeView === 'nutritionist') {
-                searchNutritionist();
-              } else {
-                searchBlog();
-              }
-            }}
+
             // onClearIconPress={() => {
             //   if (activeView === 'nutritionist') {
             //     console.log('-----------------------ugh');
@@ -192,15 +131,15 @@ export default function Community({route, navigation}) {
             // }}
           />
           <DuoToggleSwitch
-            primaryText="Nutritionist"
-            secondaryText="Blogs"
+            primaryText="Approved"
+            secondaryText="Unapproved"
             onPrimaryPress={() => {
               setSearchQuery('');
-              handleToggle('nutritionist');
+              handleToggle('approved');
             }}
             onSecondaryPress={() => {
               setSearchQuery('');
-              handleToggle('blog');
+              handleToggle('unapproved');
             }}
             activeColor="#91C788"
             inactiveColor="#DCEDDA"
@@ -213,7 +152,11 @@ export default function Community({route, navigation}) {
             style={{width: 300, borderRadius: 0}}
           />
 
-          {activeView === 'nutritionist' ? <NutritionistView /> : <BlogView />}
+          {activeView === 'approved' ? (
+            <ApprovedRecipeView />
+          ) : (
+            <UnapprovedRecipeView />
+          )}
         </View>
       </ScrollView>
     </View>

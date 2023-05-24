@@ -322,7 +322,7 @@ export default function SearchRecipe({route, navigation}) {
             renderItem={({index, item}) => (
               <View key={index}>
                 <TouchableOpacity
-                  style={[styles.box3, {backgroundColor: '#EBF2FF'}]}
+                  style={[styles.box3, {backgroundColor: '#EFF7EE'}]}
                   onPress={() => {
                     // console.log(item.Title);
                     //setTitle(item.title);
@@ -626,6 +626,7 @@ const styles = StyleSheet.create({
 
   name1: {
     fontSize: 16,
+
     color: 'black',
     fontFamily: 'Inter-Medium',
     marginTop: (5 / dim.h) * dim.Height,
@@ -635,7 +636,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     fontFamily: 'Inter-SemiBold',
-    marginTop: (5 / dim.h) * dim.Height,
+    // marginTop: (5 / dim.h) * dim.Height,
   },
 
   desc: {
@@ -644,11 +645,20 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Light',
     marginTop: (5 / dim.h) * dim.Height,
   },
+  // thumbnail: {
+  //   width: (50 / dim.w) * dim.Width,
+  //   height: (50 / dim.w) * dim.Width,
+  //   marginRight: 10,
+  //   borderRadius: 25,
+  // },
   thumbnail: {
-    width: (50 / dim.w) * dim.Width,
-    height: (50 / dim.w) * dim.Width,
-    marginRight: 10,
-    borderRadius: 25,
+    width: (40 / dim.w) * dim.Width,
+    height: (40 / dim.w) * dim.Width,
+    marginRight: 20,
+    borderRadius: 10,
+    backgroundColor: 'red',
+    borderColor: '#91C788',
+    borderWidth: 1,
   },
 
   heading1: {

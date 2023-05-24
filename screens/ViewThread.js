@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -9,94 +9,281 @@ import {
   Image,
 } from 'react-native';
 import dim from '../util/dim';
+import axios from 'axios';
+import {AuthContext} from '../context/AuthContext';
+import {endpoint} from '../util/config';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Reply from '../assets/images/reply.svg';
 
 const ViewThread = ({navigation, route}) => {
+  const {title} = route.params;
   const [thread, setThread] = useState(null);
-  const [comments, setComments] = useState(null);
+  const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false);
+
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState('');
+
+  const [reply, setReply] = useState('');
+  const [commentId, setCommentId] = useState('');
+
+  const [showreply, setShowReply] = useState(false);
+
+  const {user} = useContext(AuthContext);
+  const userId = user?.data?.user?._id;
+  const email = user?.data?.user?.email;
+
+  const handleLikePress = () => {
+    setLiked(!liked);
+    updateLikes();
+  };
+
+  const updateLikes = async res => {
+    var data = JSON.stringify({
+      title: title,
+      email: email,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/discussionThreads/likeThread',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      if (response) {
+        fetchThread();
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const addComment = async res => {
+    var data = JSON.stringify({
+      title: title,
+      email: email,
+      comment: comment,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/discussionThreads/addComments',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      if (response) {
+        fetchThread();
+      }
+      setComment('');
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const addReplyToComment = async res => {
+    var data = JSON.stringify({
+      title: title,
+      commentId: commentId,
+      email: email,
+      reply: reply,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/discussionThreads/replyOnComment',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      if (response) {
+        fetchThread();
+      }
+      setReply('');
+      setShowReply(!showreply);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const fetchThread = async res => {
+    console.log(title);
+    var data = JSON.stringify({
+      title: title,
+    });
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/discussionThreads/viewThreadByTitle',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(response.data[0]);
+      setThread(response.data[0]);
+      setLikes(response.data[0].LikesCount.length);
+      console.log(response.data[0].LikesCount.length);
+      console.log(response.data[0].Comments.length);
+      setComments(response.data[0].Comments);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
 
   useEffect(() => {
-    // const { threadId } = route.params;
-    fetch(
-      `https://www.reddit.com/r/karachi/comments/136b9tm/breaking_daniyal_sheikh_finally_lets_his_guest/.json`,
-    )
-      .then(response => response.json())
-      .then(json => {
-        const [threadData, commentsData] = json;
-        setThread(threadData.data.children[0].data);
-        setComments(commentsData.data.children);
-      })
-      .catch(error => {
-        // handle error
-      });
+    fetchThread();
   }, []);
 
   return (
     <ScrollView style={styles.container}>
       {thread && (
         <View style={styles.threadContainer}>
-          <Text style={styles.title}>{thread.title}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={[styles.title, {width: 250}]}>{thread.Title}</Text>
+            <TouchableOpacity
+              onPress={handleLikePress}
+              style={{
+                marginLeft: 30,
+                padding: 10,
+                alignItems: 'center',
+              }}>
+              <Ionicons
+                name={liked ? 'heart' : 'heart-outline'}
+                size={25}
+                color={liked ? 'red' : 'black'}
+              />
+              <Text>{likes} likes</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.infoContainer}>
-            <Text style={styles.author}>{thread.author}</Text>
-            <Text style={styles.comments}>{thread.num_comments} comments</Text>
+            <Text style={styles.author}>{thread.User}</Text>
+            <Text style={styles.comments}>
+              {thread.Comments.length} comments
+            </Text>
           </View>
           <Text style={[styles.title, {fontWeight: '300', fontSize: 17}]}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-            lacus odio, consectetur eu ante sed, bibendum faucibus diam. Nam
-            ante magna, aliquet vel pretium in, suscipit a sem. Suspendisse
-            potenti. Nullam ex lorem, vulputate venenatis vestibulum sed,
-            molestie vel nisl. Etiam venenatis ipsum sed tellus posuere, ac
-            hendrerit sapien rutrum. Pellentesque habitant morbi tristique
-            senectus et netus et malesuada fames ac turpis egestas.
+            {thread.Content}
           </Text>
         </View>
       )}
+      <View style={[styles.box3, {flexDirection: 'column'}]}>
+        <Text style={[styles.subtitle, {alignSelf: 'flex-start'}]}>
+          Comments:
+        </Text>
+        <TextInput
+          style={styles.txtInput}
+          placeholder="Leave a comment"
+          placeholderTextColor="#8F9098"
+          value={comment}
+          onChangeText={text => setComment(text)}
+          multiline={true}
+        />
+
+        <TouchableOpacity
+          style={[styles.btn, {width: 100}]}
+          onPress={addComment}>
+          <Text style={styles.btntxt}>Comment</Text>
+        </TouchableOpacity>
+      </View>
       {comments && (
         <View style={styles.commentsContainer}>
-          <Text style={styles.subtitle}>Comments:</Text>
           {comments.map(comment => (
-            <View style={styles.commentContainer} key={comment.data.id}>
+            <View style={styles.commentContainer} key={comment._id}>
               <View style={{flexDirection: 'row'}}>
                 <Image
-                  source={require('../assets/images/menu-bg.jpeg')}
+                  source={{uri: endpoint + '/' + comment.user.Image.filename}}
                   style={styles.thumbnail}
                 />
                 <View>
                   <View style={styles.commentHeader}>
                     <Text style={styles.commentAuthor}>
-                      {comment.data.author}
+                      {comment.user.email}
                     </Text>
-                    <Text style={styles.commentTime}>
-                      {comment.data.created_utc} ago
-                    </Text>
+                    <Text style={styles.commentTime}>{comment.date} ago</Text>
                   </View>
-                  <Text style={styles.commentBody}>{comment.data.body}</Text>
+                  <Text style={styles.commentBody}>{comment.comment}</Text>
+                  <TouchableOpacity
+                    style={{flexDirection: 'row', marginTop: 5}}
+                    onPress={() => {
+                      setCommentId(comment._id);
+                      setShowReply(!showreply);
+                      console.log(commentId);
+                      console.log(comment._id);
+                    }}>
+                    <Text style={{marginRight: 5, color: '#91C788'}}>
+                      Reply
+                    </Text>
+                    <Reply
+                      width={(20 / dim.w) * dim.Width}
+                      height={(20 / dim.w) * dim.Width}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
-              {comment.data.replies && (
+              {comment.replies && (
                 <View style={styles.repliesContainer}>
-                  {comment.data.replies.data.children.map(reply => (
-                    <View style={styles.replyContainer} key={reply.data.id}>
+                  {comment.replies.map(reply => (
+                    <View style={styles.replyContainer} key={reply._id}>
                       <View style={{flexDirection: 'row'}}>
                         <Image
-                          source={require('../assets/images/menu-bg.jpeg')}
+                          source={{
+                            uri: endpoint + '/' + reply.user.Image.filename,
+                          }}
                           style={styles.thumbnail}
                         />
                         <View>
                           <View style={styles.replyHeader}>
                             <Text style={styles.replyAuthor}>
-                              {reply.data.author}
+                              {reply.user.email}
                             </Text>
                             <Text style={styles.replyTime}>
-                              {reply.data.created_utc} ago
+                              {reply.date} ago
                             </Text>
                           </View>
-                          <Text style={styles.replyBody}>
-                            {reply.data.body}
-                          </Text>
+                          <Text style={styles.replyBody}>{reply.comment}</Text>
                         </View>
                       </View>
                     </View>
                   ))}
+                </View>
+              )}
+              {showreply === true && comment._id === commentId && (
+                <View
+                  style={[
+                    styles.box3,
+                    {
+                      marginLeft: 40,
+                      width: dim.Width * 0.83,
+                      flexDirection: 'column',
+                    },
+                  ]}>
+                  <TextInput
+                    style={styles.reply}
+                    placeholder="Leave a reply"
+                    placeholderTextColor="#8F9098"
+                    value={reply}
+                    onChangeText={text => setReply(text)}
+                    multiline={true}
+                  />
+
+                  <TouchableOpacity
+                    style={styles.btn}
+                    onPress={addReplyToComment}>
+                    <Text style={styles.btntxt}>Reply</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             </View>
@@ -134,6 +321,7 @@ const styles = StyleSheet.create({
 
   author: {
     marginRight: 5,
+    color: '#91C788',
   },
 
   comments: {
@@ -151,7 +339,8 @@ const styles = StyleSheet.create({
   },
   commentContainer: {
     // marginLeft: 20,
-    marginBottom: 20,
+    marginTop: 10,
+
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
@@ -175,6 +364,7 @@ const styles = StyleSheet.create({
   },
   repliesContainer: {
     marginLeft: 20,
+    marginTop: 10,
   },
   replyContainer: {
     marginLeft: 20,
@@ -198,271 +388,58 @@ const styles = StyleSheet.create({
     width: 290,
     marginBottom: 10,
   },
+  txtInput: {
+    borderColor: '#F8F9FE',
+    backgroundColor: '#F8F9FE',
+    borderWidth: 1,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (25 / dim.w) * dim.Width,
+    borderRadius: 20,
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+  },
+  reply: {
+    borderColor: '#F8F9FE',
+    backgroundColor: '#F8F9FE',
+    borderWidth: 1,
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+    paddingHorizontal: 20,
+    width: (300 / dim.w) * dim.Width,
+    borderRadius: 12,
+  },
+
+  box3: {
+    width: dim.Width * 0.93,
+    borderRadius: 12,
+    marginVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    // backgroundColor: '#EFF7EE',
+    // paddingVertical: 10,
+  },
+
+  btn: {
+    width: (80 / dim.w) * dim.Width,
+    height: (38 / dim.h) * dim.Height,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    alignSelf: 'flex-end',
+    marginRight: 15,
+  },
+
+  btntxt: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
+  },
 });
 
 export default ViewThread;
-
-// const ViewThread = ({route, navigation}) => {
-//   const [post, setPost] = useState({
-//     title: 'Sample Post',
-//     author: 'JohnDoe',
-//     likes: 0,
-//     comments: [],
-//   });
-//   const [likes, setLikes] = useState(post.likes);
-//   const [comments, setComments] = useState(post.comments);
-//   const [commentText, setCommentText] = useState('');
-//   const [replyText, setReplyText] = useState('');
-
-//   const handleLike = () => {
-//     setLikes(likes + 1);
-//   };
-
-//   const handleComment = () => {
-//     const newComment = {
-//       id: comments.length + 1,
-//       text: commentText,
-//       replies: [],
-//       likes: 0,
-//     };
-//     setComments([...comments, newComment]);
-//     setCommentText('');
-//   };
-
-//   const handleReply = commentId => {
-//     const updatedComments = [...comments];
-//     const commentIndex = updatedComments.findIndex(
-//       comment => comment.id === commentId,
-//     );
-//     const newReply = {
-//       id: updatedComments[commentIndex].replies.length + 1,
-//       text: replyText,
-//       likes: 0,
-//     };
-//     updatedComments[commentIndex].replies.push(newReply);
-//     setComments(updatedComments);
-//     setReplyText('');
-//   };
-
-//   return (
-//     <ScrollView style={styles.container}>
-//       <View style={styles.post}>
-//         <Text style={styles.title}>{post.title}</Text>
-//         <Text style={styles.author}>Posted by u/{post.author}</Text>
-//         <View style={styles.postFooter}>
-//           <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
-//             <Text style={styles.likeButtonText}>{likes} Likes</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-//       <View style={styles.commentSection}>
-//         <Text style={styles.commentTitle}>Comments</Text>
-//         {comments.map(comment => (
-//           <View key={comment.id} style={styles.comment}>
-//             <Text style={styles.commentText}>{comment.text}</Text>
-//             <View style={styles.commentFooter}>
-//               <TouchableOpacity style={styles.commentLikeButton}>
-//                 <Text style={styles.commentLikeButtonText}>
-//                   {comment.likes} Likes
-//                 </Text>
-//               </TouchableOpacity>
-//               <TouchableOpacity style={styles.commentReplyButton}>
-//                 <Text style={styles.commentReplyButtonText}>Reply</Text>
-//               </TouchableOpacity>
-//             </View>
-//             <View style={styles.replySection}>
-//               {comment.replies.map(reply => (
-//                 <View key={reply.id} style={styles.reply}>
-//                   <Text style={styles.replyText}>{reply.text}</Text>
-//                   <TouchableOpacity style={styles.replyLikeButton}>
-//                     <Text style={styles.replyLikeButtonText}>
-//                       {reply.likes} Likes
-//                     </Text>
-//                   </TouchableOpacity>
-//                 </View>
-//               ))}
-//               <View style={styles.addReply}>
-//                 <TextInput
-//                   style={styles.addReplyInput}
-//                   placeholder="Add a reply"
-//                   onChangeText={text => setReplyText(text)}
-//                   value={replyText}
-//                 />
-//                 <TouchableOpacity
-//                   style={styles.addReplyButton}
-//                   onPress={() => handleReply(comment.id, replyText)}>
-//                   <Text style={styles.addReplyButtonText}>Reply</Text>
-//                 </TouchableOpacity>
-//               </View>
-//             </View>
-//           </View>
-//         ))}
-//         <View style={styles.addComment}>
-//           <TextInput
-//             style={styles.addCommentInput}
-//             placeholder="Add a comment"
-//             onChangeText={text => setCommentText(text)}
-//             value={commentText}
-//           />
-//           <TouchableOpacity
-//             style={styles.addCommentButton}
-//             onPress={handleComment}>
-//             <Text style={styles.addCommentButtonText}>Comment</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </View>
-//     </ScrollView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     paddingHorizontal: 10,
-//   },
-//   post: {
-//     marginTop: 20,
-//     marginBottom: 10,
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#ccc',
-//   },
-//   title: {
-//     fontSize: 20,
-//     fontWeight: 'bold',
-//   },
-//   author: {
-//     color: '#999',
-//     marginBottom: 10,
-//   },
-//   postFooter: {
-//     flexDirection: 'row',
-//     justifyContent: 'flex-end',
-//     alignItems: 'center',
-//     marginTop: 10,
-//   },
-//   likeButton: {
-//     backgroundColor: '#f2f2f2',
-//     paddingVertical: 5,
-//     paddingHorizontal: 10,
-//     borderRadius: 5,
-//   },
-//   likeButtonText: {
-//     color: '#666',
-//   },
-//   commentSection: {
-//     marginTop: 20,
-//   },
-//   commentTitle: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginBottom: 10,
-//   },
-//   comment: {
-//     marginBottom: 10,
-//     paddingLeft: 10,
-//     borderLeftWidth: 1,
-//     borderLeftColor: '#ccc',
-//   },
-//   commentText: {
-//     marginBottom: 5,
-//   },
-//   commentFooter: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     marginBottom: 5,
-//   },
-//   commentLikeButton: {
-//     backgroundColor: '#f2f2f2',
-//     paddingVertical: 5,
-//     paddingHorizontal: 10,
-//     borderRadius: 5,
-//   },
-//   commentLikeButtonText: {
-//     color: '#666',
-//   },
-//   commentReplyButton: {
-//     backgroundColor: '#f2f2f2',
-//     paddingVertical: 5,
-//     paddingHorizontal: 10,
-//     borderRadius: 5,
-//   },
-//   commentReplyButtonText: {
-//     color: '#666',
-//   },
-//   replySection: {
-//     marginLeft: 20,
-//     borderLeftWidth: 1,
-//     borderLeftColor: '#ccc',
-//   },
-//   reply: {
-//     marginTop: 10,
-//     marginBottom: 5,
-//     paddingLeft: 10,
-//     borderLeftWidth: 1,
-//     borderLeftColor: '#ccc',
-//   },
-//   replyText: {
-//     marginBottom: 5,
-//   },
-//   replyLikeButton: {
-//     backgroundColor: '#f2f2f2',
-//     paddingVertical: 5,
-//     paddingHorizontal: 10,
-//     borderRadius: 5,
-//   },
-//   replyLikeButtonText: {
-//     color: '#666',
-//   },
-//   addComment: {
-//     marginTop: 20,
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//   },
-//   addCommentInput: {
-//     flex: 1,
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 5,
-//     marginRight: 10,
-//     paddingHorizontal: 10,
-//     paddingVertical: 5,
-//     fontSize: 16,
-//   },
-//   addCommentButton: {
-//     backgroundColor: '#007AFF',
-//     paddingVertical: 5,
-//     paddingHorizontal: 10,
-//     borderRadius: 5,
-//   },
-//   addCommentButtonText: {
-//     color: '#fff',
-//   },
-//   addReply: {
-//     marginTop: 10,
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//   },
-//   addReplyInput: {
-//     flex: 1,
-//     borderWidth: 1,
-//     borderColor: '#ccc',
-//     borderRadius: 5,
-//     marginRight: 10,
-//     paddingHorizontal: 10,
-//     paddingVertical: 5,
-//     fontSize: 16,
-//   },
-//   addReplyButton: {
-//     backgroundColor: '#007AFF',
-//     paddingVertical: 5,
-//     paddingHorizontal: 10,
-//     borderRadius: 5,
-//   },
-//   addReplyButtonText: {
-//     color: '#fff',
-//   },
-// });
-
-// export default ViewThread;

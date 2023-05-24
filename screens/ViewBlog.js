@@ -143,18 +143,16 @@ const ViewBlog = ({navigation, route}) => {
         data: data,
       });
 
-      // console.log(JSON.stringify(response.data));
       setBlog(response.data[0]);
       setContent(response.data[0].Content);
-      // console.log(response.data[0].LikesCount.length);
       setLikes(response.data[0].LikesCount.length);
+      console.log(response.data[0].LikesCount.length);
       // console.log(response.data[0].Comments);
       setComments(response.data[0].Comments);
       const filename = response.data[0].Image.filename;
       const u = endpoint + '/' + filename;
-      console.log(u);
+      // console.log(u);
       setImageUri(u);
-      // console.log(comments);
     } catch (error) {
       console.log(error.response);
     }
@@ -175,7 +173,7 @@ const ViewBlog = ({navigation, route}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            width: dim.Width * 0.94,
+            width: dim.Width * 0.93,
           }}>
           <View>
             <Text
@@ -222,102 +220,111 @@ const ViewBlog = ({navigation, route}) => {
               color: 'black',
               fontSize: 20,
             }}>
-            Rate & Review
+            Comments:
           </Text>
           <Rating rating={rating} onRatingChange={handleRatingChange} />
         </View>
+        <View style={[styles.box3, {flexDirection: 'column'}]}>
+          <TextInput
+            style={styles.txtInput}
+            placeholder="Leave a comment"
+            placeholderTextColor="#8F9098"
+            value={comment}
+            onChangeText={text => setComment(text)}
+            multiline={true}
+          />
 
-        <TextInput
-          style={styles.txtInput}
-          placeholder="Leave a comment"
-          placeholderTextColor="#8F9098"
-          value={comment}
-          onChangeText={text => setComment(text)}
-        />
-        <TouchableOpacity
-          style={{backgroundColor: 'red', padding: 10}}
-          onPress={addComment}>
-          <Text>Comment</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.btn, {width: 100}]}
+            onPress={addComment}>
+            <Text style={styles.btntxt}>Comment</Text>
+          </TouchableOpacity>
+        </View>
         <View
           style={{
-            marginTop: (10 / dim.h) * dim.Height,
             flexDirection: 'row',
           }}>
           <ScrollView>
             {comments.length > 0 &&
               comments.map((item, index) => (
-                <View key={index} style={{flexDirection: 'row'}}>
-                  <Image
-                    source={require('../assets/images/homedp.png')}
-                    style={{
-                      width: (50 / dim.w) * dim.Width,
-                      height: (50 / dim.w) * dim.Width,
-                    }}
-                  />
-                  <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
-                    <Text style={styles.name}>{item.email}</Text>
-                    <Text
-                      style={[styles.tag, {width: (300 / dim.w) * dim.Width}]}>
-                      {item.comment}
-                    </Text>
-
-                    <Reply
-                      width={(20 / dim.w) * dim.Width}
-                      height={(20 / dim.w) * dim.Width}
-                      onPress={() => {
-                        setCommentId(item._id);
-                        setShowReply(!showreply);
-                        console.log(commentId);
-                        console.log(item._id);
-                        // console.log(showreply === true);
-                      }}
+                <View key={index}>
+                  <View style={styles.box3}>
+                    <Image
+                      source={{uri: endpoint + '/' + item.user.Image.filename}}
+                      style={styles.thumbnail}
                     />
+                    <View>
+                      <Text style={styles.name}>{item.user.email}</Text>
+                      <Text style={[styles.tag]}>{item.comment}</Text>
 
-                    {item.replies.length > 0 &&
-                      item.replies.map((replyItem, replyIndex) => (
-                        <View
-                          key={replyIndex}
-                          style={{flexDirection: 'row', marginVertical: 10}}>
-                          <Image
-                            source={require('../assets/images/homedp.png')}
-                            style={{
-                              width: (50 / dim.w) * dim.Width,
-                              height: (50 / dim.w) * dim.Width,
-                            }}
-                          />
-                          <View style={{marginLeft: (10 / dim.w) * dim.Width}}>
-                            <Text style={styles.name}>{replyItem.email}</Text>
-                            <Text>{replyItem.comment}</Text>
-                          </View>
-                        </View>
-                      ))}
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginTop: (5 / dim.h) * dim.Height,
-                        marginBottom: (10 / dim.h) * dim.Height,
-                        backgroundColor: 'blue',
-                      }}>
-                      {showreply === true && item._id === commentId && (
-                        <View>
-                          <TextInput
-                            style={styles.reply}
-                            placeholder="Leave a comment"
-                            placeholderTextColor="#8F9098"
-                            value={reply}
-                            onChangeText={text => setReply(text)}
-                          />
-                          <TouchableOpacity
-                            style={{backgroundColor: 'red', padding: 10}}
-                            onPress={addReplyToComment}>
-                            <Text>Add Reply</Text>
-                          </TouchableOpacity>
-                        </View>
-                      )}
+                      <TouchableOpacity
+                        style={{flexDirection: 'row', marginTop: 5}}
+                        onPress={() => {
+                          setCommentId(item._id);
+                          setShowReply(!showreply);
+                          console.log(commentId);
+                          console.log(item._id);
+                        }}>
+                        <Text style={{marginRight: 5, color: '#91C788'}}>
+                          Reply
+                        </Text>
+                        <Reply
+                          width={(20 / dim.w) * dim.Width}
+                          height={(20 / dim.w) * dim.Width}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
+
+                  {item.replies.length > 0 &&
+                    item.replies.map((replyItem, replyIndex) => (
+                      <View
+                        key={replyIndex}
+                        style={[
+                          styles.box3,
+                          {marginLeft: 40, width: dim.Width * 0.83},
+                        ]}>
+                        <Image
+                          source={{
+                            uri: endpoint + '/' + replyItem.user.Image.filename,
+                          }}
+                          style={styles.thumbnail}
+                        />
+                        <View>
+                          <Text style={styles.name}>
+                            {replyItem.user.email}
+                          </Text>
+                          <Text style={[styles.tag2]}>{replyItem.comment}</Text>
+                        </View>
+                      </View>
+                    ))}
+
+                  {showreply === true && item._id === commentId && (
+                    <View
+                      style={[
+                        styles.box3,
+                        {
+                          marginLeft: 40,
+                          width: dim.Width * 0.83,
+                          flexDirection: 'column',
+                        },
+                      ]}>
+                      <TextInput
+                        style={styles.reply}
+                        placeholder="Leave a reply"
+                        placeholderTextColor="#8F9098"
+                        value={reply}
+                        onChangeText={text => setReply(text)}
+                        multiline={true}
+                      />
+
+                      <TouchableOpacity
+                        style={styles.btn}
+                        onPress={addReplyToComment}>
+                        <Text style={styles.btntxt}>Reply</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               ))}
           </ScrollView>
@@ -343,7 +350,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 20,
-    // marginTop: (10 / dim.h) * dim.Height,
     marginBottom: (10 / dim.h) * dim.Height,
     alignSelf: 'flex-start',
   },
@@ -354,18 +360,14 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Inter-Light',
     width: dim.Width * 0.93,
-
-    // backgroundColor: 'red',
   },
 
   txtInput: {
-    marginVertical: (10 / dim.h) * dim.Height,
     borderColor: '#F8F9FE',
     backgroundColor: '#F8F9FE',
     borderWidth: 1,
-    height: (50 / dim.h) * dim.Height,
-    width: (370 / dim.w) * dim.Width,
-    paddingHorizontal: (15 / dim.w) * dim.Width,
+    width: (350 / dim.w) * dim.Width,
+    paddingHorizontal: (25 / dim.w) * dim.Width,
     borderRadius: 20,
     fontFamily: 'Inter-Regular',
     color: 'black',
@@ -373,17 +375,15 @@ const styles = StyleSheet.create({
   },
 
   reply: {
-    marginVertical: (10 / dim.h) * dim.Height,
     borderColor: '#F8F9FE',
     backgroundColor: '#F8F9FE',
     borderWidth: 1,
-    height: (50 / dim.h) * dim.Height,
-    width: (270 / dim.w) * dim.Width,
-    paddingHorizontal: (15 / dim.w) * dim.Width,
-    borderRadius: 20,
     fontFamily: 'Inter-Regular',
     color: 'black',
     fontSize: 16,
+    paddingHorizontal: 20,
+    width: (300 / dim.w) * dim.Width,
+    borderRadius: 12,
   },
 
   name: {
@@ -398,15 +398,60 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Inter-Regular',
     alignSelf: 'flex-start',
-    marginBottom: (5 / dim.h) * dim.Height,
+    width: 250,
+  },
+
+  tag2: {
+    fontSize: 14,
+    color: 'black',
+    fontFamily: 'Inter-Regular',
+    alignSelf: 'flex-start',
+    width: 210,
   },
   heading2: {
     fontFamily: 'Inter-Bold',
     color: 'black',
     fontSize: 20,
     width: (250 / dim.w) * dim.Width,
+  },
+  thumbnail: {
+    width: (50 / dim.w) * dim.Width,
+    height: (50 / dim.w) * dim.Width,
+    marginRight: 20,
+    marginLeft: 20,
+    borderRadius: 25,
+    backgroundColor: 'red',
+    alignSelf: 'flex-start',
+    marginTop: 5,
+  },
+  box3: {
+    width: dim.Width * 0.93,
+    borderRadius: 12,
+    marginVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#EFF7EE',
+    paddingVertical: 10,
+  },
 
-    // backgroundColor: 'blue',
+  btn: {
+    width: (80 / dim.w) * dim.Width,
+    height: (38 / dim.h) * dim.Height,
+    backgroundColor: '#91C788',
+    alignSelf: 'center',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    alignSelf: 'flex-end',
+    marginRight: 15,
+  },
+
+  btntxt: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
 });
 export default ViewBlog;

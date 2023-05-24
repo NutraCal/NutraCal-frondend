@@ -59,6 +59,7 @@ import DietPlans from './screens/DietPlans';
 import ViewThread from './screens/ViewThread';
 import ViewBlog from './screens/ViewBlog';
 import PostBlog from './screens/PostBlog';
+import PostThread from './screens/PostThread';
 import ViewMeal from './screens/ViewMeal';
 import EditMeal from './screens/EditMeal';
 
@@ -339,6 +340,12 @@ export default function MainNavigator() {
         <Stack.Screen
           name="PostBlog"
           component={PostBlog}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="PostThread"
+          component={PostThread}
           options={{headerShown: true}}
         />
 

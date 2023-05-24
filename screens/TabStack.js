@@ -242,7 +242,7 @@ const TabStack = ({route, navigation}) => {
 
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => navigation.navigate('BarcodeScan')}
+              onPress={() => navigation.navigate('PostThread')}
               styles={{backgroundColor: '#91C788'}}>
               <Text
                 style={{
@@ -251,7 +251,7 @@ const TabStack = ({route, navigation}) => {
                   marginRight: (30 / dim.w) * dim.Width,
                   fontWeight: 'bold',
                 }}>
-                Scan
+                Post Thread
               </Text>
             </TouchableOpacity>
           ),
