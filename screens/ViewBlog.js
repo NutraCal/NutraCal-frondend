@@ -36,10 +36,14 @@ const ViewBlog = ({navigation, route}) => {
   const [commentId, setCommentId] = useState('');
 
   const [showreply, setShowReply] = useState(false);
+  const [showremarks, setShowRemarks] = useState(false);
+
+  const [remarks, setRemarks] = useState('');
 
   const {user} = useContext(AuthContext);
   const userId = user?.data?.user?._id;
   const email = user?.data?.user?.email;
+  const role = user?.data?.user?.role;
 
   const handleLikePress = () => {
     setLiked(!liked);
@@ -65,6 +69,51 @@ const ViewBlog = ({navigation, route}) => {
       if (response) {
         fetchBlog();
       }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const approveBlog = async res => {
+    var data = JSON.stringify({
+      title: title,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/blogs/approveBlog',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      alert('Blog has been approved');
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const rejectBlog = async res => {
+    var data = JSON.stringify({
+      title: title,
+      remarks: remarks,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/blogs/rejectBlog',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data));
+      alert('Blog has been rejected');
+      setRemarks('');
+      setShowRemarks(!showremarks);
     } catch (error) {
       console.log(error.response);
     }
@@ -129,6 +178,7 @@ const ViewBlog = ({navigation, route}) => {
   };
 
   const fetchBlog = async res => {
+    console.log(role);
     console.log(title);
     var data = JSON.stringify({
       title: title,
@@ -222,24 +272,28 @@ const ViewBlog = ({navigation, route}) => {
             }}>
             Comments:
           </Text>
-          <Rating rating={rating} onRatingChange={handleRatingChange} />
+          {/* <Rating rating={rating} onRatingChange={handleRatingChange} /> */}
         </View>
-        <View style={[styles.box3, {flexDirection: 'column'}]}>
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Leave a comment"
-            placeholderTextColor="#8F9098"
-            value={comment}
-            onChangeText={text => setComment(text)}
-            multiline={true}
-          />
 
-          <TouchableOpacity
-            style={[styles.btn, {width: 100}]}
-            onPress={addComment}>
-            <Text style={styles.btntxt}>Comment</Text>
-          </TouchableOpacity>
-        </View>
+        {role !== 'Admin' ? (
+          <View style={[styles.box3, {flexDirection: 'column'}]}>
+            <TextInput
+              style={styles.txtInput}
+              placeholder="Leave a comment"
+              placeholderTextColor="#8F9098"
+              value={comment}
+              onChangeText={text => setComment(text)}
+              multiline={true}
+            />
+
+            <TouchableOpacity
+              style={[styles.btn, {width: 100}]}
+              onPress={addComment}>
+              <Text style={styles.btntxt}>Comment</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
+
         <View
           style={{
             flexDirection: 'row',
@@ -257,22 +311,24 @@ const ViewBlog = ({navigation, route}) => {
                       <Text style={styles.name}>{item.user.email}</Text>
                       <Text style={[styles.tag]}>{item.comment}</Text>
 
-                      <TouchableOpacity
-                        style={{flexDirection: 'row', marginTop: 5}}
-                        onPress={() => {
-                          setCommentId(item._id);
-                          setShowReply(!showreply);
-                          console.log(commentId);
-                          console.log(item._id);
-                        }}>
-                        <Text style={{marginRight: 5, color: '#91C788'}}>
-                          Reply
-                        </Text>
-                        <Reply
-                          width={(20 / dim.w) * dim.Width}
-                          height={(20 / dim.w) * dim.Width}
-                        />
-                      </TouchableOpacity>
+                      {role !== 'Admin' ? (
+                        <TouchableOpacity
+                          style={{flexDirection: 'row', marginTop: 5}}
+                          onPress={() => {
+                            setCommentId(item._id);
+                            setShowReply(!showreply);
+                            console.log(commentId);
+                            console.log(item._id);
+                          }}>
+                          <Text style={{marginRight: 5, color: '#91C788'}}>
+                            Reply
+                          </Text>
+                          <Reply
+                            width={(20 / dim.w) * dim.Width}
+                            height={(20 / dim.w) * dim.Width}
+                          />
+                        </TouchableOpacity>
+                      ) : null}
                     </View>
                   </View>
 
@@ -317,7 +373,6 @@ const ViewBlog = ({navigation, route}) => {
                         onChangeText={text => setReply(text)}
                         multiline={true}
                       />
-
                       <TouchableOpacity
                         style={styles.btn}
                         onPress={addReplyToComment}>
@@ -327,6 +382,56 @@ const ViewBlog = ({navigation, route}) => {
                   )}
                 </View>
               ))}
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                // backgroundColor: 'yellow',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: dim.Width * 0.8,
+                  justifyContent: 'space-around',
+                  marginBottom: 10,
+                }}>
+                <TouchableOpacity style={styles.btn1} onPress={approveBlog}>
+                  <Text style={styles.btntxt}>Approve</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btn1}
+                  onPress={() => {
+                    setShowRemarks(!showremarks);
+                  }}>
+                  <Text style={styles.btntxt}>Unapprove</Text>
+                </TouchableOpacity>
+              </View>
+              {showremarks === true && (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    // backgroundColor: 'blue',
+                    width: dim.Width * 0.8,
+                  }}>
+                  <TextInput
+                    style={styles.remarks}
+                    placeholder="Leave remarks"
+                    placeholderTextColor="#8F9098"
+                    value={remarks}
+                    onChangeText={text => setRemarks(text)}
+                    multiline={true}
+                  />
+                  <TouchableOpacity
+                    onPress={rejectBlog}
+                    style={[
+                      styles.btn1,
+                      {alignSelf: 'flex-end', marginRight: 10},
+                    ]}>
+                    <Text style={styles.btntxt}>Add Remarks</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           </ScrollView>
         </View>
       </ScrollView>
@@ -420,7 +525,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginLeft: 20,
     borderRadius: 25,
-    backgroundColor: 'red',
+    backgroundColor: '#91C788',
     alignSelf: 'flex-start',
     marginTop: 5,
   },
@@ -436,7 +541,7 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    width: (80 / dim.w) * dim.Width,
+    // width: (80 / dim.w) * dim.Width,
     height: (38 / dim.h) * dim.Height,
     backgroundColor: '#91C788',
     alignSelf: 'center',
@@ -446,12 +551,37 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: 'flex-end',
     marginRight: 15,
+    paddingHorizontal: 20,
   },
 
   btntxt: {
     color: 'white',
     fontSize: 16,
     fontFamily: 'Inter-SemiBold',
+  },
+
+  btn1: {
+    paddingHorizontal: (30 / dim.w) * dim.Width,
+    paddingVertical: (8 / dim.h) * dim.Height,
+    marginTop: (15 / dim.h) * dim.Height,
+    borderRadius: 20,
+    backgroundColor: '#91C788',
+    borderColor: '#91C788',
+    borderWidth: 1,
+  },
+
+  remarks: {
+    // borderColor: '#E1E3E8',
+    backgroundColor: '#EFF7EE',
+    // borderWidth: 1,
+    height: (80 / dim.h) * dim.Height,
+    width: dim.Width * 0.93,
+    paddingHorizontal: (15 / dim.w) * dim.Width,
+    borderRadius: 10,
+    fontFamily: 'Inter-Regular',
+    color: 'black',
+    fontSize: 16,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 });
 export default ViewBlog;

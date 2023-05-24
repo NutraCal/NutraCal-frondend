@@ -11,6 +11,7 @@ import {
 import {Searchbar} from 'react-native-paper';
 import dim from '../util/dim';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
+import {AuthContext} from '../context/AuthContext';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import Ionicon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -185,7 +186,7 @@ export default function RecipeApproval({route, navigation}) {
             style={styles.box3}
             onPress={() => {
               console.log(item.Title);
-              navigation.navigate('ViewBlog', {title: item.Title});
+              navigation.navigate('ViewRecipe', {title: item.Title});
             }}>
             <Image
               source={{
@@ -221,6 +222,7 @@ export default function RecipeApproval({route, navigation}) {
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchbar}
+            multiline={true}
             onIconPress={() => {
               if (searchQuery === '') {
                 alert('Enter search query');

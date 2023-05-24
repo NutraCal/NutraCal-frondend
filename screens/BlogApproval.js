@@ -203,6 +203,7 @@ export default function BlogApproval({route, navigation}) {
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchbar}
+            multiline={true}
             onIconPress={() => {
               if (searchQuery === '') {
                 alert('Enter search query');
