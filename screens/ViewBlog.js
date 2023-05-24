@@ -18,6 +18,8 @@ import {AuthContext} from '../context/AuthContext';
 import {endpoint} from '../util/config';
 import Rating from './Rating';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {width} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const ViewBlog = ({navigation, route}) => {
   const {title} = route.params;
@@ -39,6 +41,9 @@ const ViewBlog = ({navigation, route}) => {
   const [showremarks, setShowRemarks] = useState(false);
 
   const [remarks, setRemarks] = useState('');
+
+  const [cId, setCId] = useState('');
+  const [rId, setRId] = useState('');
 
   const {user} = useContext(AuthContext);
   const userId = user?.data?.user?._id;
@@ -208,6 +213,54 @@ const ViewBlog = ({navigation, route}) => {
     }
   };
 
+  const deleteComment = async cId => {
+    var data = JSON.stringify({
+      commentId: cId,
+      title: title,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/blogs/deleteComment',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data.message));
+      fetchBlog();
+    } catch (error) {
+      console.log(error.response.data);
+      alert(error.response.data);
+    }
+  };
+
+  const deleteReply = async (cId, rId) => {
+    var data = JSON.stringify({
+      title: title,
+      commentId: cId,
+      replyId: rId,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'put',
+        url: endpoint + '/blogs/deleteReply',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+      console.log(JSON.stringify(response.data.message));
+
+      fetchBlog();
+    } catch (error) {
+      console.log(error.response.data);
+      alert(error.response.data);
+    }
+  };
+
   useEffect(() => {
     fetchBlog();
   }, []);
@@ -287,7 +340,7 @@ const ViewBlog = ({navigation, route}) => {
             />
 
             <TouchableOpacity
-              style={[styles.btn, {width: 100}]}
+              style={[styles.btn, {width: (120 / dim.w) * dim.Width}]}
               onPress={addComment}>
               <Text style={styles.btntxt}>Comment</Text>
             </TouchableOpacity>
@@ -307,7 +360,10 @@ const ViewBlog = ({navigation, route}) => {
                       source={{uri: endpoint + '/' + item.user.Image.filename}}
                       style={styles.thumbnail}
                     />
-                    <View>
+                    <View
+                      style={{
+                        width: (230 / dim.w) * dim.Width,
+                      }}>
                       <Text style={styles.name}>{item.user.email}</Text>
                       <Text style={[styles.tag]}>{item.comment}</Text>
 
@@ -330,6 +386,15 @@ const ViewBlog = ({navigation, route}) => {
                         </TouchableOpacity>
                       ) : null}
                     </View>
+                    {(role === 'Admin' || userId === item.user._id) && (
+                      <TouchableOpacity
+                        style={{alignSelf: 'flex-start'}}
+                        onPress={() => {
+                          deleteComment(item._id);
+                        }}>
+                        <Ionicon name="delete" size={22} color="#91C788" />
+                      </TouchableOpacity>
+                    )}
                   </View>
 
                   {item.replies.length > 0 &&
@@ -346,12 +411,26 @@ const ViewBlog = ({navigation, route}) => {
                           }}
                           style={styles.thumbnail}
                         />
-                        <View>
+                        <View
+                          style={{
+                            width: (190 / dim.w) * dim.Width,
+                          }}>
                           <Text style={styles.name}>
                             {replyItem.user.email}
                           </Text>
                           <Text style={[styles.tag2]}>{replyItem.comment}</Text>
                         </View>
+
+                        {(role === 'Admin' ||
+                          userId === replyItem.user._id) && (
+                          <TouchableOpacity
+                            style={{alignSelf: 'flex-start'}}
+                            onPress={() => {
+                              deleteReply(item._id, replyItem._id);
+                            }}>
+                            <Ionicon name="delete" size={22} color="#91C788" />
+                          </TouchableOpacity>
+                        )}
                       </View>
                     ))}
 
@@ -382,56 +461,58 @@ const ViewBlog = ({navigation, route}) => {
                   )}
                 </View>
               ))}
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                // backgroundColor: 'yellow',
-              }}>
+            {role === 'Admin' ? (
               <View
                 style={{
-                  flexDirection: 'row',
-                  width: dim.Width * 0.8,
-                  justifyContent: 'space-around',
-                  marginBottom: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  // backgroundColor: 'yellow',
                 }}>
-                <TouchableOpacity style={styles.btn1} onPress={approveBlog}>
-                  <Text style={styles.btntxt}>Approve</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.btn1}
-                  onPress={() => {
-                    setShowRemarks(!showremarks);
-                  }}>
-                  <Text style={styles.btntxt}>Unapprove</Text>
-                </TouchableOpacity>
-              </View>
-              {showremarks === true && (
                 <View
                   style={{
-                    alignItems: 'center',
-                    // backgroundColor: 'blue',
+                    flexDirection: 'row',
                     width: dim.Width * 0.8,
+                    justifyContent: 'space-around',
+                    marginBottom: 10,
                   }}>
-                  <TextInput
-                    style={styles.remarks}
-                    placeholder="Leave remarks"
-                    placeholderTextColor="#8F9098"
-                    value={remarks}
-                    onChangeText={text => setRemarks(text)}
-                    multiline={true}
-                  />
+                  <TouchableOpacity style={styles.btn1} onPress={approveBlog}>
+                    <Text style={styles.btntxt}>Approve</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={rejectBlog}
-                    style={[
-                      styles.btn1,
-                      {alignSelf: 'flex-end', marginRight: 10},
-                    ]}>
-                    <Text style={styles.btntxt}>Add Remarks</Text>
+                    style={styles.btn1}
+                    onPress={() => {
+                      setShowRemarks(!showremarks);
+                    }}>
+                    <Text style={styles.btntxt}>Unapprove</Text>
                   </TouchableOpacity>
                 </View>
-              )}
-            </View>
+                {showremarks === true && (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      // backgroundColor: 'blue',
+                      width: dim.Width * 0.8,
+                    }}>
+                    <TextInput
+                      style={styles.remarks}
+                      placeholder="Leave remarks"
+                      placeholderTextColor="#8F9098"
+                      value={remarks}
+                      onChangeText={text => setRemarks(text)}
+                      multiline={true}
+                    />
+                    <TouchableOpacity
+                      onPress={rejectBlog}
+                      style={[
+                        styles.btn1,
+                        {alignSelf: 'flex-end', marginRight: 10},
+                      ]}>
+                      <Text style={styles.btntxt}>Add Remarks</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            ) : null}
           </ScrollView>
         </View>
       </ScrollView>
@@ -503,7 +584,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Inter-Regular',
     alignSelf: 'flex-start',
-    width: 250,
   },
 
   tag2: {
@@ -511,7 +591,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Inter-Regular',
     alignSelf: 'flex-start',
-    width: 210,
   },
   heading2: {
     fontFamily: 'Inter-Bold',

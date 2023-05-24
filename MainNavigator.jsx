@@ -58,6 +58,7 @@ import StepCount from './screens/StepCount';
 import DietPlans from './screens/DietPlans';
 
 import ViewThread from './screens/ViewThread';
+import DiscussionThread from './screens/DiscussionThread';
 import ViewBlog from './screens/ViewBlog';
 import PostBlog from './screens/PostBlog';
 import PostThread from './screens/PostThread';
@@ -69,6 +70,8 @@ import EditNutritionistProfile from './screens/EditNutritionistProfile';
 import ViewNutritionist from './screens/ViewNutritionist';
 
 import dim from './util/dim';
+import axios from 'axios';
+import {endpoint} from './util/config';
 
 LogBox.ignoreAllLogs();
 
@@ -170,6 +173,12 @@ export default function MainNavigator() {
         <Stack.Screen
           name="ApplyFilters"
           component={ApplyFilters}
+          options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="DiscussionThread"
+          component={DiscussionThread}
           options={{headerShown: true}}
         />
 
@@ -321,11 +330,7 @@ export default function MainNavigator() {
           component={StepCount}
           options={{headerShown: true}}
         />
-        <Stack.Screen
-          name="ViewThread"
-          component={ViewThread}
-          options={{headerShown: true}}
-        />
+
         <Stack.Screen
           name="ViewMeal"
           component={ViewMeal}
@@ -359,6 +364,70 @@ export default function MainNavigator() {
           name="EditNutritionistProfile"
           component={EditNutritionistProfile}
           options={{headerShown: true}}
+        />
+
+        <Stack.Screen
+          name="ViewThread"
+          component={ViewThread}
+          options={({route, navigation}) => {
+            const {title} = route.params;
+
+            const handleDeleteThread = async res => {
+              // navigation.navigate('EditNutritionistProfile', {title}); // Pass the nutritionistId to the "EditNutritionist" screen
+              // const deleteBlog = async title => {
+              var data = JSON.stringify({
+                title: title,
+              });
+
+              console.log(data);
+              console.log('wow did it');
+
+              try {
+                const response = await axios({
+                  method: 'delete',
+                  url: endpoint + '/discussionThreads/deleteThread',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  data: data,
+                });
+
+                console.log(JSON.stringify(response.data.message));
+                // alert(response.data.message);
+                navigation.goBack();
+                // navigation.navigate('DiscussionThread');
+              } catch (error) {
+                console.log(error.response.data);
+                alert(error.response.data);
+              }
+            };
+
+            return {
+              title: 'View Thread',
+              headerShown: true,
+              headerRight: () => {
+                if (role === 'Admin') {
+                  return (
+                    <TouchableOpacity
+                      onPress={handleDeleteThread}
+                      styles={{backgroundColor: '#91C788'}}>
+                      <Text
+                        style={{
+                          color: '#91C788',
+                          fontSize: 16,
+                          marginRight: (10 / dim.w) * dim.Width,
+                          fontWeight: 'bold',
+                        }}>
+                        Delete thread
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return null; // Return null if the role is not "Nutritionist"
+                }
+              },
+            };
+          }}
         />
 
         <Stack.Screen

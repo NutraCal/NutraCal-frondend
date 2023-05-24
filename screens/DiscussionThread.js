@@ -13,6 +13,7 @@ import {Searchbar} from 'react-native-paper';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useFocusEffect} from '@react-navigation/native';
 
 const DiscussionThread = ({navigation, route}) => {
   const [posts, setPosts] = useState([]);
@@ -62,9 +63,15 @@ const DiscussionThread = ({navigation, route}) => {
     }
   };
 
-  useEffect(() => {
-    getForums();
-  }, []);
+  // useEffect(() => {
+  //   getForums();
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getForums();
+    }, []),
+  );
 
   return (
     <View style={styles.container}>

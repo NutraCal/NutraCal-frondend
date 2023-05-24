@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     height: (50 / dim.w) * dim.Width,
     marginRight: 10,
     borderRadius: 10,
-    backgroundColor: 'red',
+    backgroundColor: '#91C788',
     borderColor: '#91C788',
     borderWidth: 1,
   },
