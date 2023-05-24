@@ -178,7 +178,7 @@ const TabStack = ({route, navigation}) => {
           };
         }}
       />
-      {role != 'Nutritionist' ? (
+      {role === 'User' ? (
         <Tab.Screen
           name="DietPlans"
           initialParams={{email: email}}
@@ -195,37 +195,41 @@ const TabStack = ({route, navigation}) => {
           })}
         />
       ) : null}
-      <Tab.Screen
-        name="Shopping"
-        initialParams={{email: email}}
-        component={Shopping}
-        options={({navigation}) => ({
-          headerShown: true,
-          headerStyle: {
-            borderBottomWidth: 1,
-            elevation: 5,
-          },
-          headerTitleStyle: {
-            marginLeft: (20 / dim.w) * dim.Width,
-          },
 
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('BarcodeScan')}
-              styles={{backgroundColor: '#91C788'}}>
-              <Text
-                style={{
-                  color: '#91C788',
-                  fontSize: 16,
-                  marginRight: (30 / dim.w) * dim.Width,
-                  fontWeight: 'bold',
-                }}>
-                Scan
-              </Text>
-            </TouchableOpacity>
-          ),
-        })}
-      />
+      {role === 'User' || role === 'Nutritionist' ? (
+        <Tab.Screen
+          name="Shopping"
+          initialParams={{email: email}}
+          component={Shopping}
+          options={({navigation}) => ({
+            headerShown: true,
+            headerStyle: {
+              borderBottomWidth: 1,
+              elevation: 5,
+            },
+            headerTitleStyle: {
+              marginLeft: (20 / dim.w) * dim.Width,
+            },
+
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('BarcodeScan')}
+                styles={{backgroundColor: '#91C788'}}>
+                <Text
+                  style={{
+                    color: '#91C788',
+                    fontSize: 16,
+                    marginRight: (30 / dim.w) * dim.Width,
+                    fontWeight: 'bold',
+                  }}>
+                  Scan
+                </Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
+      ) : null}
+
       <Tab.Screen
         name="Discussion"
         component={DiscussionThread}

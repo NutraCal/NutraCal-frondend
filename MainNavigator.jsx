@@ -30,6 +30,7 @@ import UserDiet from './screens/UserDiet';
 import UserIng from './screens/UserIng';
 import Register from './screens/Register';
 import Login from './screens/Login';
+import AdminLogin from './screens/AdminLogin';
 import SearchRecipe from './screens/SearchRecipe';
 import ApplyFilters from './screens/ApplyFilters';
 import ViewRecipe from './screens/ViewRecipe';
@@ -143,6 +144,11 @@ export default function MainNavigator() {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="AdminLogin"
+          component={AdminLogin}
           options={{headerShown: true}}
         />
         <Stack.Screen

@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import dim from '../util/dim';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import Ionicon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function RecipeApproval({route, navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,6 +21,7 @@ export default function RecipeApproval({route, navigation}) {
   const [approvedrecipes, setApprovedRecipes] = useState([]);
   const [unapprovedrecipes, setUnapprovedRecipes] = useState([]);
   const [nutritionists, setNutritionists] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -26,7 +29,78 @@ export default function RecipeApproval({route, navigation}) {
     setActiveView(value);
   };
 
+  const searchRecipe = async res => {
+    var data = JSON.stringify({
+      title: searchQuery,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/recipes/searchRecipes',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      // console.log(JSON.stringify(response.data));
+
+      if (response.data.length.toString() === '0') {
+        alert('Recipe not found');
+        setSearchQuery('');
+      } else if (
+        response.data[0].Approved.toString() === '1' &&
+        activeView === 'approved'
+      ) {
+        console.log('found in approved');
+        setApprovedRecipes(response.data);
+        alert('Found in approved recipes');
+        setSearchQuery('');
+      } else if (
+        response.data[0].Approved.toString() !== '1' &&
+        activeView === 'unapproved'
+      ) {
+        setUnapprovedRecipes(response.data);
+        alert('Found in unapproved recipes');
+        setSearchQuery('');
+      } else {
+        alert('Recipe not found');
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const deleteRecipe = async title => {
+    var data = JSON.stringify({
+      title: title,
+    });
+
+    console.log(data);
+
+    try {
+      const response = await axios({
+        method: 'delete',
+        url: endpoint + '/recipes/deleteRecipe',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data.message));
+      alert('Recipe deleted successfully');
+      getApprovedRecipes();
+      getUnapprovedRecipes();
+    } catch (error) {
+      console.log(error.response.data);
+      alert(error.response.data);
+    }
+  };
+
   const getApprovedRecipes = async res => {
+    setLoading(true);
     try {
       const response = await axios({
         method: 'get',
@@ -34,14 +108,16 @@ export default function RecipeApproval({route, navigation}) {
         headers: {},
       });
 
-      console.log(JSON.stringify(response.data));
+      // console.log(JSON.stringify(response.data));
       setApprovedRecipes(response.data);
+      setLoading(false);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
   const getUnapprovedRecipes = async res => {
+    setLoading(true);
     try {
       const response = await axios({
         method: 'get',
@@ -49,62 +125,87 @@ export default function RecipeApproval({route, navigation}) {
         headers: {},
       });
 
-      console.log(JSON.stringify(response.data));
+      // console.log(JSON.stringify(response.data));
       setUnapprovedRecipes(response.data);
+      setLoading(false);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
-  const ApprovedRecipeView = () => (
-    <View>
-      {approvedrecipes.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.box3}
-          onPress={() => {
-            console.log(item.Title);
-            navigation.navigate('ViewRecipe', {title: item.Title});
-          }}>
-          <Image
-            source={{
-              uri: endpoint + '/' + item.Image.filename,
-            }}
-            style={[styles.thumbnail, {marginRight: 20}]}
-          />
-          <View style={{width: 220}}>
-            <Text style={styles.name}>{item.Title}</Text>
-            <Text style={styles.desc}>Recipe</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+  const ApprovedRecipeView = () =>
+    loading ? (
+      <ActivityIndicator
+        size="large"
+        color="#91C788"
+        style={{marginTop: (250 / dim.h) * dim.Height}}
+      />
+    ) : (
+      <View>
+        {approvedrecipes.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.box3}
+            onPress={() => {
+              console.log(item.Title);
+              navigation.navigate('ViewRecipe', {title: item.Title});
+            }}>
+            <Image
+              source={{
+                uri: endpoint + '/' + item.Image.filename,
+              }}
+              style={[styles.thumbnail, {marginRight: 20}]}
+            />
+            <View style={{width: 200}}>
+              <Text style={styles.name}>{item.Title}</Text>
+              <Text style={styles.desc}>Recipe</Text>
+            </View>
+            <TouchableOpacity
+              style={{alignSelf: 'flex-start', marginLeft: 10}}
+              onPress={() => deleteRecipe(item.Title)}>
+              <Ionicon name="delete" size={25} color="#91C788" />
+            </TouchableOpacity>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
 
-  const UnapprovedRecipeView = () => (
-    <View>
-      {unapprovedrecipes.map((item, index) => (
-        <TouchableOpacity
-          key={index}
-          style={styles.box3}
-          onPress={() => {
-            console.log(item.Title);
-            navigation.navigate('ViewBlog', {title: item.Title});
-          }}>
-          <Image
-            source={{
-              uri: endpoint + '/' + item.Image.filename,
-            }}
-            style={[styles.thumbnail, {marginRight: 20}]}
-          />
-          <View style={{width: 220}}>
-            <Text style={styles.name}>{item.Title}</Text>
-            <Text style={styles.desc}>Blog</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+  const UnapprovedRecipeView = () =>
+    loading ? (
+      <ActivityIndicator
+        size="large"
+        color="#91C788"
+        style={{marginTop: (250 / dim.h) * dim.Height}}
+      />
+    ) : (
+      <View>
+        {unapprovedrecipes.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.box3}
+            onPress={() => {
+              console.log(item.Title);
+              navigation.navigate('ViewBlog', {title: item.Title});
+            }}>
+            <Image
+              source={{
+                uri: endpoint + '/' + item.Image.filename,
+              }}
+              style={[styles.thumbnail, {marginRight: 20}]}
+            />
+            <View style={{width: 200}}>
+              <Text style={styles.name}>{item.Title}</Text>
+              <Text style={styles.desc}>Blog</Text>
+            </View>
+            <TouchableOpacity
+              style={{alignSelf: 'flex-start', marginLeft: 10}}
+              onPress={() => deleteRecipe(item.Title)}>
+              <Ionicon name="delete" size={25} color="#91C788" />
+            </TouchableOpacity>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
 
   useEffect(() => {
     getApprovedRecipes();
@@ -120,6 +221,13 @@ export default function RecipeApproval({route, navigation}) {
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchbar}
+            onIconPress={() => {
+              if (searchQuery === '') {
+                alert('Enter search query');
+              } else {
+                searchRecipe();
+              }
+            }}
 
             // onClearIconPress={() => {
             //   if (activeView === 'nutritionist') {
@@ -136,10 +244,12 @@ export default function RecipeApproval({route, navigation}) {
             onPrimaryPress={() => {
               setSearchQuery('');
               handleToggle('approved');
+              getApprovedRecipes();
             }}
             onSecondaryPress={() => {
               setSearchQuery('');
               handleToggle('unapproved');
+              getUnapprovedRecipes();
             }}
             activeColor="#91C788"
             inactiveColor="#DCEDDA"
@@ -180,7 +290,6 @@ const styles = StyleSheet.create({
   },
 
   box3: {
-    height: 100,
     width: 350,
     borderRadius: 12,
     marginVertical: 8,
@@ -188,6 +297,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#EFF7EE',
+    paddingVertical: 10,
   },
 
   name: {
@@ -221,7 +331,7 @@ const styles = StyleSheet.create({
     height: (50 / dim.w) * dim.Width,
     marginRight: 10,
     borderRadius: 10,
-    backgroundColor: 'red',
+    backgroundColor: '#91C788',
     borderColor: '#91C788',
     borderWidth: 1,
   },

@@ -74,12 +74,14 @@ export default function Home({route, navigation}) {
 
           <View style={{alignItems: 'center'}}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Image
-                source={{
-                  uri: endpoint + '/' + image.filename,
-                }}
-                style={styles.thumbnail}
-              />
+              {image.filename != undefined ? (
+                <Image
+                  source={{
+                    uri: endpoint + '/' + image.filename,
+                  }}
+                  style={styles.thumbnail}
+                />
+              ) : null}
             </TouchableOpacity>
           </View>
         </View>

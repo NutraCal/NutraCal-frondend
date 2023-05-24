@@ -12,6 +12,8 @@ import type {Node} from 'react';
 import Login from './Login';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
+import axios from 'axios';
+
 const AdminRegister = ({route, navigation}) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,7 +22,64 @@ const AdminRegister = ({route, navigation}) => {
   const [isPasswordValid, setIsPasswordValid] = useState('false');
   const [pressed, setPressed] = useState(false);
 
+  const createUser = async res => {
+    var data = JSON.stringify({
+      name: name,
+      email: email,
+      password: password,
+    });
+
+    try {
+      if (
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
+        /^(?=.*\d).{8,12}$/.test(password)
+      ) {
+        console.log(name, email, password);
+        console.log(data);
+
+        try {
+          console.log('about to send request');
+          const response = await axios({
+            method: 'post',
+            url: endpoint + '/admin/createAdmin',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: data,
+          });
+          console.log(JSON.stringify(response.data));
+
+          if (response.status == 200) {
+            navigation.navigate('AdminLogin');
+          } else {
+            Alert.alert('Uh oh', 'Admin already exists', [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]);
+          }
+        } catch (error) {
+          console.log(error.response);
+        }
+        console.log('in if');
+
+        // setEmail('');
+        // setPassword('');
+        // setIsEmailValid('true');
+        // setIsPasswordValid('true');
+      } else {
+        console.log('hehe in else');
+        // setIsEmailValid('false');
+        // setIsPasswordValid('false');
+        // Alert.alert('Invalid Input', 'Please check your email and password', [
+        //   {text: 'OK', onPress: () => console.log('OK Pressed')},
+        // ]);
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   const credentialsValidation = () => {
+    console.log('here to validate');
     setPressed(true);
 
     if (email == '' && password == '' && name == '') {
@@ -43,7 +102,6 @@ const AdminRegister = ({route, navigation}) => {
       ]);
       return;
     }
-
     if (password == '') {
       Alert.alert('Empty field', 'Please enter password', [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
@@ -51,43 +109,7 @@ const AdminRegister = ({route, navigation}) => {
       return;
     }
 
-    if (
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email) &&
-      /^(?=.*\d).{8,12}$/.test(password)
-    ) {
-      fetch(endpoint + '/users/createUser', {
-        method: 'POST',
-
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          password: password,
-        }),
-      }).then(response => {
-        if (response.status == 200) {
-          navigation.navigate('Login');
-        } else {
-          Alert.alert('Uh oh', 'Admin already exists', [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ]);
-        }
-        console.log(response.status); // returns 200
-      });
-      setEmail('');
-      setPassword('');
-      setIsEmailValid('true');
-      setIsPasswordValid('true');
-    } else {
-      setIsEmailValid('false');
-      setIsPasswordValid('false');
-      Alert.alert('Invalid Input', 'Please check your email and password', [
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ]);
-    }
+    createUser();
   };
   return (
     <View style={styles.container}>
@@ -148,7 +170,7 @@ const AdminRegister = ({route, navigation}) => {
               color: '#90C888',
               fontFamily: 'Inter-SemiBold',
             }}
-            onPress={() => navigation.navigate('Login')}>
+            onPress={() => navigation.navigate('AdminLogin')}>
             Log In
           </Text>
         </View>

@@ -191,19 +191,6 @@ const Register = ({route, navigation}) => {
         name: 'photo.jpg',
         type: 'image/jpeg', // You can set the type here if you know the specific file type
       });
-      // data.append('photo', photo, {type: 'image/jpeg'});
-      // data.append('photo', photo);
-      // data.append('photo', photo, 'file.jpg');
-      // const photoBlob = new Blob([photo], {type: 'image/jpeg'});
-
-      // // Append the image file to the FormData object
-      // data.append('photo', photoBlob, 'girl2.jpg');
-
-      // data.append('photo', {
-      //   uri: image.assets[0].uri,
-      //   name: 'photo.jpg',
-      //   type: 'image/jpeg', // You can set the type here if you know the specific file type
-      // });
     }
 
     try {

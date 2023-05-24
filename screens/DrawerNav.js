@@ -55,7 +55,7 @@ const DrawerNav = ({route, navigation}) => {
         }}
       />
       <Drawer.Screen
-        name="BlogApproval"
+        name="Blog Approvals"
         component={BlogApproval}
         options={{
           headerShown: true,
@@ -70,7 +70,7 @@ const DrawerNav = ({route, navigation}) => {
       />
 
       <Drawer.Screen
-        name="RecipeApproval"
+        name="Recipe Approvals"
         component={RecipeApproval}
         options={{
           headerShown: true,

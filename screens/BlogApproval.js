@@ -6,24 +6,97 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import dim from '../util/dim';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import Ionicon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function BlogApproval({route, navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [name, setName] = useState('');
   const [activeView, setActiveView] = useState('approved');
   const [approvedblogs, setApprovedBlogs] = useState([]);
   const [unapprovedblogs, setUnapprovedBlogs] = useState([]);
   const [nutritionists, setNutritionists] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const onChangeSearch = query => setSearchQuery(query);
 
   const handleToggle = value => {
     setActiveView(value);
+  };
+
+  const searchBlog = async res => {
+    var data = JSON.stringify({
+      title: searchQuery,
+    });
+    console.log(data);
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/blogs/viewBlogByTitle',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      // console.log(JSON.stringify(response.data));
+      if (response.data.length.toString() === '0') {
+        alert('Blog not found');
+        setSearchQuery('');
+      } else if (
+        response.data[0].Approved.toString() === '1' &&
+        activeView === 'approved'
+      ) {
+        console.log('found in approved');
+        setApprovedBlogs(response.data);
+        alert('Found in approved blogs');
+        setSearchQuery('');
+      } else if (
+        response.data[0].Approved.toString() !== '1' &&
+        activeView === 'unapproved'
+      ) {
+        setUnapprovedBlogs(response.data);
+        alert('Found in unapproved blogs');
+        setSearchQuery('');
+      } else {
+        alert('Blog not found');
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const deleteBlog = async title => {
+    var data = JSON.stringify({
+      title: title,
+    });
+
+    console.log(data);
+
+    try {
+      const response = await axios({
+        method: 'delete',
+        url: endpoint + '/blogs/deleteBlog',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data.message));
+      alert(response.data.message);
+      getApprovedRecipes();
+      getUnapprovedRecipes();
+    } catch (error) {
+      console.log(error.response.data);
+      alert(error.response.data);
+    }
   };
 
   const getApprovedBlogs = async res => {
@@ -34,7 +107,7 @@ export default function BlogApproval({route, navigation}) {
         headers: {},
       });
 
-      console.log(JSON.stringify(response.data));
+      // console.log(JSON.stringify(response.data));
       setApprovedBlogs(response.data);
     } catch (error) {
       console.log(error.response.data);
@@ -49,7 +122,7 @@ export default function BlogApproval({route, navigation}) {
         headers: {},
       });
 
-      console.log(JSON.stringify(response.data));
+      // console.log(JSON.stringify(response.data));
       setUnapprovedBlogs(response.data);
     } catch (error) {
       console.log(error.response.data);
@@ -72,10 +145,15 @@ export default function BlogApproval({route, navigation}) {
             }}
             style={[styles.thumbnail, {marginRight: 20}]}
           />
-          <View style={{width: 220}}>
+          <View style={{width: 200}}>
             <Text style={styles.name}>{item.Title}</Text>
             <Text style={styles.desc}>Blog</Text>
           </View>
+          <TouchableOpacity
+            style={{alignSelf: 'flex-start', marginLeft: 10}}
+            onPress={() => deleteBlog(item.Title)}>
+            <Ionicon name="delete" size={25} color="#91C788" />
+          </TouchableOpacity>
         </TouchableOpacity>
       ))}
     </View>
@@ -97,10 +175,15 @@ export default function BlogApproval({route, navigation}) {
             }}
             style={[styles.thumbnail, {marginRight: 20}]}
           />
-          <View style={{width: 220}}>
+          <View style={{width: 200}}>
             <Text style={styles.name}>{item.Title}</Text>
             <Text style={styles.desc}>Blog</Text>
           </View>
+          <TouchableOpacity
+            style={{alignSelf: 'flex-start', marginLeft: 10}}
+            onPress={() => deleteBlog(item.Title)}>
+            <Ionicon name="delete" size={25} color="#91C788" />
+          </TouchableOpacity>
         </TouchableOpacity>
       ))}
     </View>
@@ -120,6 +203,13 @@ export default function BlogApproval({route, navigation}) {
             onChangeText={onChangeSearch}
             value={searchQuery}
             style={styles.searchbar}
+            onIconPress={() => {
+              if (searchQuery === '') {
+                alert('Enter search query');
+              } else {
+                searchBlog();
+              }
+            }}
 
             // onClearIconPress={() => {
             //   if (activeView === 'nutritionist') {
@@ -136,10 +226,12 @@ export default function BlogApproval({route, navigation}) {
             onPrimaryPress={() => {
               setSearchQuery('');
               handleToggle('approved');
+              getApprovedBlogs();
             }}
             onSecondaryPress={() => {
               setSearchQuery('');
               handleToggle('unapproved');
+              getUnapprovedBlogs();
             }}
             activeColor="#91C788"
             inactiveColor="#DCEDDA"
@@ -180,7 +272,7 @@ const styles = StyleSheet.create({
   },
 
   box3: {
-    height: 100,
+    // height: 100,
     width: 350,
     borderRadius: 12,
     marginVertical: 8,
@@ -188,6 +280,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#EFF7EE',
+    paddingVertical: 10,
   },
 
   name: {
@@ -221,7 +314,7 @@ const styles = StyleSheet.create({
     height: (50 / dim.w) * dim.Width,
     marginRight: 10,
     borderRadius: 10,
-    backgroundColor: 'red',
+    backgroundColor: '#91C788',
     borderColor: '#91C788',
     borderWidth: 1,
   },
