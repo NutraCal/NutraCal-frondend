@@ -65,15 +65,13 @@ export default function SuggestedRecipeResults({route, navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.boldheading}>Suggested Recipes</Text>
-      <Text style={styles.subheading}>Here is what you can make</Text>
-      {loading ? (
-        <ActivityIndicator></ActivityIndicator>
-      ) : (
-        <FlatList
-          data={responseArray}
-          // scrollEnabled={false}
-          renderItem={({index, item}) => (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Text style={styles.boldheading}>Suggested Recipes</Text>
+        <Text style={styles.subheading}>Here is what you can make</Text>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          responseArray.map((item, index) => (
             <View key={index}>
               <TouchableOpacity
                 style={[styles.box3, {backgroundColor: '#EBF2FF'}]}
@@ -95,9 +93,9 @@ export default function SuggestedRecipeResults({route, navigation}) {
                 </View>
               </TouchableOpacity>
             </View>
-          )}
-        />
-      )}
+          ))
+        )}
+      </ScrollView>
     </View>
   );
 }
@@ -107,10 +105,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: (8 / dim.h) * dim.Height,
-    // flex: 1,
-    // backgroundColor: 'red',
-    height: dim.Height,
-    paddingTop: 50,
   },
 
   box3: {

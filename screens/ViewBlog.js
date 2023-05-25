@@ -304,6 +304,7 @@ const ViewBlog = ({navigation, route}) => {
                 size={25}
                 color={liked ? 'red' : 'black'}
               />
+
               <Text>{likes} likes</Text>
             </TouchableOpacity>
           </View>

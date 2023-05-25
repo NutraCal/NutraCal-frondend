@@ -218,9 +218,9 @@ const ViewThread = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <Ionicons
-                name={liked ? 'heart' : 'heart-outline'}
+                name={liked ? 'heart-outline' : 'heart'}
                 size={25}
-                color={liked ? 'red' : 'black'}
+                color={liked ? 'black' : 'red'}
               />
               <Text>{likes} likes</Text>
             </TouchableOpacity>

@@ -178,7 +178,7 @@ export default function MainNavigator() {
           options={{headerShown: true}}
         />
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="ViewBlog"
           component={ViewBlog}
           options={({route, navigation}) => {
@@ -204,6 +204,40 @@ export default function MainNavigator() {
                   </Text>
                 </TouchableOpacity>
               ),
+            };
+          }}
+        /> */}
+
+        <Stack.Screen
+          name="ViewBlog"
+          component={ViewBlog}
+          options={({route, navigation}) => {
+            const {title} = route.params;
+
+            const handleUpdateBlog = () => {
+              navigation.navigate('UpdateBlog', {title});
+            };
+
+            // Check user's role to conditionally render the headerRight
+
+            return {
+              title: 'View Blog',
+              headerShown: true,
+              ...(role === 'Nutritionist' && {
+                headerRight: () => (
+                  <TouchableOpacity onPress={handleUpdateBlog}>
+                    <Text
+                      style={{
+                        color: '#91C788',
+                        fontSize: 16,
+                        marginRight: (10 / dim.w) * dim.Width,
+                        fontWeight: 'bold',
+                      }}>
+                      Update Blog
+                    </Text>
+                  </TouchableOpacity>
+                ),
+              }),
             };
           }}
         />
