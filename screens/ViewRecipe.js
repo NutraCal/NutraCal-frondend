@@ -38,6 +38,8 @@ export default function ViewRecipe({route, navigation}) {
   const [item, setItem] = useState('');
   const [getlist, setList] = useState([]);
   const [getqlist, setQList] = useState([]);
+  const [allergies, setAllergies] = useState([]);
+  const [imageuri, setImageUri] = useState(0);
 
   const [likes, setLikes] = useState(0);
 
@@ -142,6 +144,9 @@ export default function ViewRecipe({route, navigation}) {
 
       console.log(JSON.stringify(response.data));
       console.log(response.data[0].Remarks);
+      console.log(response.data[0].Quantity);
+      setQList(response.data[0].Quantity);
+      setAllergies(response.data[0].Allergies);
       if (response.data[0].hasOwnProperty('Remarks')) {
         setRem(response.data[0].Remarks);
       }
@@ -149,6 +154,11 @@ export default function ViewRecipe({route, navigation}) {
       setId(response.data[0]._id);
       setName(response.data[0].Title);
       setDesc(response.data[0].RecipeMethod);
+      const filename = response.data[0].Image.filename;
+      const u = endpoint + '/' + filename;
+      // console.log(u);
+      setImageUri(u);
+
       const c = response.data[0].Calories.toString();
       setCalories(c);
       const f = response.data[0].Fats.toString();
@@ -163,6 +173,9 @@ export default function ViewRecipe({route, navigation}) {
       setList([...slist]);
       const qlist = response.data[0].Quantity;
       setQList([...qlist]);
+      const alist = response.data[0].Allergies;
+      setAllergies([...alist]);
+      console.log(response.data[0].Quantity);
 
       // console.log('ughhhhh');
       // if (response.data[0].Remarks !== '') {
@@ -212,6 +225,16 @@ export default function ViewRecipe({route, navigation}) {
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.container}>
+      {imageuri ? (
+        <Image source={{uri: imageuri}} style={styles.img} />
+      ) : (
+        <Image
+          // source={{uri: item.thumbnail}}
+          source={require('../assets/images/recipefood.png')}
+          style={styles.coverimg}
+        />
+      )}
+
       <Image
         // source={{uri: item.thumbnail}}
         source={require('../assets/images/recipefood.png')}
@@ -349,6 +372,30 @@ export default function ViewRecipe({route, navigation}) {
           </View>
         ))}
       </ScrollView>
+
+      <Text style={[styles.heading, {width: (280 / dim.w) * dim.Width}]}>
+        Allergies
+      </Text>
+
+      {allergies.map((item, index) => (
+        <View
+          key={index}
+          style={{
+            alignItems: 'flex-start',
+            // backgroundColor: 'red',
+            width: dim.Width,
+          }}>
+          <View>
+            <Text
+              style={[
+                styles.name,
+                {width: 120, textAlign: 'left', marginLeft: 20},
+              ]}>
+              {item}
+            </Text>
+          </View>
+        </View>
+      ))}
 
       {role !== 'Admin' ? (
         <TouchableOpacity
