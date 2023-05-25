@@ -168,12 +168,14 @@ export default function MyRecipes({route, navigation}) {
               console.log(item.Title);
               navigation.navigate('ViewRecipe', {title: item.Title});
             }}>
-            <Image
-              source={{
-                uri: endpoint + '/' + item.Image.filename,
-              }}
-              style={[styles.thumbnail, {marginRight: 20}]}
-            />
+            {item.Image !== undefined && (
+              <Image
+                source={{
+                  uri: endpoint + '/' + item.Image.filename,
+                }}
+                style={[styles.thumbnail, {marginRight: 20}]}
+              />
+            )}
             <View style={{width: 200}}>
               <Text style={styles.name}>{item.Title}</Text>
               <Text style={styles.desc}>Recipe</Text>
@@ -205,12 +207,14 @@ export default function MyRecipes({route, navigation}) {
               console.log(item.Title);
               navigation.navigate('ViewRecipe', {title: item.Title});
             }}>
-            <Image
-              source={{
-                uri: endpoint + '/' + item.Image.filename,
-              }}
-              style={[styles.thumbnail, {marginRight: 20}]}
-            />
+            {item.Image !== undefined && (
+              <Image
+                source={{
+                  uri: endpoint + '/' + item.Image.filename,
+                }}
+                style={[styles.thumbnail, {marginRight: 20}]}
+              />
+            )}
             <View style={{width: 200}}>
               <Text style={styles.name}>{item.Title}</Text>
               <Text style={styles.desc}>Blog</Text>
