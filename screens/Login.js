@@ -45,12 +45,15 @@ export const googleSignIn = async () => {
 };
 
 export default function Login({route, navigation}) {
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
   const {login} = useContext(AuthContext);
   const [notification, setNotification] = useState('');
+
+  const {user} = useContext(AuthContext);
+  const email = user?.data?.user?.email;
+  const userId = user?.data?.user?._id;
 
   const getNotifications = async email => {
     console.log('getNotification');
@@ -187,7 +190,9 @@ export default function Login({route, navigation}) {
 
       console.log(JSON.stringify(response.data));
       if (response.status == 200) {
-        navigation.navigate('Login');
+        navigation.navigate('DrawerNav', {
+          email: email,
+        });
         alert('User added successfully');
       } else {
         Alert.alert('User already exists', 'Create Account with new Email', [
