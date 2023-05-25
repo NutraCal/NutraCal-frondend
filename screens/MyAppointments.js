@@ -21,6 +21,7 @@ export default function MyAppointments({route, navigation}) {
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
+  const role = user?.data?.user?.role;
   const [appointments, setAppointments] = useState([]);
 
   const getAppointments = async res => {
@@ -49,8 +50,39 @@ export default function MyAppointments({route, navigation}) {
     }
   };
 
+  const getNAppointments = async res => {
+    var data = JSON.stringify({
+      email: email,
+    });
+
+    try {
+      const response = await axios({
+        method: 'post',
+        url: endpoint + '/nutritionist/getAppointments',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      });
+
+      console.log(JSON.stringify(response.data));
+      if (response && response.data && response.data.length > 0) {
+        setAppointments(response.data);
+      }
+      // setNutritionist(response.data);
+    } catch (error) {
+      console.log(error.response.data);
+      alert(error.response.data);
+    }
+  };
+
   useEffect(() => {
-    getAppointments();
+    console.log(role);
+    if (role === 'User') {
+      getAppointments();
+    } else {
+      getNAppointments();
+    }
   }, []);
 
   return (
@@ -66,9 +98,19 @@ export default function MyAppointments({route, navigation}) {
           <View style={styles.thumbnail2}></View>
 
           <View style={{width: 250}}>
-            <Text style={styles.name}>{item.nutritionist}</Text>
-            <Text style={styles.name}>{item.day}</Text>
-            <Text style={styles.desc}>{item.time}</Text>
+            {role === 'Nutritionist' ? (
+              <View>
+                <Text style={styles.name}>{item.user}</Text>
+                <Text style={styles.name}>{item.day}</Text>
+                <Text style={styles.desc}>{item.time}</Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={styles.name}>{item.nutritionist}</Text>
+                <Text style={styles.name}>{item.day}</Text>
+                <Text style={styles.desc}>{item.time}</Text>
+              </View>
+            )}
           </View>
         </TouchableOpacity>
       ))}

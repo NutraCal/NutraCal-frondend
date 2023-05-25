@@ -139,12 +139,14 @@ export default function BlogApproval({route, navigation}) {
             console.log(item.Title);
             navigation.navigate('ViewBlog', {title: item.Title});
           }}>
-          <Image
-            source={{
-              uri: endpoint + '/' + item.Image.filename,
-            }}
-            style={[styles.thumbnail, {marginRight: 20}]}
-          />
+          {item.Image !== undefined && (
+            <Image
+              source={{
+                uri: endpoint + '/' + item.Image.filename,
+              }}
+              style={[styles.thumbnail, {marginRight: 20}]}
+            />
+          )}
           <View style={{width: 200}}>
             <Text style={styles.name}>{item.Title}</Text>
             <Text style={styles.desc}>Blog</Text>
@@ -169,12 +171,14 @@ export default function BlogApproval({route, navigation}) {
             console.log(item.Title);
             navigation.navigate('ViewBlog', {title: item.Title});
           }}>
-          <Image
-            source={{
-              uri: endpoint + '/' + item.Image.filename,
-            }}
-            style={[styles.thumbnail, {marginRight: 20}]}
-          />
+          {item.Image !== undefined && (
+            <Image
+              source={{
+                uri: endpoint + '/' + item.Image.filename,
+              }}
+              style={[styles.thumbnail, {marginRight: 20}]}
+            />
+          )}
           <View style={{width: 200}}>
             <Text style={styles.name}>{item.Title}</Text>
             <Text style={styles.desc}>Blog</Text>

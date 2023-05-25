@@ -36,6 +36,7 @@ import ApplyFilters from './screens/ApplyFilters';
 import ViewRecipe from './screens/ViewRecipe';
 import AddRecipe from './screens/AddRecipe';
 import MyRecipes from './screens/MyRecipes';
+import MyBlogs from './screens/MyBlogs';
 import SuggestRecipe from './screens/SuggestRecipe';
 import SuggestedRecipeResults from './screens/SuggestedRecipeResults';
 import TabStack from './screens/TabStack';
@@ -242,6 +243,12 @@ export default function MainNavigator() {
           component={MyRecipes}
           options={{headerShown: true}}
         />
+        <Stack.Screen
+          name="MyBlogs"
+          component={MyBlogs}
+          options={{headerShown: true}}
+        />
+
         <Stack.Screen
           name="ApplyFilters"
           component={ApplyFilters}

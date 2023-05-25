@@ -45,6 +45,7 @@ export default function ViewRecipe({route, navigation}) {
 
   const [showremarks, setShowRemarks] = useState(false);
   const [remarks, setRemarks] = useState('');
+  const [rem, setRem] = useState('');
 
   const {user} = useContext(AuthContext);
   const userId = user?.data?.user?._id;
@@ -140,6 +141,11 @@ export default function ViewRecipe({route, navigation}) {
       });
 
       console.log(JSON.stringify(response.data));
+      console.log(response.data[0].Remarks);
+      if (response.data[0].hasOwnProperty('Remarks')) {
+        setRem(response.data[0].Remarks);
+      }
+
       setId(response.data[0]._id);
       setName(response.data[0].Title);
       setDesc(response.data[0].RecipeMethod);
@@ -157,6 +163,18 @@ export default function ViewRecipe({route, navigation}) {
       setList([...slist]);
       const qlist = response.data[0].Quantity;
       setQList([...qlist]);
+
+      // console.log('ughhhhh');
+      // if (response.data[0].Remarks !== '') {
+      //   console.log('heheheh');
+      // }
+      // if (
+      //   response.data[0].Remarks !== '' ||
+      //   response.data[0].Remarks !== undefined
+      // ) {
+      //   setRem(response.data[0].Remarks);
+      //   xonsole.log('heereerr');
+      // }
     } catch (error) {
       console.log(error.response);
     }
@@ -345,6 +363,18 @@ export default function ViewRecipe({route, navigation}) {
             Add to Shopping List
           </Text>
         </TouchableOpacity>
+      ) : null}
+
+      {rem !== '' ? (
+        <View style={{alignSelf: 'flex-start'}}>
+          <Text style={styles.heading}>Admin Remarks:</Text>
+          <View style={{backgroundColor: '#EBF2FF'}}>
+            <Text
+              style={{fontSize: 20, padding: 10, fontFamily: 'Inter-Regular'}}>
+              {rem}
+            </Text>
+          </View>
+        </View>
       ) : null}
 
       {role === 'Admin' ? (

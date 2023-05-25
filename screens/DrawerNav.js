@@ -17,6 +17,7 @@ const Drawer = createDrawerNavigator();
 
 import {AuthContext} from '../context/AuthContext';
 import MyRecipes from './MyRecipes';
+import MyBlogs from './MyBlogs';
 
 const DrawerNav = ({route, navigation}) => {
   const {user} = useContext(AuthContext);
@@ -90,6 +91,23 @@ const DrawerNav = ({route, navigation}) => {
         />
       )}
 
+      {role === 'Nutritionist' && (
+        <Drawer.Screen
+          name="My Blogs"
+          component={MyBlogs}
+          options={{
+            headerShown: true,
+            drawerIcon: ({color}) => (
+              <Ionicons
+                name="home-outline"
+                size={(22 / dim.w) * dim.Width}
+                color={color}
+              />
+            ),
+          }}
+        />
+      )}
+
       {role === 'Admin' && (
         <Drawer.Screen
           name="Recipe Approvals"
@@ -107,20 +125,22 @@ const DrawerNav = ({route, navigation}) => {
         />
       )}
 
-      <Drawer.Screen
-        name="MyAppointments"
-        component={MyAppointments}
-        options={{
-          headerShown: true,
-          drawerIcon: ({color}) => (
-            <Ionicons
-              name="home-outline"
-              size={(22 / dim.w) * dim.Width}
-              color={color}
-            />
-          ),
-        }}
-      />
+      {role !== 'Admin' && (
+        <Drawer.Screen
+          name="MyAppointments"
+          component={MyAppointments}
+          options={{
+            headerShown: true,
+            drawerIcon: ({color}) => (
+              <Ionicons
+                name="home-outline"
+                size={(22 / dim.w) * dim.Width}
+                color={color}
+              />
+            ),
+          }}
+        />
+      )}
 
       {role === 'User' && (
         <Drawer.Screen

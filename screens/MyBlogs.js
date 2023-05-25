@@ -11,16 +11,17 @@ import {
 import {Searchbar} from 'react-native-paper';
 import dim from '../util/dim';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
-import {AuthContext} from '../context/AuthContext';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import Ionicon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AuthContext} from '../context/AuthContext';
 
-export default function MyRecipes({route, navigation}) {
+export default function MyBlogs({route, navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [name, setName] = useState('');
   const [activeView, setActiveView] = useState('approved');
-  const [approvedrecipes, setApprovedRecipes] = useState([]);
-  const [unapprovedrecipes, setUnapprovedRecipes] = useState([]);
+  const [approvedblogs, setApprovedBlogs] = useState([]);
+  const [unapprovedblogs, setUnapprovedBlogs] = useState([]);
   const [nutritionists, setNutritionists] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +35,7 @@ export default function MyRecipes({route, navigation}) {
     setActiveView(value);
   };
 
-  const searchRecipe = async res => {
+  const searchBlog = async res => {
     var data = JSON.stringify({
       title: searchQuery,
     });
@@ -42,7 +43,7 @@ export default function MyRecipes({route, navigation}) {
     try {
       const response = await axios({
         method: 'post',
-        url: endpoint + '/recipes/searchRecipes',
+        url: endpoint + '/blogs/viewBlogByTitle',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -50,34 +51,33 @@ export default function MyRecipes({route, navigation}) {
       });
 
       // console.log(JSON.stringify(response.data));
-
       if (response.data.length.toString() === '0') {
-        alert('Recipe not found');
+        alert('Blog not found');
         setSearchQuery('');
       } else if (
         response.data[0].Approved.toString() === '1' &&
         activeView === 'approved'
       ) {
         console.log('found in approved');
-        setApprovedRecipes(response.data);
-        alert('Found in approved recipes');
+        setApprovedBlogs(response.data);
+        alert('Found in approved blogs');
         setSearchQuery('');
       } else if (
         response.data[0].Approved.toString() !== '1' &&
         activeView === 'unapproved'
       ) {
-        setUnapprovedRecipes(response.data);
-        alert('Found in unapproved recipes');
+        setUnapprovedBlogs(response.data);
+        alert('Found in unapproved blogs');
         setSearchQuery('');
       } else {
-        alert('Recipe not found');
+        alert('Blog not found');
       }
     } catch (error) {
       console.log(error.response);
     }
   };
 
-  const deleteRecipe = async title => {
+  const deleteBlog = async title => {
     var data = JSON.stringify({
       title: title,
     });
@@ -87,7 +87,7 @@ export default function MyRecipes({route, navigation}) {
     try {
       const response = await axios({
         method: 'delete',
-        url: endpoint + '/recipes/deleteRecipe',
+        url: endpoint + '/blogs/deleteBlog',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -95,7 +95,7 @@ export default function MyRecipes({route, navigation}) {
       });
 
       console.log(JSON.stringify(response.data.message));
-      alert('Recipe deleted successfully');
+      alert(response.data.message);
       getApprovedRecipes();
       getUnapprovedRecipes();
     } catch (error) {
@@ -104,16 +104,16 @@ export default function MyRecipes({route, navigation}) {
     }
   };
 
-  const getApprovedRecipes = async res => {
+  const getApprovedBlogs = async res => {
     var data = JSON.stringify({
-      email: email,
+      userId: userId,
     });
     console.log(data);
     setLoading(true);
     try {
       const response = await axios({
         method: 'post',
-        url: endpoint + '/recipes/userRecipes',
+        url: endpoint + '/blogs/viewApproved',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -121,113 +121,101 @@ export default function MyRecipes({route, navigation}) {
       });
 
       // console.log(JSON.stringify(response.data));
-      setApprovedRecipes(response.data);
+      setApprovedBlogs(response.data);
       setLoading(false);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
-  const getUnapprovedRecipes = async res => {
+  const getUnapprovedBlogs = async res => {
     var data = JSON.stringify({
-      email: email,
+      userId: userId,
     });
     console.log(data);
     setLoading(true);
     try {
       const response = await axios({
         method: 'post',
-        url: endpoint + '/recipes/userUnapprovedRecipes',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: data,
+        url: endpoint + '/blogs/viewUnapproved',
+        headers: {},
       });
 
-      setUnapprovedRecipes(response.data);
+      // console.log(JSON.stringify(response.data));
+      setUnapprovedBlogs(response.data);
       setLoading(false);
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
-  const ApprovedRecipeView = () =>
-    loading ? (
-      <ActivityIndicator
-        size="large"
-        color="#91C788"
-        style={{marginTop: (250 / dim.h) * dim.Height}}
-      />
-    ) : (
-      <View>
-        {approvedrecipes.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.box3}
-            onPress={() => {
-              console.log(item.Title);
-              navigation.navigate('ViewRecipe', {title: item.Title});
-            }}>
+  const ApprovedBlogView = () => (
+    <View>
+      {approvedblogs.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          style={styles.box3}
+          onPress={() => {
+            console.log(item.Title);
+            navigation.navigate('ViewBlog', {title: item.Title});
+          }}>
+          {item.Image !== undefined && (
             <Image
               source={{
                 uri: endpoint + '/' + item.Image.filename,
               }}
               style={[styles.thumbnail, {marginRight: 20}]}
             />
-            <View style={{width: 200}}>
-              <Text style={styles.name}>{item.Title}</Text>
-              <Text style={styles.desc}>Recipe</Text>
-            </View>
-            <TouchableOpacity
-              style={{alignSelf: 'flex-start', marginLeft: 10}}
-              onPress={() => deleteRecipe(item.Title)}>
-              <Ionicon name="delete" size={25} color="#91C788" />
-            </TouchableOpacity>
+          )}
+          <View style={{width: 200}}>
+            <Text style={styles.name}>{item.Title}</Text>
+            <Text style={styles.desc}>Blog</Text>
+          </View>
+          <TouchableOpacity
+            style={{alignSelf: 'flex-start', marginLeft: 10}}
+            onPress={() => deleteBlog(item.Title)}>
+            <Ionicon name="delete" size={25} color="#91C788" />
           </TouchableOpacity>
-        ))}
-      </View>
-    );
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
-  const UnapprovedRecipeView = () =>
-    loading ? (
-      <ActivityIndicator
-        size="large"
-        color="#91C788"
-        style={{marginTop: (250 / dim.h) * dim.Height}}
-      />
-    ) : (
-      <View>
-        {unapprovedrecipes.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.box3}
-            onPress={() => {
-              console.log(item.Title);
-              navigation.navigate('ViewRecipe', {title: item.Title});
-            }}>
+  const UnapprovedBlogView = () => (
+    <View>
+      {unapprovedblogs.map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          style={styles.box3}
+          onPress={() => {
+            console.log(item.Title);
+            navigation.navigate('ViewBlog', {title: item.Title});
+          }}>
+          {item.Image !== undefined && (
             <Image
               source={{
                 uri: endpoint + '/' + item.Image.filename,
               }}
               style={[styles.thumbnail, {marginRight: 20}]}
             />
-            <View style={{width: 200}}>
-              <Text style={styles.name}>{item.Title}</Text>
-              <Text style={styles.desc}>Blog</Text>
-            </View>
-            <TouchableOpacity
-              style={{alignSelf: 'flex-start', marginLeft: 10}}
-              onPress={() => deleteRecipe(item.Title)}>
-              <Ionicon name="delete" size={25} color="#91C788" />
-            </TouchableOpacity>
+          )}
+          <View style={{width: 200}}>
+            <Text style={styles.name}>{item.Title}</Text>
+            <Text style={styles.desc}>Blog</Text>
+          </View>
+          <TouchableOpacity
+            style={{alignSelf: 'flex-start', marginLeft: 10}}
+            onPress={() => deleteBlog(item.Title)}>
+            <Ionicon name="delete" size={25} color="#91C788" />
           </TouchableOpacity>
-        ))}
-      </View>
-    );
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
   useEffect(() => {
-    getApprovedRecipes();
-    getUnapprovedRecipes();
+    getApprovedBlogs();
+    getUnapprovedBlogs();
   }, []);
 
   return (
@@ -244,7 +232,7 @@ export default function MyRecipes({route, navigation}) {
               if (searchQuery === '') {
                 alert('Enter search query');
               } else {
-                searchRecipe();
+                searchBlog();
               }
             }}
 
@@ -263,12 +251,12 @@ export default function MyRecipes({route, navigation}) {
             onPrimaryPress={() => {
               setSearchQuery('');
               handleToggle('approved');
-              getApprovedRecipes();
+              getApprovedBlogs();
             }}
             onSecondaryPress={() => {
               setSearchQuery('');
               handleToggle('unapproved');
-              getUnapprovedRecipes();
+              getUnapprovedBlogs();
             }}
             activeColor="#91C788"
             inactiveColor="#DCEDDA"
@@ -282,9 +270,9 @@ export default function MyRecipes({route, navigation}) {
           />
 
           {activeView === 'approved' ? (
-            <ApprovedRecipeView />
+            <ApprovedBlogView />
           ) : (
-            <UnapprovedRecipeView />
+            <UnapprovedBlogView />
           )}
         </View>
       </ScrollView>
@@ -309,6 +297,7 @@ const styles = StyleSheet.create({
   },
 
   box3: {
+    // height: 100,
     width: 350,
     borderRadius: 12,
     marginVertical: 8,

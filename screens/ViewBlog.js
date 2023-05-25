@@ -40,6 +40,7 @@ const ViewBlog = ({navigation, route}) => {
   const [showremarks, setShowRemarks] = useState(false);
 
   const [remarks, setRemarks] = useState('');
+  const [rem, setRem] = useState('');
 
   const [cId, setCId] = useState('');
   const [rId, setRId] = useState('');
@@ -196,6 +197,9 @@ const ViewBlog = ({navigation, route}) => {
       });
 
       setBlog(response.data[0]);
+      if (response.data[0].hasOwnProperty('Remarks')) {
+        setRem(response.data[0].Remarks);
+      }
       setContent(response.data[0].Content);
       setLikes(response.data[0].LikesCount.length);
       console.log(response.data[0].LikesCount.length);
@@ -458,6 +462,22 @@ const ViewBlog = ({navigation, route}) => {
                   )}
                 </View>
               ))}
+
+            {rem !== '' ? (
+              <View style={{alignSelf: 'flex-start'}}>
+                <Text style={styles.heading}>Admin Remarks:</Text>
+                <View style={{backgroundColor: '#EBF2FF'}}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      padding: 10,
+                      fontFamily: 'Inter-Regular',
+                    }}>
+                    {rem}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
             {role === 'Admin' ? (
               <View
                 style={{
