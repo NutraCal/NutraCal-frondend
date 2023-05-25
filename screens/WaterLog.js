@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,22 +14,39 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import {endpoint} from '../util/config';
 import dim from '../util/dim';
+import ColorfulCard from 'react-native-colorful-card';
 
-import {AuthContext} from '../context/AuthContext';
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from 'react-native-chart-kit';
 
 const WaterLog = ({route, navigation}) => {
-  const {user} = useContext(AuthContext);
-  const email = user?.data?.user?.email;
-  const userId = user?.data?.user?._id;
-  const userName = user?.data?.user?.name;
-
+  const {email} = route.params;
+  console.log(email);
   const [isVisible, setIsVisible] = useState(false);
   const [isGoalVisible, setIsGoalVisible] = useState(false);
   const [glasses, setGlasses] = useState('');
   const [goal, setGoal] = useState(0);
   const [loadData, setLoadData] = useState(true);
 
+  //Water Intake
+  const line2 = {
+    labels: ['18', '19', '20', '21', '22', '23', '24', '25'],
+    datasets: [
+      {
+        data: [8, 10, 7, 8, 11, 10, 9, 10],
+        strokeWidth: 2, // optional
+      },
+    ],
+  };
+
   const handleSave = () => {
+    // Call Node server to save data to MongoDB
     setIsVisible(false);
   };
 
@@ -89,13 +106,27 @@ const WaterLog = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.waterContainer}>
-        <Image
-          style={{
-            width: (300 / dim.w) * dim.Width,
-            height: (200 / dim.h) * dim.Height,
-            marginBottom: (30 / dim.h) * dim.Height,
+        <Text style={styles.heading}>Water Intake</Text>
+        <LineChart
+          data={line2}
+          width={(350 / dim.w) * dim.Width} // from react-native
+          height={200}
+          chartConfig={{
+            backgroundColor: '#e26a00',
+            backgroundGradientFrom: '#e26a00',
+            backgroundGradientTo: '#2bc3df',
+            decimalPlaces: 2, // optional, defaults to 2dp
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 8,
+            },
           }}
-          source={require('../assets/images/water.png')}
+          bezier
+          style={{
+            marginVertical: 8,
+            borderRadius: 16,
+            alignSelf: 'center',
+          }}
         />
         <ImageBackground
           source={require('../assets/images/waterbg.png')}
@@ -103,6 +134,7 @@ const WaterLog = ({route, navigation}) => {
             width: (310 / dim.w) * dim.Width,
             height: (160 / dim.h) * dim.Height,
             alignItems: 'center',
+            alignSelf: 'center',
             justifyContent: 'center',
           }}>
           <Text style={styles.goalCount}>Daily Intake Goal</Text>

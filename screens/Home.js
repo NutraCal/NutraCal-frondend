@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
+var axios = require('axios');
 import {
   Text,
   View,
@@ -33,25 +34,70 @@ import {
 } from 'react-native-chart-kit';
 
 export default function Home({route, navigation}) {
+  const [countData, setCountData] = useState([]);
+  const [dateLabels, setDateLabels] = useState([]);
+  const [loadData, setLoadData] = useState(false);
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
   const image = user?.data?.user?.Image;
   const name = user?.data?.user?.name;
 
-  const line = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+  //Water Intake
+  const line2 = {
+    labels: ['18', '19', '20', '21', '22', '23', '24', '25'],
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43],
+        data: [8, 10, 7, 8, 11, 10, 9, 10],
+        strokeWidth: 2, // optional
+      },
+    ],
+  };
+  const line = {
+    labels: ['18', '19', '20', '21', '22', '23', '24', '25'],
+    datasets: [
+      {
+        data: [1200, 1440, 1530, 1350, 1390, 1356, 1356],
         strokeWidth: 2, // optional
       },
     ],
   };
 
+  const getSteps = async () => {
+    try {
+      const response = await axios.post(endpoint + '/meals/getSteps', {
+        email: email,
+      });
+
+      let chartData = response.data.data;
+
+      if (chartData) {
+        const count = chartData.map(obj => obj.count);
+        const date = chartData.map(obj => obj.date);
+        setCountData(count);
+        setDateLabels(date);
+        console.log('date', dateLabels);
+        console.log('count', countData);
+        // line = {
+        //   labels: dateLabels,
+        //   datasets: [
+        //     {
+        //       data: count,
+        //     },
+        //   ],
+        // };
+      } else {
+        console.log('chartData is undefined or null');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
+    // getSteps();
     console.log(image);
-  }, []);
+  }, [loadData]);
 
   return (
     <View style={styles.container}>
@@ -85,21 +131,20 @@ export default function Home({route, navigation}) {
             </TouchableOpacity>
           </View>
         </View>
-
         <View>
+          <Text style={styles.heading}>Calories intake</Text>
           <LineChart
             data={line}
             width={(350 / dim.w) * dim.Width} // from react-native
             height={200}
-            yAxisLabel={'$'}
             chartConfig={{
               backgroundColor: '#e26a00',
-              backgroundGradientFrom: '#fb8c00',
-              backgroundGradientTo: '#ffa726',
+              backgroundGradientFrom: '#e26a00',
+              backgroundGradientTo: '#2bc3df',
               decimalPlaces: 2, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               style: {
-                borderRadius: 16,
+                borderRadius: 8,
               },
             }}
             bezier
@@ -128,23 +173,23 @@ export default function Home({route, navigation}) {
               justifyContent: 'space-evenly',
             }}>
             <ColorfulCard
-              title="Heart Rate"
-              value="126"
-              valuePostfix="bpm"
-              footerTitle="80-120"
+              title="Calories"
+              value="1000-3000"
+              valuePostfix=""
+              footerTitle="1200"
               footerValue="Healthy"
               iconImageSource={require('../assets/icons/pulse.png')}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('Calories')}
             />
             <ColorfulCard
-              title="Sleep"
-              value="8"
-              valuePostfix="h 42 m"
-              footerTitle="Deep Sleep"
-              footerValue="3h 13m"
+              title="BMI"
+              value="18.5-24.9"
+              valuePostfix=""
+              footerTitle="20"
+              footerValue="Normal"
               iconImageSource={require('../assets/icons/sleep.png')}
               style={{backgroundColor: '#7954ff'}}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('Bmi')}
             />
           </View>
 
@@ -157,115 +202,32 @@ export default function Home({route, navigation}) {
               justifyContent: 'space-evenly',
             }}>
             <ColorfulCard
-              title="Energy Burn"
-              value="583"
-              valuePostfix="kcal"
+              title="Water Intake"
+              value="8-12"
+              valuePostfix="glass"
               footerTitle="Daily Goal"
-              footerValue="900 kcal"
+              footerValue="10"
               iconImageStyle={{tintColor: '#fff'}}
               iconImageSource={require('../assets/icons/hot-or-burn-interface-symbol.png')}
               style={{backgroundColor: '#fe8f62'}}
-              onPress={() => {}}
-            />
-            <ColorfulCard
-              title="Steps"
-              value="16,741"
-              valuePostfix=""
-              footerTitle="Daily Goal"
-              footerValue="10,000 steps"
-              iconImageSource={require('../assets/icons/steps.png')}
-              style={{backgroundColor: '#2bc3ff'}}
-              onPress={() => {}}
-            />
-          </View>
-
-          <View
-            style={{
-              marginTop: 16,
-              width: '100%',
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-            }}>
-            <ColorfulCard
-              title="Running"
-              value="5,3"
-              valuePostfix="km"
-              footerTitle="Daily Goal"
-              footerValue="10 km"
-              iconImageSource={require('../assets/icons/running.png')}
-              style={{backgroundColor: '#5a65ff'}}
-              onPress={() => {}}
-            />
-            <ColorfulCard
-              title="Cycling"
-              value="12,5"
-              valuePostfix="km"
-              footerTitle="Daily Goal"
-              footerValue="20 km"
-              iconImageSource={require('../assets/icons/bicycle.png')}
-              style={{backgroundColor: '#96da45'}}
-              onPress={() => {}}
-            />
-          </View>
-        </SafeAreaView>
-
-        <View
-          style={{
-            marginTop: (10 / dim.h) * dim.Height,
-            marginBottom: (20 / dim.h) * dim.Height,
-          }}>
-          <View style={styles.hbox}>
-            <TouchableOpacity
-              style={styles.box2}
-              onPress={() => navigation.navigate('Calories')}>
-              <Calories
-                width={(70 / dim.w) * dim.Width}
-                height={(70 / dim.w) * dim.Width}
-              />
-              <Text style={styles.name}>Calories</Text>
-              <Text style={styles.desc}>3 min ago</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.box2}
-              onPress={() => navigation.navigate('Bmi')}>
-              <Weight
-                width={(70 / dim.w) * dim.Width}
-                height={(70 / dim.w) * dim.Width}
-              />
-              <Text style={styles.name}>Weight</Text>
-              <Text style={styles.desc}>4 days ago</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.hbox}>
-            <TouchableOpacity
-              style={styles.box2}
               onPress={() =>
                 navigation.navigate('WaterLog', {
                   email: email,
                 })
-              }>
-              <Water
-                width={(70 / dim.w) * dim.Width}
-                height={(70 / dim.w) * dim.Width}
-              />
-              <Text style={styles.name}>Water</Text>
-              <Text style={styles.desc}>1 hour ago</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.box2}
-              onPress={() => navigation.navigate('StepCount')}>
-              <Steps
-                width={(70 / dim.w) * dim.Width}
-                height={(70 / dim.w) * dim.Width}
-              />
-              <Text style={styles.name}>Steps</Text>
-              <Text style={styles.desc}>1 min ago</Text>
-            </TouchableOpacity>
+              }
+            />
+            <ColorfulCard
+              title="Steps"
+              value="8000-9000"
+              valuePostfix=""
+              footerTitle="Daily Goal"
+              footerValue="8,000 steps"
+              iconImageSource={require('../assets/icons/steps.png')}
+              style={{backgroundColor: '#2bc3ff'}}
+              onPress={() => navigation.navigate('StepCount')}
+            />
           </View>
-        </View>
+        </SafeAreaView>
       </ScrollView>
     </View>
   );

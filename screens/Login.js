@@ -73,7 +73,7 @@ export default function Login({route, navigation}) {
       if (response.status == 200) {
         setNotification(response.data);
         console.log(response.data);
-        alert('We got a notification');
+        // alert('We got a notification');
       }
     } catch (error) {
       console.log(error.message);
@@ -100,7 +100,7 @@ export default function Login({route, navigation}) {
       });
       console.log(JSON.stringify(response.data));
       if (response.status == 200) {
-        alert('We got a successful response from the server');
+        console.log('We got a successful response from the server');
       }
     } catch (error) {
       console.log(error.message);

@@ -7,6 +7,16 @@ import {
   Image,
   BackHandler,
 } from 'react-native';
+import ColorfulCard from 'react-native-colorful-card';
+
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from 'react-native-chart-kit';
 import {accelerometer} from 'react-native-sensors';
 import dim from '../util/dim';
 import axios from 'axios';
@@ -23,6 +33,17 @@ export default function StepCount({route, navigation}) {
   const [lastY, setLastY] = useState(0); // Last known y value
   const [lastZ, setLastZ] = useState(0); // Last known z value
   const [isRequestSent, setIsRequestSent] = useState(false);
+
+  //StepCount
+  const line = {
+    labels: ['18', '19', '20', '21', '22', '23', '24', '25'],
+    datasets: [
+      {
+        data: [10000, 5000, 7000, 8000, 4000, 1000, 700],
+        strokeWidth: 2, // optional
+      },
+    ],
+  };
 
   useEffect(() => {
     let subscription = accelerometer.subscribe(({x, y, z}) => {
@@ -107,6 +128,28 @@ export default function StepCount({route, navigation}) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.heading}>Step Count</Text>
+      <LineChart
+        data={line}
+        width={(350 / dim.w) * dim.Width} // from react-native
+        height={200}
+        chartConfig={{
+          backgroundColor: '#e26a00',
+          backgroundGradientFrom: '#e26a00',
+          backgroundGradientTo: '#2bc3df',
+          decimalPlaces: 2, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          style: {
+            borderRadius: 8,
+          },
+        }}
+        bezier
+        style={{
+          marginVertical: 8,
+          borderRadius: 16,
+          alignSelf: 'center',
+        }}
+      />
       <Image
         style={{
           width: (200 / dim.w) * dim.Width,
@@ -126,5 +169,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: (20 / dim.h) * dim.Height,
+  },
+  heading: {
+    fontFamily: 'Inter-Bold',
+    color: 'black',
+    fontSize: 18,
+    marginTop: (10 / dim.h) * dim.Height,
+    marginBottom: (5 / dim.h) * dim.Height,
   },
 });
