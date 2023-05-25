@@ -137,12 +137,16 @@ export default function DietPlans({route, navigation}) {
       });
 
       console.log(JSON.stringify(response.data));
+      alert('generated successfully');
     } catch (error) {
       console.log(error.response);
     }
   };
 
   const editDietPlan = async res => {
+    if (stitle == '') {
+      return;
+    }
     var data = JSON.stringify({
       email: email,
       date: cDate,
@@ -269,15 +273,6 @@ export default function DietPlans({route, navigation}) {
     getCalories();
   }, [refresh]);
 
-  // useEffect(() => {
-  //   if (date !== null) {
-  //     getWeekDates(date);
-  //     console.log(
-  //       'here in date useffecteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-  //     );
-  //   }
-  // }, [date]);
-
   useEffect(() => {
     if (val !== '') {
     }
@@ -320,8 +315,8 @@ export default function DietPlans({route, navigation}) {
           </View>
         </View>
 
-        <Modal isVisible={isModalVisible}>
-          <View style={{backgroundColor: 'blue'}}>
+        <Modal isVisible={isModalVisible} style={{backgroundColor: 'white'}}>
+          <View>
             <Searchbar
               placeholder="Recipes"
               onChangeText={onChangeSearch}
@@ -337,7 +332,7 @@ export default function DietPlans({route, navigation}) {
                 data={recipes}
                 scrollEnabled={false}
                 renderItem={({index, item}) => (
-                  <View key={index} style={{backgroundColor: 'red'}}>
+                  <View key={index} style={{}}>
                     <TouchableOpacity
                       style={[styles.box3, {backgroundColor: '#EBF2FF'}]}>
                       <Image
@@ -541,7 +536,7 @@ export default function DietPlans({route, navigation}) {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.btnn}>
+          <TouchableOpacity style={styles.btnn} onPress={generateDietPlan}>
             <Text
               style={{
                 color: 'white',

@@ -70,9 +70,7 @@ const ViewBlog = ({navigation, route}) => {
         data: data,
       });
       console.log(JSON.stringify(response.data));
-      if (response) {
-        fetchBlog();
-      }
+      setLikes(response.data.likesCount);
     } catch (error) {
       console.log(error.response);
     }

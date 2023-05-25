@@ -16,6 +16,7 @@ import dim from '../util/dim';
 const Drawer = createDrawerNavigator();
 
 import {AuthContext} from '../context/AuthContext';
+import MyRecipes from './MyRecipes';
 
 const DrawerNav = ({route, navigation}) => {
   const {user} = useContext(AuthContext);
@@ -55,10 +56,27 @@ const DrawerNav = ({route, navigation}) => {
           ),
         }}
       />
-      {role === 'User' && (
+      {role === 'Admin' && (
         <Drawer.Screen
           name="Blog Approvals"
           component={BlogApproval}
+          options={{
+            headerShown: true,
+            drawerIcon: ({color}) => (
+              <Ionicons
+                name="home-outline"
+                size={(22 / dim.w) * dim.Width}
+                color={color}
+              />
+            ),
+          }}
+        />
+      )}
+
+      {role === 'User' && (
+        <Drawer.Screen
+          name="My Recipes"
+          component={MyRecipes}
           options={{
             headerShown: true,
             drawerIcon: ({color}) => (

@@ -23,9 +23,6 @@ const WaterLog = ({route, navigation}) => {
   const userId = user?.data?.user?._id;
   const userName = user?.data?.user?.name;
 
-  const {email} = route.params;
-  console.log(email);
-
   const [isVisible, setIsVisible] = useState(false);
   const [isGoalVisible, setIsGoalVisible] = useState(false);
   const [glasses, setGlasses] = useState('');
@@ -33,7 +30,6 @@ const WaterLog = ({route, navigation}) => {
   const [loadData, setLoadData] = useState(true);
 
   const handleSave = () => {
-    // Call Node server to save data to MongoDB
     setIsVisible(false);
   };
 

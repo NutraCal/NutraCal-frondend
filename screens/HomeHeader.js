@@ -57,14 +57,14 @@ const HomeHeader = ({route, navigation}) => {
               title="Add Recipe"
             />
             <Divider />
-            <Menu.Item
+            {/* <Menu.Item
               onPress={() => {
                 navigation.navigate('MyRecipes');
                 closeMenu();
               }}
               title="My Recipes"
             />
-            <Divider />
+            <Divider /> */}
             <Menu.Item
               onPress={() => {
                 navigation.navigate('SuggestRecipe');

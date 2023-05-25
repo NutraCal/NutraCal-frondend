@@ -116,9 +116,8 @@ export default function ViewRecipe({route, navigation}) {
         data: data,
       });
       console.log(JSON.stringify(response.data));
-      if (response) {
-        searchRecipeByName();
-      }
+      setLikes(response.data.likesCount);
+      console.log(response.data.likesCount);
     } catch (error) {
       console.log(error.response);
     }
@@ -152,7 +151,7 @@ export default function ViewRecipe({route, navigation}) {
       setProteins(p);
       const ca = response.data[0].Carbs.toString();
       setCarbs(ca);
-      setLikes(response.data[0].Likes);
+      setLikes(response.data[0].LikesCount.length());
       const slist = response.data[0].Ingredients;
       console.log(...slist);
       setList([...slist]);
