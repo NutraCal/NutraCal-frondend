@@ -15,6 +15,7 @@ import dim from '../util/dim';
 import DuoToggleSwitch from 'react-native-duo-toggle-switch';
 import axios from 'axios';
 import {endpoint} from '../util/config';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function Community({route, navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -159,10 +160,16 @@ export default function Community({route, navigation}) {
     </View>
   );
 
-  useEffect(() => {
-    getBlogs();
-    getNutritionists();
-  }, []);
+  // useEffect(() => {
+  //   getBlogs();
+  //   getNutritionists();
+  // }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getBlogs();
+      getNutritionists();
+    }, []),
+  );
 
   return (
     <View style={styles.container}>

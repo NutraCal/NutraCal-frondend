@@ -39,7 +39,7 @@ export default function ViewNutritionist({route, navigation}) {
     var data = JSON.stringify({
       email: nEmail,
       userId: userId,
-      rating: rating,
+      rating: newRating,
     });
 
     console.log(data);

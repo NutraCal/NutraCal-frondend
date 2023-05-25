@@ -16,6 +16,7 @@ import dim from '../util/dim';
 import {AuthContext} from '../context/AuthContext';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import moment from 'moment';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function MyAppointments({route, navigation}) {
   const {user} = useContext(AuthContext);
@@ -76,14 +77,24 @@ export default function MyAppointments({route, navigation}) {
     }
   };
 
-  useEffect(() => {
-    console.log(role);
-    if (role === 'User') {
-      getAppointments();
-    } else {
-      getNAppointments();
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log(role);
+  //   if (role === 'User') {
+  //     getAppointments();
+  //   } else {
+  //     getNAppointments();
+  //   }
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (role === 'User') {
+        getAppointments();
+      } else {
+        getNAppointments();
+      }
+    }, []),
+  );
 
   return (
     <View style={styles.container}>
@@ -93,7 +104,20 @@ export default function MyAppointments({route, navigation}) {
           style={styles.box3}
           onPress={() => {
             console.log(item.Title);
-            navigation.navigate('CallHome');
+            const currentTime = moment();
+            // if (item.time)
+            const comparisonTime = moment(item.time, 'h:mm A');
+            const isSameOrBefore = currentTime.isSameOrBefore(comparisonTime);
+
+            // Compare if the current time is greater than or equal to the comparison time
+            const isSameOrAfter = currentTime.isSameOrAfter(comparisonTime);
+            if (isSameOrAfter) {
+              navigation.navigate('CallHome');
+            } else {
+              alert(
+                'Your appointment time is not scheduled at this time. Try again later',
+              );
+            }
           }}>
           <View style={styles.thumbnail2}></View>
 

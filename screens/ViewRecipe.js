@@ -167,7 +167,7 @@ export default function ViewRecipe({route, navigation}) {
       setProteins(p);
       const ca = response.data[0].Carbs.toString();
       setCarbs(ca);
-      setLikes(response.data[0].LikesCount.length());
+      setLikes(response.data[0].LikesCount.length);
       const slist = response.data[0].Ingredients;
       console.log(...slist);
       setList([...slist]);
