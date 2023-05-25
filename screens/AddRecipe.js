@@ -28,6 +28,8 @@ import RNFS from 'react-native-fs';
 import FormData from 'form-data';
 
 export default function AddRecipe({route, navigation}) {
+  const content = route.params?.content;
+
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
@@ -55,7 +57,7 @@ export default function AddRecipe({route, navigation}) {
   ]);
 
   const [name, setName] = useState('');
-  const [desc, setDesc] = useState('');
+  const [desc, setDesc] = useState(content || '');
   const [calories, setCalories] = useState('');
   const [fats, setFats] = useState('');
   const [proteins, setProteins] = useState('');
@@ -73,6 +75,10 @@ export default function AddRecipe({route, navigation}) {
   const [ingredients, setIngredients] = useState([]);
   const [quantities, setQuantities] = useState([]);
   const [idata, setIData] = useState([]);
+
+  useEffect(() => {
+    setDesc(content);
+  }, [content]);
 
   const addIngredient = () => {
     //Add a new ingredient to the data array

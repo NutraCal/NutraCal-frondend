@@ -162,6 +162,44 @@ export default function AddMealScan({route, navigation}) {
               <Text style={styles.resultText}>Fats: {fats}</Text>
               <Text style={styles.resultText}>Proteins: {proteins}</Text>
               <Text style={styles.resultText}>Carbs: {carbs}</Text>
+
+              {/* 
+              const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [calories, setCalories] = useState('');
+  const [fats, setFats] = useState('');
+  const [proteins, setProteins] = useState('');
+  const [carbs, setCarbs] = useState(''); */}
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('AddMeal', {
+                    na: result,
+                    ca: calories,
+                    fa: fats,
+                    car: carbs,
+                    pro: proteins,
+                  });
+                }}
+                style={{
+                  width: (330 / dim.w) * dim.Width,
+                  height: (48 / dim.h) * dim.Height,
+                  backgroundColor: '#91C788',
+                  alignSelf: 'center',
+                  borderRadius: 12,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginTop: (20 / dim.h) * dim.Height,
+                  marginBottom: (20 / dim.h) * dim.Height,
+                }}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: 16,
+                    fontFamily: 'Inter-SemiBold',
+                  }}>
+                  Go back
+                </Text>
+              </TouchableOpacity>
             </View>
           )}
         </View>

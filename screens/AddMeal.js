@@ -25,6 +25,12 @@ import DatePicker from 'react-native-modern-datepicker';
 import Modal from 'react-native-modal';
 
 export default function AddMeal({route, navigation}) {
+  const na = route.params?.na;
+  const ca = route.params?.ca;
+  const fa = route.params?.fa;
+  const car = route.params?.car;
+  const pro = route.params?.pro;
+
   const {user} = useContext(AuthContext);
   const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
@@ -41,16 +47,24 @@ export default function AddMeal({route, navigation}) {
     {label: 'Snacks', value: 'Snacks'},
   ]);
 
-  const [name, setName] = useState('');
-  const [calories, setCalories] = useState('');
-  const [fats, setFats] = useState('');
-  const [proteins, setProteins] = useState('');
-  const [carbs, setCarbs] = useState('');
+  const [name, setName] = useState(na || '');
+  const [calories, setCalories] = useState(ca || '');
+  const [fats, setFats] = useState(fa || '');
+  const [proteins, setProteins] = useState(pro || '');
+  const [carbs, setCarbs] = useState(car || '');
   const [loadId, setLoadId] = useState(true);
   const [loadData, setLoadData] = useState(true);
   const [image, setImage] = useState(null);
   const [cDate, setCDate] = useState(moment().format('YYYY-MM-DD'));
   const [time, setTime] = useState('');
+
+  useEffect(() => {
+    setName(na);
+    setCalories(ca);
+    setFats(fa);
+    setCarbs(car);
+    setProteins(pro);
+  }, [na, ca, fa, car, pro]);
 
   const handleChoosePhoto = async () => {
     try {
