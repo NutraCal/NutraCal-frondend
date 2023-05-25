@@ -73,6 +73,10 @@ export default function DietPlans({route, navigation}) {
 
   const [refresh, setRefresh] = useState(false);
 
+  const [checkedItems, setCheckedItems] = useState(
+    Array(recipes.length).fill(false),
+  );
+
   const onChangeSearch = query => {
     setSearchQuery(query);
   };
@@ -143,8 +147,8 @@ export default function DietPlans({route, navigation}) {
     }
   };
 
-  const editDietPlan = async res => {
-    if (stitle == '') {
+  const editDietPlan = async selectedRecipe => {
+    if (selectedRecipe === '') {
       return;
     }
     var data = JSON.stringify({
@@ -152,7 +156,7 @@ export default function DietPlans({route, navigation}) {
       date: cDate,
       day: parseInt(day),
       mealType: scategory,
-      mealName: stitle,
+      mealName: selectedRecipe,
     });
     console.log(data);
     try {
@@ -329,6 +333,7 @@ export default function DietPlans({route, navigation}) {
               <ActivityIndicator></ActivityIndicator>
             ) : (
               <FlatList
+                style={{height: 500}}
                 data={recipes}
                 scrollEnabled={false}
                 renderItem={({index, item}) => (
@@ -348,12 +353,19 @@ export default function DietPlans({route, navigation}) {
                         {item.Title}
                       </Text>
                       <Checkbox
-                        status={checked ? 'checked' : 'unchecked'}
+                        // status={checked ? 'checked' : 'unchecked'}
+                        // color="#91C788"
+                        // onPress={() => {
+                        //   setSTitle(item.Title);
+                        //   setChecked(!checked);
+                        status={checkedItems[index] ? 'checked' : 'unchecked'}
                         color="#91C788"
                         onPress={() => {
-                          setSTitle(item.Title);
-                          setChecked(!checked);
-                          editDietPlan();
+                          const updatedCheckedItems = [...checkedItems];
+                          updatedCheckedItems[index] =
+                            !updatedCheckedItems[index];
+                          setCheckedItems(updatedCheckedItems);
+                          editDietPlan(item.Title);
                           setTimeout(() => {
                             setModalVisible(false);
                           }, 1000);
@@ -665,12 +677,13 @@ const styles = StyleSheet.create({
   },
 
   box3: {
-    height: (80 / dim.h) * dim.Height,
+    // height: (80 / dim.h) * dim.Height,
     width: (330 / dim.w) * dim.Width,
     borderRadius: 12,
     margin: (10 / dim.w) * dim.Width,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 10,
   },
 });
