@@ -211,31 +211,32 @@ export default function MainNavigator() {
         <Stack.Screen
           name="ViewRecipe"
           component={ViewRecipe}
-          options={({route, navigation}) => {
-            const {title} = route.params;
+          options={{headerShown: true}}
+          // options={({route, navigation}) => {
+          //   const {title} = route.params;
 
-            const handleUpdateRecipe = () => {
-              navigation.navigate('UpdateRecipe', {title}); // Pass the nutritionistId to the "EditNutritionist" screen
-            };
+          //   const handleUpdateRecipe = () => {
+          //     navigation.navigate('UpdateRecipe', {title}); // Pass the nutritionistId to the "EditNutritionist" screen
+          //   };
 
-            return {
-              title: 'View Recipe',
-              headerShown: true,
-              headerRight: () => (
-                <TouchableOpacity onPress={handleUpdateRecipe}>
-                  <Text
-                    style={{
-                      color: '#91C788',
-                      fontSize: 16,
-                      marginRight: (10 / dim.w) * dim.Width,
-                      fontWeight: 'bold',
-                    }}>
-                    Update Recipe
-                  </Text>
-                </TouchableOpacity>
-              ),
-            };
-          }}
+          //   return {
+          //     title: 'View Recipe',
+          //     headerShown: true,
+          //     headerRight: () => (
+          //       <TouchableOpacity onPress={handleUpdateRecipe}>
+          //         <Text
+          //           style={{
+          //             color: '#91C788',
+          //             fontSize: 16,
+          //             marginRight: (10 / dim.w) * dim.Width,
+          //             fontWeight: 'bold',
+          //           }}>
+          //           Update Recipe
+          //         </Text>
+          //       </TouchableOpacity>
+          //     ),
+          //   };
+          // }}
         />
 
         <Stack.Screen
