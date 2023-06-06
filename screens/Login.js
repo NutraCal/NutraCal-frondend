@@ -45,6 +45,7 @@ export const googleSignIn = async () => {
 };
 
 export default function Login({route, navigation}) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState('false');
   const [isPasswordValid, setIsPasswordValid] = useState('false');
@@ -52,7 +53,7 @@ export default function Login({route, navigation}) {
   const [notification, setNotification] = useState('');
 
   const {user} = useContext(AuthContext);
-  const email = user?.data?.user?.email;
+  // const email = user?.data?.user?.email;
   const userId = user?.data?.user?._id;
 
   const getNotifications = async email => {

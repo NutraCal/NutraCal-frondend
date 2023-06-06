@@ -1,1 +1,1 @@
-export let endpoint = 'http://10.113.52.198:8000';
+export let endpoint = 'http://192.168.10.5:8000';

@@ -48,7 +48,7 @@ function BarcodeScan(): JSX.Element {
     try {
       const response = await axios({
         method: 'get',
-        url: 'https://www.foodrepo.org/api/v3/products?barcodes=20641627',
+        url: 'https://www.foodrepo.org/api/v3/products?barcodes=' + val,
         headers: {
           Authorization: 'Token token=6a98f4d52076fe23e7510cb28ee01932',
           secret_key: '6a98f4d52076fe23e7510cb28ee01932',

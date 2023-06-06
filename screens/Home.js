@@ -138,9 +138,12 @@ export default function Home({route, navigation}) {
             width={(350 / dim.w) * dim.Width} // from react-native
             height={200}
             chartConfig={{
+              // backgroundColor: '#91C788',
+              // backgroundGradientFrom: '#e26a00',
+              // backgroundGradientTo: '#2bc3df',
               backgroundColor: '#e26a00',
-              backgroundGradientFrom: '#e26a00',
-              backgroundGradientTo: '#2bc3df',
+              backgroundGradientFrom: '#9ccc93',
+              backgroundGradientTo: '#91C788',
               decimalPlaces: 2, // optional, defaults to 2dp
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               style: {
